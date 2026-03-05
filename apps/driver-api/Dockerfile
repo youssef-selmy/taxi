@@ -1,5 +1,4 @@
-FROM node:24.1.0-alpine AS builder
-WORKDIR /workspace
+WORKDIR /app
 
 COPY package*.json ./
 COPY nx.json ./
@@ -8,13 +7,6 @@ COPY apps ./apps
 COPY libs ./libs
 
 RUN npm ci
-RUN npx nx build driver-api --configuration=production
-
-FROM node:24.1.0-alpine
-WORKDIR /app
-
-COPY --from=builder /workspace/apps/driver-api/dist/ ./
-RUN npm install --omit=dev
 
 EXPOSE 3000
-CMD ["node", "main.js"]
+CMD ["node", "-r", "ts-node/register/transpile-only", "-r", "tsconfig-paths/register", "apps/driver-api/src/main.ts"]
