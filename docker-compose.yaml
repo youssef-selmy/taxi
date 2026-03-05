@@ -61,8 +61,10 @@ services:
     ports:
       - "4001:3000"
   admin-panel:
-    image: nginx:alpine
+    image: ghcr.io/lumeagency/taxi-legacy-admin-panel:4.0.4
     restart: always
+    volumes:
+      - taxiassets:/usr/share/nginx/html/assets
     ports:
       - "4003:80"
   payment-gateways:
