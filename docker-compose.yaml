@@ -60,13 +60,11 @@ services:
       - .env
     ports:
       - "4001:3000"
-  admin-panel:
+  taxi-admin-panel:
     image: ghcr.io/lumeagency/taxi-legacy-admin-panel:4.0.4
     restart: always
     volumes:
       - taxiassets:/usr/share/nginx/html/assets
-    ports:
-      - "4003:80"
   payment-gateways:
     build:
       context: .
@@ -77,6 +75,20 @@ services:
       - "3333:3333"
     env_file:
       - .env
+
+  nginx:
+    image: nginx
+    depends_on:
+      - "payment-gateways"
+      - "taxi-rider-api"
+      - "taxi-driver-api"
+      - "taxi-admin-api"
+      - "taxi-admin-panel"
+    volumes:
+      - ./.nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./img:/app/uploads
+    ports:
+      - "80:80"
 volumes:
   redisvol:
   mysqlvol:
