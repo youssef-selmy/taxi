@@ -15,7 +15,7 @@
           "commands": [
             "mkdir -p apps/admin-api/dist/migrations",
             "npx swc libs/database/src/lib/migration/*.ts -d apps/admin-api/dist/migrations --config-file apps/admin-api/.swcrc",
-            "mv -f apps/admin-api/dist/migrations/libs/database/src/lib/migration/*.js apps/admin-api/dist/migrations"
+            "sh -c \"if ls apps/admin-api/dist/migrations/libs/database/src/lib/migration/*.js >/dev/null 2>&1; then mv -f apps/admin-api/dist/migrations/libs/database/src/lib/migration/*.js apps/admin-api/dist/migrations; fi\""
           ]
         }
       },
