@@ -88,7 +88,7 @@ services:
       - ./.nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       - ./img:/app/uploads
     ports:
-      - "80:80"
+      - "4003:80"
 volumes:
   redisvol:
   mysqlvol:
