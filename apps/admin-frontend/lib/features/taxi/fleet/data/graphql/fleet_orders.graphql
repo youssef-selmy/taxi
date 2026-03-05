@@ -1,0 +1,43 @@
+query fleetOrders(
+  $paging: OffsetPaging
+  $sorting: [OrderSort!]!
+  $filter: OrderFilter
+) {
+  orders(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...fleetOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query exportFleetOrders(
+  $filter: OrderFilter
+  $format: ExportFormat!
+  $sorting: [OrderSort!]!
+) {
+  exportOrders(
+    filter: $filter
+    format: $format
+    sorting: $sorting
+    fields: [
+      { label: "Order ID", field: "id" }
+      { label: "Created At", field: "requestTimestamp" }
+      { label: "Status", field: "status" }
+      { label: "Start Time", field: "startTimestamp" }
+      { label: "End Time", field: "finishTimestamp" }
+      { label: "Rider Id", field: "riderId" }
+      { label: "Driver Id", field: "driverId" }
+      { label: "Addresses", field: "addresses" }
+      { label: "Distance", field: "distanceBest" }
+      { label: "Wait Cost", field: "waitCost" }
+      { label: "Ride Options Cost", field: "rideOptionsCost" }
+      { label: "Tax", field: "tax" }
+      { label: "Provider Share", field: "providerShare" }
+      { label: "Cost", field: "cost" }
+    ]
+  )
+}

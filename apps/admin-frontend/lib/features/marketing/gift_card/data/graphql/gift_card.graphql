@@ -1,0 +1,45 @@
+query giftBatches(
+  $filter: GiftBatchFilter
+  $sorting: [GiftBatchSort!]
+  $paging: OffsetPaging
+) {
+  giftBatches(filter: $filter, sorting: $sorting, paging: $paging) {
+    nodes {
+      ...giftBatchListItem
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}
+
+query giftBatch($id: ID!) {
+  giftBatch(id: $id) {
+    ...giftBatchDetails
+  }
+}
+
+query giftCodes(
+  $paging: OffsetPaging
+  $giftBatchId: ID!
+  $sorting: [GiftCodeSort!]!
+) {
+  giftCodes(
+    filter: { giftId: { eq: $giftBatchId } }
+    paging: $paging
+    sorting: $sorting
+  ) {
+    ...giftCodeConnection
+  }
+}
+
+mutation createGiftBatch($input: CreateGiftBatchInput!) {
+  createGiftCardBatch(input: $input) {
+    ...giftBatchListItem
+  }
+}
+
+mutation exportGiftBatch($batchId: ID!) {
+  exportGiftCardBatch(batchId: $batchId)
+}

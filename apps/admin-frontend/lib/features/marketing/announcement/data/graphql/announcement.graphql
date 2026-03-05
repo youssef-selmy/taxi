@@ -1,0 +1,39 @@
+query announcements(
+  $paging: OffsetPaging
+  $filter: AnnouncementFilter
+  $sort: [AnnouncementSort!]!
+) {
+  announcements(paging: $paging, filter: $filter, sorting: $sort) {
+    nodes {
+      ...announcementListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query announcement($id: ID!) {
+  announcement(id: $id) {
+    ...announcementDetails
+  }
+}
+
+mutation createAnnouncement($input: CreateAnnouncementInput!) {
+  createAnnouncement(input: $input) {
+    ...announcementDetails
+  }
+}
+
+mutation updateAnnouncement($id: ID!, $input: UpdateAnnouncementInput!) {
+  updateOneAnnouncement(input: { id: $id, update: $input }) {
+    ...announcementDetails
+  }
+}
+
+mutation deleteAnnouncement($id: ID!) {
+  deleteOneAnnouncement(input: { id: $id }) {
+    id
+  }
+}

@@ -1,0 +1,40 @@
+query fleetStaffList(
+  $paging: OffsetPaging
+  $filter: FleetStaffFilter!
+  $sorting: [FleetStaffSort!]!
+) {
+  fleetStaffs(paging: $paging, filter: $filter, sorting: $sorting) {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+
+    nodes {
+      ...fleetStaffs
+    }
+  }
+}
+
+query fleetStaffDetails($id: ID!) {
+  fleetStaff(id: $id) {
+    ...fleetStaffs
+  }
+}
+
+mutation updateFleetStaff($input: UpdateOneFleetStaffInput!) {
+  updateOneFleetStaff(input: $input) {
+    ...fleetStaffs
+  }
+}
+
+mutation createFleetStaff($input: CreateOneFleetStaffInput!) {
+  createOneFleetStaff(input: $input) {
+    ...fleetStaffs
+  }
+}
+
+mutation deleteFleetStaff($id: ID!) {
+  deleteOneFleetStaff(input: { id: $id }) {
+    id
+  }
+}

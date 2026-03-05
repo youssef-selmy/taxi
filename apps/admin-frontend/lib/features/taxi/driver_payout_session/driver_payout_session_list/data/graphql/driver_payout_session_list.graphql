@@ -1,0 +1,50 @@
+query driversPendingPayoutSessions {
+  pendingSessions: taxiPayoutSessions(
+    filter: { status: { eq: PENDING } }
+    paging: { limit: 100 }
+  ) {
+    nodes {
+      ...taxiPayoutSessionListItem
+    }
+    totalCount
+  }
+}
+
+query driversPayoutSessions(
+  $paging: OffsetPaging
+  $sorting: [TaxiPayoutSessionSort!]!
+  $filter: TaxiPayoutSessionFilter
+) {
+  taxiPayoutSessions(paging: $paging, sorting: $sorting, filter: $filter) {
+    nodes {
+      ...taxiPayoutSessionListItem
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}
+
+query driversPayoutTransactions(
+  $paging: OffsetPaging
+  $filter: DriverTransactionFilter
+  $sorting: [DriverTransactionSort!]!
+) {
+  payoutTransactions: driverTransactions(
+    filter: $filter
+    paging: $paging
+    sorting: $sorting
+  ) {
+    nodes {
+      ...driverTransaction
+      driver {
+        ...DriverName
+      }
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}

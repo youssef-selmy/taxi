@@ -1,0 +1,72 @@
+query driverReview($id: ID!) {
+  driver(id: $id) {
+    ...driverDetail
+  }
+
+  carModels {
+    nodes {
+      ...vehicleModel
+    }
+  }
+
+  fleets {
+    nodes {
+      ...fleetListItem
+    }
+  }
+  carColors {
+    nodes {
+      ...vehicleColor
+    }
+  }
+}
+
+query driverDocuments($driverId: ID!) {
+  driverDocuments {
+    ...driverDocument
+  }
+  driverToDriverDocuments(filter: { driverId: { eq: $driverId } }) {
+    edges {
+      node {
+        ...driverToDriverDocument
+      }
+    }
+  }
+}
+
+query services {
+  services {
+    ...taxiPricing
+  }
+  serviceCategories {
+    ...taxiPricingCategory
+  }
+}
+
+mutation driverRejection(
+  $inputUpdate: UpdateOneDriverInput!
+  $inputCreate: CreateOneDriverNoteInput!
+) {
+  updateOneDriver(input: $inputUpdate) {
+    ...driverDetail
+  }
+  createOneDriverNote(input: $inputCreate) {
+    ...driverNote
+  }
+}
+
+mutation driverApprove($input: UpdateOneDriverInput!) {
+  updateOneDriver(input: $input) {
+    ...driverDetail
+  }
+}
+
+mutation updateDriverDocument($input: UpdateOneDriverToDriverDocumentInput!) {
+  updateOneDriverToDriverDocument(input: $input) {
+    ...driverToDriverDocument
+  }
+}
+
+mutation setEnabledServices($input: SetActiveServicesOnDriverInput!) {
+  setActivatedServicesOnDriver(input: $input)
+}

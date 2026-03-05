@@ -1,0 +1,23 @@
+query vendorCategories {
+  shopCategories(sorting: { field: displayPriority, direction: DESC }) {
+    nodes {
+      ...shopCategory
+    }
+  }
+}
+
+query vendors(
+  $paging: OffsetPaging
+  $filter: ShopFilter!
+  $sorting: [ShopSort!]!
+) {
+  shops(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...shopListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

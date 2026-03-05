@@ -1,0 +1,17 @@
+query regionCategories {
+  regionCategories {
+    ...regionCategory
+  }
+}
+
+query regions($filter: RegionFilter!, $paging: OffsetPaging) {
+  regions(filter: $filter, paging: $paging) {
+    nodes {
+      ...region
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

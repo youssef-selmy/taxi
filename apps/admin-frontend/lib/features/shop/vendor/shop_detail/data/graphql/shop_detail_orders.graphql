@@ -1,0 +1,39 @@
+query shopActiveOrders($shopId: ID!) {
+  shopOrders(
+    filter: {
+      status: { in: [New, OnHold, OutForDelivery, Processing] }
+      carts: { shopId: { eq: $shopId } }
+    }
+    paging: { limit: 50 }
+  ) {
+    nodes {
+      ...shopOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query shopOrders(
+  $paging: OffsetPaging
+  $filter: ShopOrderFilter
+  $sorting: [ShopOrderSort!]!
+) {
+  shopOrders(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...shopOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query shopOrderDetail($orderId: ID!) {
+  shopOrder(id: $orderId) {
+    ...orderShopDetail
+  }
+}

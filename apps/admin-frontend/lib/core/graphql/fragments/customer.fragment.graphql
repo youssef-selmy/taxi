@@ -1,0 +1,60 @@
+fragment CustomerCompact on Rider {
+  id
+  firstName
+  lastName
+  mobileNumber
+  lastActivityAt
+  media {
+    ...Media
+  }
+}
+
+fragment customerDetails on Rider {
+  id
+  firstName
+  lastName
+  lastActivityAt
+  countryIso
+  registrationTimestamp
+  status
+  email
+  gender
+  mobileNumber
+  ratingAggregate {
+    ...ratingAggregate
+  }
+  media {
+    ...Media
+  }
+}
+
+fragment CustomersListConnection on RiderConnection {
+  nodes {
+    ...CustomerListItem
+  }
+  pageInfo {
+    ...OffsetPageInfo
+  }
+  totalCount
+}
+
+fragment CustomerListItem on Rider {
+  id
+  firstName
+  lastName
+  lastActivityAt
+  status
+  countryIso
+  mobileNumber
+  media {
+    ...Media
+  }
+  wallet {
+    ...customerWallet
+  }
+  orderCount: ordersAggregate {
+    count {
+      id
+    }
+  }
+}

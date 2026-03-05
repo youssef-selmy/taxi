@@ -1,0 +1,98 @@
+fragment taxiPayoutSessionListItem on TaxiPayoutSession {
+  id
+  status
+  totalAmount
+  currency
+  createdAt
+  payoutMethods {
+    ...payoutMethodCompact
+  }
+  driverTransactions(paging: { limit: 2 }) {
+    nodes {
+      driver {
+        ...DriverName
+      }
+    }
+    totalCount
+  }
+}
+
+fragment taxiPayoutSessionDetail on TaxiPayoutSession {
+  id
+  totalAmount
+  createdAt
+  status
+  currency
+  driversCount: driverTransactionsAggregate {
+    count {
+      id
+    }
+  }
+  # shopsCount: shopTransactionsAggregate {
+  #   count {
+  #     id
+  #   }
+  # }
+  # parkingsCount: parkingTransactionsAggregate {
+  #   count {
+  #     id
+  #   }
+  # }
+  payoutMethodDetails {
+    ...taxiPayoutSessionPayoutMethodDetail
+  }
+
+  paidDrivers: driverTransactionsAggregate(filter: { status: { eq: Done } }) {
+    sum {
+      amount
+    }
+  }
+  unpaidDrivers: driverTransactionsAggregate(
+    filter: { status: { eq: Processing } }
+  ) {
+    sum {
+      amount
+    }
+  }
+  # paidShops: shopTransactionsAggregate(filter: { status: { eq: Done } }) {
+  #   sum {
+  #     amount
+  #   }
+  # }
+  # unpaidShops: shopTransactionsAggregate(
+  #   filter: { status: { eq: Processing } }
+  # ) {
+  #   sum {
+  #     amount
+  #   }
+  # }
+  # paidParkings: parkingTransactionsAggregate(filter: { status: { eq: Done } }) {
+  #   sum {
+  #     amount
+  #   }
+  # }
+  # unpaidParkings: parkingTransactionsAggregate(
+  #   filter: { status: { eq: Processing } }
+  # ) {
+  #   sum {
+  #     amount
+  #   }
+  # }
+}
+
+fragment taxiPayoutSessionPayoutMethodDetail on TaxiPayoutSessionPayoutMethodDetail {
+  id
+  status
+
+  statistics: driverTransactionsAggregate {
+    count {
+      id
+    }
+    sum {
+      amount
+    }
+  }
+  payoutMethod {
+    ...payoutMethodCompact
+  }
+}

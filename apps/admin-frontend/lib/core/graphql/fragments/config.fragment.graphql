@@ -1,0 +1,42 @@
+fragment license on LicenseInformation {
+  license {
+    buyerName
+    licenseType
+    supportExpireDate
+    connectedApps
+    platformAddons
+  }
+  benefits
+  drawbacks
+  availableUpgrades {
+    type
+    benefits
+    price
+  }
+}
+
+fragment Config on ConfigInformation {
+  isValid
+  config {
+    backendMapsAPIKey
+    adminPanelAPIKey
+    companyLogo
+    companyName
+    companyColor
+    taxi {
+      ...AppConfigInfo
+    }
+    shop {
+      ...AppConfigInfo
+    }
+    parking {
+      ...AppConfigInfo
+    }
+  }
+}
+
+fragment AppConfigInfo on AppConfigInfo {
+  logo
+  name
+  color
+}

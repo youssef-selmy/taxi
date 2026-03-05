@@ -1,0 +1,21 @@
+query shopFeedbacks(
+  $filter: ShopFeedbackFilter!
+  $paging: OffsetPaging
+  $sorting: [ShopFeedbackSort!]!
+) {
+  shopFeedbacks(paging: $paging, filter: $filter, sorting: $sorting) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...shopFeedback
+    }
+  }
+}
+
+mutation updateShopFeedbackStatus($feedbackId: ID!, $status: ReviewStatus!) {
+  updateShopFeedbackStatus(feedbackId: $feedbackId, status: $status) {
+    ...shopFeedback
+  }
+}

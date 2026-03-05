@@ -1,0 +1,39 @@
+query emailTemplates(
+  $paging: OffsetPaging
+  $filter: EmailTemplateFilter
+  $sorting: [EmailTemplateSort!]!
+) {
+  emailTemplates(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...emailTemplateListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query emailTemplate($id: ID!) {
+  emailTemplate(id: $id) {
+    ...emailTemplateDetails
+  }
+}
+
+mutation updateEmailTemplate($id: ID!, $input: EmailTemplateInput!) {
+  updateOneEmailTemplate(input: { id: $id, update: $input }) {
+    ...emailTemplateDetails
+  }
+}
+
+mutation createEmailTemplate($input: EmailTemplateInput!) {
+  createOneEmailTemplate(input: { emailTemplate: $input }) {
+    ...emailTemplateDetails
+  }
+}
+
+mutation deleteEmailTemplate($id: ID!) {
+  deleteOneEmailTemplate(input: { id: $id }) {
+    id
+  }
+}

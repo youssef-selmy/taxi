@@ -1,0 +1,23 @@
+query parkSpotDetail($id: ID!) {
+  parkSpot(id: $id) {
+    ...parkSpotDetail
+  }
+}
+
+query parkSpotFeedbacks($parkSpotId: ID!) {
+  parkingFeedbacks(filter: { parkSpotId: { eq: $parkSpotId } }) {
+    nodes {
+      ...parkingFeedback
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+mutation updateParkSpot($id: ID!, $update: UpdateParkSpotInput!) {
+  updateOneParkSpot(input: { id: $id, update: $update }) {
+    ...parkSpotDetail
+  }
+}

@@ -1,0 +1,33 @@
+query taxiPricingOptions {
+  taxiPricingOptions: serviceOptions {
+    ...taxiOrderOption
+  }
+}
+
+query taxiPricingOption($id: ID!) {
+  taxiPricingOption: serviceOption(id: $id) {
+    ...taxiOrderOption
+  }
+}
+
+mutation createPricingOption($input: ServiceOptionInput!) {
+  createPricingOption: createOneServiceOption(
+    input: { serviceOption: $input }
+  ) {
+    ...taxiOrderOption
+  }
+}
+
+mutation updatePricingOption($id: ID!, $input: ServiceOptionInput!) {
+  updatePricingOption: updateOneServiceOption(
+    input: { id: $id, update: $input }
+  ) {
+    ...taxiOrderOption
+  }
+}
+
+mutation deletePricingOption($id: ID!) {
+  deletePricingOption: deleteOneServiceOption(input: { id: $id }) {
+    id
+  }
+}

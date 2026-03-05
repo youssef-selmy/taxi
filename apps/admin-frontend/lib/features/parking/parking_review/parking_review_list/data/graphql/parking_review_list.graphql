@@ -1,0 +1,21 @@
+query parkingFeedbacks(
+  $filter: ParkingFeedbackFilter!
+  $paging: OffsetPaging
+  $sorting: [ParkingFeedbackSort!]!
+) {
+  parkingFeedbacks(paging: $paging, filter: $filter, sorting: $sorting) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...parkingFeedback
+    }
+  }
+}
+
+mutation updateParkingFeedbackStatus($feedbackId: ID!, $status: ReviewStatus!) {
+  updateParkingFeedbackStatus(feedbackId: $feedbackId, status: $status) {
+    ...parkingFeedback
+  }
+}

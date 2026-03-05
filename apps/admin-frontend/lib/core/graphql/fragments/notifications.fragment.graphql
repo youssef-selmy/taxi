@@ -1,0 +1,99 @@
+fragment notification on AdminNotificationUnion {
+  __typename
+  ... on TaxiSupportRequestNotification {
+    ...taxiSupportRequestNotification
+  }
+  ... on ShopSupportRequestNotification {
+    ...shopSupportRequestNotification
+  }
+  ... on ParkingSupportRequestNotification {
+    ...parkingSupportRequestNotification
+  }
+  ... on DriverPendingVerificationNotification {
+    ...driverPendingVerificationNotification
+  }
+  ... on ShopPendingVerificationNotification {
+    ...shopPendingVerificationNotification
+  }
+  ... on ParkSpotPendingVerificationNotification {
+    ...parkSpotPendingVerificationNotification
+  }
+  ... on ShopReviewPendingApprovalNotification {
+    ...shopReviewPendingApprovalNotification
+  }
+  ... on ParkingReviewPendingApprovalNotification {
+    ...parkingReviewPendingApprovalNotification
+  }
+}
+
+# Support Request notifications
+fragment taxiSupportRequestNotification on TaxiSupportRequestNotification {
+  createdAt
+  readAt
+  type
+  taxiSupportRequest {
+    ...taxiSupportRequest
+  }
+}
+fragment shopSupportRequestNotification on ShopSupportRequestNotification {
+  createdAt
+  readAt
+  type
+  shopSupportRequest {
+    ...shopSupportRequest
+  }
+}
+fragment parkingSupportRequestNotification on ParkingSupportRequestNotification {
+  createdAt
+  readAt
+  type
+  parkingSupportRequest {
+    ...parkingOrderSupportRequest
+  }
+}
+
+# Pending Verification notifications
+fragment driverPendingVerificationNotification on DriverPendingVerificationNotification {
+  createdAt
+  readAt
+  type
+  driverPendingVerification {
+    ...driverListItem
+  }
+}
+fragment shopPendingVerificationNotification on ShopPendingVerificationNotification {
+  createdAt
+  readAt
+  type
+  shopPendingVerification {
+    ...shopListItem
+  }
+}
+
+fragment parkSpotPendingVerificationNotification on ParkSpotPendingVerificationNotification {
+  createdAt
+  readAt
+  type
+  parkSpotPendingVerification {
+    ...parkingListItem
+  }
+}
+
+# Review Pending Approval notifications
+fragment shopReviewPendingApprovalNotification on ShopReviewPendingApprovalNotification {
+  createdAt
+  readAt
+  type
+  shopReviewPendingApproval {
+    ...shopFeedback
+  }
+}
+
+fragment parkingReviewPendingApprovalNotification on ParkingReviewPendingApprovalNotification {
+  createdAt
+  readAt
+  type
+  parkingReviewPendingApproval {
+    ...parkingFeedback
+  }
+}

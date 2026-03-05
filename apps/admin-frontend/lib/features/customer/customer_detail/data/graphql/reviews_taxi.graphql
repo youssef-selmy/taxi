@@ -1,0 +1,13 @@
+query customerTaxiReviews($customerId: ID!) {
+  taxiReviews: feedbacks(
+    filter: { request: { riderId: { eq: $customerId } } }
+  ) {
+    nodes {
+      ...reviewTaxi
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

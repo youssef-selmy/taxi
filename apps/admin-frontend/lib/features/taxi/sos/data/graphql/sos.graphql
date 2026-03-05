@@ -1,0 +1,67 @@
+query distressSignals(
+  $filter: DistressSignalFilter!
+  $paging: OffsetPaging
+  $sorting: [DistressSignalSort!]!
+) {
+  distressSignals(paging: $paging, filter: $filter, sorting: $sorting) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...DistressSignal
+    }
+  }
+}
+
+query distressSignalDetails($id: ID!) {
+  distressSignal(id: $id) {
+    ...distressSignalDetail
+  }
+}
+
+query sosReasons(
+  $filter: SOSReasonFilter!
+  $paging: OffsetPaging
+  $sorting: [SOSReasonSort!]!
+) {
+  sosReasons(paging: $paging, filter: $filter, sorting: $sorting) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...SosReassonList
+    }
+  }
+}
+
+query sosReasonDetail($id: ID!) {
+  sosReason(id: $id) {
+    ...SosReassonDetail
+  }
+}
+
+mutation updateSos($id: ID!, $update: UpdateSosInput!) {
+  updateOneDistressSignal(input: { id: $id, update: $update }) {
+    ...distressSignalDetail
+  }
+}
+
+mutation sosReasonCreate($input: CreateOneSOSReasonInput!) {
+  createOneSOSReason(input: $input) {
+    ...SosReassonDetail
+  }
+}
+
+mutation sosReasonUpdate($input: UpdateOneSOSReasonInput!) {
+  updateOneSOSReason(input: $input) {
+    ...SosReassonDetail
+  }
+}
+
+mutation sosReasonDelete($id: ID!) {
+  deleteOneSOSReason(input: { id: $id }) {
+    id
+  }
+}

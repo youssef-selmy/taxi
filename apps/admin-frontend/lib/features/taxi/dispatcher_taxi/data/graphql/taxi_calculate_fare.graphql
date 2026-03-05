@@ -1,0 +1,17 @@
+query CalculateFare($input: CalculateFareInput!) {
+  calculateFare(input: $input) {
+    ...TaxiCalculateFare
+  }
+}
+
+query getDriversLocation($coordinate: PointInput!) {
+  getDriversLocationWithData(center: $coordinate, count: 20) {
+    ...DriverLocation
+  }
+}
+
+mutation createTaxiOrder($input: CreateOrderInput!) {
+  createTaxiOrder: createOrder(input: $input) {
+    id
+  }
+}

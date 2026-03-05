@@ -1,0 +1,5 @@
+mutation insertCustomerTransaction($input: RiderTransactionInput!) {
+  createOneRiderTransaction(input: { riderTransaction: $input }) {
+    ...customerTransaction
+  }
+}

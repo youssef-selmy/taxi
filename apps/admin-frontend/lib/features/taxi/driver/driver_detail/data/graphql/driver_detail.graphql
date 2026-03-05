@@ -1,0 +1,41 @@
+query driverDetail($id: ID!) {
+  driver(id: $id) {
+    ...driverDetail
+  }
+
+  carModels(paging: { limit: 50 }) {
+    nodes {
+      ...vehicleModel
+    }
+  }
+
+  carColors(paging: { limit: 50 }) {
+    nodes {
+      ...vehicleColor
+    }
+  }
+  fleets(paging: { limit: 50 }) {
+    nodes {
+      ...fleetListItem
+    }
+  }
+  serviceCategories {
+    ...taxiPricingCategory
+  }
+}
+
+mutation updateDriver($input: UpdateOneDriverInput!) {
+  updateOneDriver(input: $input) {
+    ...driverDetail
+  }
+}
+
+mutation updateDriverService($input: SetActiveServicesOnDriverInput!) {
+  setActivatedServicesOnDriver(input: $input)
+}
+
+mutation updateDriverStatusDetail($id: ID!, $status: DriverStatus!) {
+  updateDriverStatus(id: $id, status: $status) {
+    ...driverDetail
+  }
+}

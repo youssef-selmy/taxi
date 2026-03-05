@@ -1,0 +1,10 @@
+query driverTimesheet($id: ID!, $startTime: DateTime!, $endTime: DateTime!) {
+  driverTimesheet: driverTimesheets(
+    input: { driverId: $id, startDate: $startTime, endDate: $endTime }
+  ) {
+    ...Timesheet
+  }
+  driverShiftRules {
+    ...driverShiftRule
+  }
+}

@@ -1,0 +1,32 @@
+fragment systemConfiguration on CurrentConfiguration {
+  mysqlHost
+  mysqlPort
+  mysqlUser
+  mysqlPassword
+  mysqlDatabase
+  redisHost
+  redisPort
+  redisDb
+  redisPassword
+  adminPanelAPIKey
+  backendMapsAPIKey
+  firebaseProjectPrivateKey
+  companyLogo
+  companyName
+  taxi {
+    ...appConfigInfo
+  }
+  shop {
+    ...appConfigInfo
+  }
+  parking {
+    ...appConfigInfo
+  }
+  versionNumber
+}
+
+fragment appConfigInfo on AppConfigInfo {
+  logo
+  name
+  color
+}

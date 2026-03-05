@@ -1,0 +1,31 @@
+fragment TaxiCalculateFare on CalculateFare {
+  currency
+  distance
+  duration
+  error
+  services {
+    id
+    name
+    services {
+      id
+      name
+      description
+      personCapacity
+      costResult {
+        ... on FixedCost {
+          cost
+        }
+        ... on RangeCost {
+          min
+          max
+        }
+      }
+      options {
+        ...taxiOrderOption
+      }
+      media {
+        ...Media
+      }
+    }
+  }
+}

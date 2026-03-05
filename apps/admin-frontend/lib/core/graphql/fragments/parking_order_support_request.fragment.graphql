@@ -1,0 +1,7 @@
+fragment parkingOrderSupportRequest on ParkingSupportRequest {
+  id
+  status
+  createdAt
+  subject
+  content
+}

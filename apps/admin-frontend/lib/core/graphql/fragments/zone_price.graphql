@@ -1,0 +1,31 @@
+fragment zonePriceListItem on ZonePrice {
+  id
+  name
+}
+
+fragment zonePrice on ZonePrice {
+  ...zonePriceListItem
+  from {
+    ...Coordinate
+  }
+  to {
+    ...Coordinate
+  }
+  cost
+  timeMultipliers {
+    ...timeMultiplier
+  }
+  fleets {
+    id
+    name
+  }
+  services {
+    id
+    name
+  }
+}
+
+fragment zonePriceCategory on ZonePriceCategory {
+  id
+  name
+}

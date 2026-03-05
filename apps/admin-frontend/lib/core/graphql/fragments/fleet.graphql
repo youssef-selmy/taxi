@@ -1,0 +1,111 @@
+fragment fleetListItem on Fleet {
+  id
+  name
+  isBlocked
+  mobileNumber
+  driversAggregate {
+    count {
+      id
+    }
+  }
+  wallet {
+    balance
+    currency
+  }
+  profilePicture {
+    ...Media
+  }
+}
+
+fragment fleetDetails on Fleet {
+  id
+  name
+  isBlocked
+  createdAt
+  wallet {
+    ...fleetWallet
+  }
+  userName
+  phoneNumber
+  mobileNumber
+  address
+  commissionSharePercent
+  commissionShareFlat
+  feeMultiplier
+  accountNumber
+  exclusivityAreas {
+    ...Coordinate
+  }
+  profilePicture {
+    ...Media
+  }
+}
+
+fragment fleetTransaction on FleetTransaction {
+  id
+  refrenceNumber
+  description
+  operator {
+    ...staffListItem
+  }
+  operatorId
+  requestId
+  fleetId
+  transactionTimestamp
+  action
+  deductType
+  rechargeType
+  amount
+  currency
+  status
+}
+
+fragment fleetStaffs on FleetStaff {
+  id
+  registeredAt
+  permissionFinancial
+  fleetId
+  firstName
+  lastName
+  lastActivityAt
+  phoneNumber
+  mobileNumber
+  email
+  isBlocked
+  address
+  userName
+  password
+  permissionOrder
+  profileImage {
+    ...Media
+  }
+}
+
+fragment fleetStaffSessions on FleetStaffSession {
+  id
+  sessionInfo {
+    ...sessionInfo
+  }
+}
+
+fragment fleetOrderListItem on Order {
+  id
+  createdOn
+  addresses
+  expectedTimestamp
+  costAfterCoupon
+  currency
+  paymentMode
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+  status
+  driver {
+    ...DriverName
+  }
+  startTimestamp
+  finishTimestamp
+}

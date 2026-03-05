@@ -1,0 +1,58 @@
+fragment parkingOrderListItem on ParkOrder {
+  id
+  createdAt
+  price
+  currency
+  paymentMode
+  status
+  carSize
+  exitTime
+  enterTime
+  vehicleType
+  parkSpot {
+    ...parkingCompact
+  }
+  carOwner {
+    ...CustomerListItem
+  }
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+}
+fragment parkingOrderDetail on ParkOrder {
+  id
+  createdAt
+  price
+  currency
+  paymentMode
+  status
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+  parkSpot {
+    ...parkingCompact
+  }
+  carOwner {
+    ...CustomerListItem
+  }
+  activities {
+    ...parkingOrderActivities
+  }
+  carSize
+  exitTime
+  enterTime
+  vehicleType
+}
+
+fragment parkingOrderActivities on ParkOrderActivity {
+  id
+  updatedAt
+  status
+  expectedBy
+}

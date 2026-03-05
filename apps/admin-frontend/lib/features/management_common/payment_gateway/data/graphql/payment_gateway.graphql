@@ -1,0 +1,39 @@
+query paymentGateways(
+  $paging: OffsetPaging
+  $filter: PaymentGatewayFilter
+  $sorting: [PaymentGatewaySort!]!
+) {
+  paymentGateways(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...paymentGatewayListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query paymentGateway($id: ID!) {
+  paymentGateway(id: $id) {
+    ...paymentGatewayDetails
+  }
+}
+
+mutation createPaymentGateway($input: CreatePaymentGatewayInput!) {
+  createOnePaymentGateway(input: { paymentGateway: $input }) {
+    ...paymentGatewayDetails
+  }
+}
+
+mutation updatePaymentGateway($id: ID!, $input: UpdatePaymentGatewayInput!) {
+  updateOnePaymentGateway(input: { id: $id, update: $input }) {
+    ...paymentGatewayDetails
+  }
+}
+
+mutation deletePaymentGateway($id: ID!) {
+  deleteOnePaymentGateway(input: { id: $id }) {
+    id
+  }
+}

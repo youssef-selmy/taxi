@@ -1,0 +1,37 @@
+query customerWalletsSummary($currency: String!) {
+  walletsCount: riderWalletAggregate(filter: { currency: { eq: $currency } }) {
+    count {
+      id
+    }
+  }
+  totalWalletBalance: riderWalletAggregate(
+    filter: { currency: { eq: $currency } }
+  ) {
+    sum {
+      balance
+    }
+  }
+}
+
+query customerWallets(
+  $paging: OffsetPaging
+  $currency: String!
+  $sorting: [RiderWalletSort!]!
+) {
+  riderWallets(
+    filter: { currency: { eq: $currency } }
+    sorting: $sorting
+    paging: $paging
+  ) {
+    nodes {
+      ...customerWallet
+      rider {
+        ...CustomerCompact
+      }
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

@@ -1,0 +1,11 @@
+fragment SavedPaymentMethod on SavedPaymentMethod {
+  id
+  riderId
+  driverId
+  lastFour
+  providerBrand
+  title
+  expiryDate
+  holderName
+  type
+}

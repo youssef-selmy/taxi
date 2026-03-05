@@ -1,0 +1,107 @@
+fragment shopOrderListItem on ShopOrder {
+  id
+  createdAt
+  status
+  currency
+  total
+  carts {
+    shop {
+      ...shopBasic
+    }
+    products {
+      ...shopOrderCartItem
+    }
+  }
+  customer {
+    ...CustomerListItem
+  }
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+  paymentMethod
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+  deliveryAddress {
+    ...Address
+  }
+}
+fragment orderShopDetail on ShopOrder {
+  id
+  createdAt
+  status
+  total
+  discount
+  serviceFee
+  subTotal
+  tax
+  deliveryFee
+  currency
+  paymentMethod
+  deliveryMethod
+  deliveryDirections {
+    ...Coordinate
+  }
+  deliveryAddress {
+    ...Address
+  }
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+  carts {
+    id
+    shop {
+      ...shopBasic
+    }
+    products {
+      ...shopOrderCartItem
+    }
+  }
+  customer {
+    ...CustomerListItem
+  }
+  statusHistories {
+    id
+    orderId
+    status
+    expectedBy
+    updatedAt
+  }
+  estimatedDeliveryTime
+  fullfillmentTime
+}
+
+fragment shopOrderCartItem on ShopOrderCartItem {
+  id
+  priceEach
+  quantity
+  itemVariant {
+    ...shopOrderCartItemVariant
+  }
+  options {
+    ...shopOrderCartItemOption
+  }
+}
+
+fragment shopOrderCartItemVariant on ItemVariant {
+  id
+  name
+  description
+  price
+  product {
+    name
+    image {
+      ...Media
+    }
+  }
+}
+
+fragment shopOrderCartItemOption on ItemOption {
+  id
+  name
+  description
+  price
+}

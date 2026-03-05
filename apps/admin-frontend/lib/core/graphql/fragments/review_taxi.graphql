@@ -1,0 +1,30 @@
+fragment reviewTaxi on Feedback {
+  id
+  score
+  reviewTimestamp
+  description
+  requestId
+  driver {
+    ...DriverName
+  }
+  parameters {
+    ...reviewTaxiParameter
+  }
+}
+
+fragment reviewTaxiParameter on FeedbackParameter {
+  id
+  title
+  isGood
+}
+
+fragment reviewTaxiParameterListItem on FeedbackParameter {
+  id
+  isGood
+  title
+  feedbacksAggregate {
+    count {
+      id
+    }
+  }
+}

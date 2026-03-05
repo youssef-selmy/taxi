@@ -1,0 +1,23 @@
+query region($id: ID!) {
+  region(id: $id) {
+    ...region
+  }
+}
+
+mutation createRegion($input: CreateRegionInput!) {
+  createOneRegion(input: { region: $input }) {
+    ...region
+  }
+}
+
+mutation updateRegion($id: ID!, $input: UpdateRegionInput!) {
+  updateOneRegion(input: { id: $id, update: $input }) {
+    ...region
+  }
+}
+
+mutation deleteRegion($id: ID!) {
+  deleteOneRegion(input: { id: $id }) {
+    id
+  }
+}

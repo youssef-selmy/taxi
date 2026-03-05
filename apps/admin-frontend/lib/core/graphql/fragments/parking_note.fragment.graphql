@@ -1,0 +1,8 @@
+fragment parkingNote on ParkSpotNote {
+  id
+  createdAt
+  note
+  staff {
+    ...staffListItem
+  }
+}

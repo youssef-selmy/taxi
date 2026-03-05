@@ -1,0 +1,13 @@
+query shopLoginSessions($customerId: ID!) {
+  shopLoginSessions(filter: { shopId: { eq: $customerId } }) {
+    id
+    shopId
+    sessionInfo {
+      ...sessionInfo
+    }
+  }
+}
+
+mutation terminateShopLoginSession($id: ID!) {
+  terminateShopLoginSession(sessionId: $id)
+}

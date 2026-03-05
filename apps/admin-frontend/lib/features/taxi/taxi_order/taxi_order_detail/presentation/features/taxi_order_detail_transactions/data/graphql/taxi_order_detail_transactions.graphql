@@ -1,0 +1,18 @@
+query getTaxiOrderDetailTransactions($orderId: ID!) {
+  order(id: $orderId) {
+    currency
+    riderTransactions {
+      ...customerTransaction
+    }
+    driverTransactions {
+      ...driverTransaction
+    }
+
+    fleetTransactions {
+      ...fleetTransaction
+    }
+    providerTransactions {
+      ...providerTransaction
+    }
+  }
+}

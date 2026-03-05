@@ -1,0 +1,30 @@
+fragment regionCategory on RegionCategory {
+  id
+  name
+  currency
+}
+
+fragment region on Region {
+  id
+  currency
+  categoryId
+  name
+  enabled
+  location {
+    ...Coordinate
+  }
+}
+
+fragment regionWithCategory on Region {
+  id
+  currency
+  categoryId
+  name
+  enabled
+  location {
+    ...Coordinate
+  }
+  category {
+    ...regionCategory
+  }
+}

@@ -1,0 +1,16 @@
+fragment shopCategory on ShopCategory {
+  id
+  name
+  status
+  image {
+    ...Media
+  }
+  shops {
+    totalCount
+  }
+}
+
+fragment shopCategoryCompact on ShopCategory {
+  id
+  name
+}

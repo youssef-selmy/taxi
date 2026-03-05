@@ -1,0 +1,44 @@
+fragment DriverScoringConfig on DriverScoringConfig {
+  distanceWeight
+  driverRatingWeight
+  idleTimeWeight
+  cancelRateWeight
+  threshold
+  topN
+}
+
+fragment DispatchConfig on DispatchConfig {
+  strategy
+  requestTimeoutSeconds
+  maxSearchRadiusMeters
+  preDispatchBufferMinutes
+  scoring {
+    ...DriverScoringConfig
+  }
+  radiusExpansion {
+    enabled
+    stepMeters
+    intervalSeconds
+    maxSteps
+  }
+  fallback {
+    fallbackEnabled
+    fallbackStrategy
+    fallbackScoring {
+      ...DriverScoringConfig
+    }
+  }
+  broadcastConfig {
+    waveSize
+    waveIntervalSeconds
+    maxWaves
+    radiusIncrementMeters
+  }
+  sequentialConfig {
+    perDriverTimeoutSeconds
+    avoidPreviousCandidates
+    maxDriversToTest
+    driverRetryLimit
+  }
+  notifyAdminOnFailure
+}

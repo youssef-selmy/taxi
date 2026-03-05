@@ -1,0 +1,5 @@
+mutation insertDriverTransaction($input: DriverTransactionInput!) {
+  createOneDriverTransaction(input: { driverTransaction: $input }) {
+    ...driverTransaction
+  }
+}

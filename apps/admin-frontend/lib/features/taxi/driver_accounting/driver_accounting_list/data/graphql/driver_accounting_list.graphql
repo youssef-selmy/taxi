@@ -1,0 +1,37 @@
+query driverWalletsSummary($currency: String) {
+  walletsCount: driverWalletAggregate(filter: { currency: { eq: $currency } }) {
+    count {
+      id
+    }
+  }
+  totalWalletBalance: driverWalletAggregate(
+    filter: { currency: { eq: $currency } }
+  ) {
+    sum {
+      balance
+    }
+  }
+}
+
+query driverWallets(
+  $paging: OffsetPaging
+  $currency: String
+  $sorting: [DriverWalletSort!]!
+) {
+  driverWallets(
+    filter: { currency: { eq: $currency } }
+    sorting: $sorting
+    paging: $paging
+  ) {
+    nodes {
+      ...driverWallet
+      driver {
+        ...DriverName
+      }
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

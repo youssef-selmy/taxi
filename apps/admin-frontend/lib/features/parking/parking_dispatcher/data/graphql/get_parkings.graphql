@@ -1,0 +1,9 @@
+query parkings(
+  $location: PointInput!
+  $fromTime: DateTime!
+  $toTime: DateTime!
+) {
+  parkings(input: { point: $location, fromTime: $fromTime, toTime: $toTime }) {
+    ...parkSpotDetail
+  }
+}

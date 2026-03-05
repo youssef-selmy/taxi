@@ -1,0 +1,15 @@
+query customerComplaintsTaxi(
+  $filter: TaxiSupportRequestFilter!
+  $paging: OffsetPaging
+  $sorting: [TaxiSupportRequestSort!]
+) {
+  taxiSupportRequests(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...taxiSupportRequest
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

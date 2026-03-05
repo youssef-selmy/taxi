@@ -1,0 +1,15 @@
+query payoutMethods(
+  $paging: OffsetPaging
+  $filter: PayoutMethodFilter
+  $sorting: [PayoutMethodSort!]!
+) {
+  payoutMethods(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...payoutMethodListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

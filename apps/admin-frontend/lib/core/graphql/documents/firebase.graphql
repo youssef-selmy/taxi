@@ -1,0 +1,3 @@
+mutation UpdateFcmToken($fcmToken: String!) {
+  updateFcmToken(fcmToken: $fcmToken)
+}

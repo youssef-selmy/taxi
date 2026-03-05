@@ -1,0 +1,9 @@
+query driverDocuments($id: ID!) {
+  driverToDriverDocuments(filter: { driverId: { eq: $id } }) {
+    edges {
+      node {
+        ...driverToDriverDocument
+      }
+    }
+  }
+}

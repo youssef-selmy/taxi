@@ -1,0 +1,87 @@
+query vehicleColors(
+  $paging: OffsetPaging
+  $filter: CarColorFilter
+  $sorting: [CarColorSort!]!
+) {
+  vehicleColors: carColors(
+    paging: $paging
+    filter: $filter
+    sorting: $sorting
+  ) {
+    nodes {
+      ...vehicleColor
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query vehicleModels(
+  $paging: OffsetPaging
+  $filter: CarModelFilter
+  $sorting: [CarModelSort!]!
+) {
+  vehicleModels: carModels(
+    paging: $paging
+    filter: $filter
+    sorting: $sorting
+  ) {
+    nodes {
+      ...vehicleModel
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query vehicleColor($id: ID!) {
+  vehicleColor: carColor(id: $id) {
+    ...vehicleColor
+  }
+}
+
+query vehicleModel($id: ID!) {
+  vehicleModel: carModel(id: $id) {
+    ...vehicleModel
+  }
+}
+
+mutation createVehicleColor($input: CarColorInput!) {
+  createVehicleColor: createOneCarColor(input: { carColor: $input }) {
+    ...vehicleColor
+  }
+}
+
+mutation createVehicleModel($input: CarModelInput!) {
+  createVehicleModel: createOneCarModel(input: { carModel: $input }) {
+    ...vehicleModel
+  }
+}
+
+mutation updateVehicleColor($id: ID!, $input: CarColorInput!) {
+  updateVehicleColor: updateOneCarColor(input: { id: $id, update: $input }) {
+    ...vehicleColor
+  }
+}
+
+mutation updateVehicleModel($id: ID!, $input: CarModelInput!) {
+  updateVehicleModel: updateOneCarModel(input: { id: $id, update: $input }) {
+    ...vehicleModel
+  }
+}
+
+mutation deleteVehicleColor($id: ID!) {
+  deleteVehicleColor: deleteOneCarColor(input: { id: $id }) {
+    id
+  }
+}
+
+mutation deleteVehicleModel($id: ID!) {
+  deleteVehicleModel: deleteOneCarModel(input: { id: $id }) {
+    id
+  }
+}

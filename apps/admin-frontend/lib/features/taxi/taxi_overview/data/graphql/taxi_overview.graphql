@@ -1,0 +1,90 @@
+query overviewKPIs($currency: String!) {
+  totalOrders: orders(filter: { currency: { eq: $currency } }) {
+    totalCount
+  }
+  totalRevenue: providerTransactionAggregate(
+    filter: { currency: { eq: $currency }, rechargeType: { in: [Commission] } }
+  ) {
+    sum {
+      amount
+    }
+  }
+  totalDrivers: drivers {
+    totalCount
+  }
+  totalCustomers: riders {
+    totalCount
+  }
+}
+
+query onlineDrivers($bounds: BoundsInput!, $center: PointInput!) {
+  driverLocationsByViewport(bounds: $bounds) {
+    clusters {
+      ...LocationCluster
+    }
+    singles {
+      ...LocationWithId
+    }
+    h3IndexesInView
+    h3Resolution
+    totalCount
+  }
+  getDriversLocationWithData(center: $center, count: 50) {
+    ...DriverLocation
+  }
+}
+
+subscription driverLocationClusters(
+  $h3Indexes: [String!]!
+  $h3Resolution: Int!
+) {
+  driverLocationClusterUpdate(
+    h3IndexIds: $h3Indexes
+    h3Resolution: $h3Resolution
+  ) {
+    ...LocationCluster
+  }
+}
+subscription driverLocationUpdate($driverIds: [ID!]!) {
+  driverLocationUpdated(driverIds: $driverIds) {
+    ...LocationWithId
+  }
+}
+
+query pendingDrivers {
+  drivers(filter: { status: { in: [PendingApproval] } }) {
+    nodes {
+      ...driverListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query pendingSupportRequests {
+  taxiSupportRequests(
+    filter: { status: { in: [Submitted, UnderInvestigation] } }
+  ) {
+    nodes {
+      ...taxiSupportRequest
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query topSpendingCustomers {
+  topSpendingCustomers {
+    ...leaderboardItem
+  }
+}
+
+query topEarningDrivers($currency: String!) {
+  topEarningDrivers(currency: $currency) {
+    ...leaderboardItem
+  }
+}

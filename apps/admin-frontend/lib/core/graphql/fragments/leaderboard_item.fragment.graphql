@@ -1,0 +1,8 @@
+fragment leaderboardItem on LeaderboardItem {
+  id
+  name
+  avatarUrl
+  totalAmount
+  totalCount
+  currency
+}

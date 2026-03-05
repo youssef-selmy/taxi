@@ -1,0 +1,9 @@
+fragment Address on Address {
+  id
+  title
+  type
+  details
+  location {
+    ...Coordinate
+  }
+}

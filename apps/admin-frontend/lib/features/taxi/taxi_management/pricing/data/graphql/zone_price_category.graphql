@@ -1,0 +1,29 @@
+query zonePriceCategories {
+  zonePriceCategories {
+    ...zonePriceCategory
+  }
+}
+
+query zonePriceCategory($id: ID!) {
+  zonePriceCategory(id: $id) {
+    ...zonePriceCategory
+  }
+}
+
+mutation createZonePriceCategory($input: ZonePriceCategoryInput!) {
+  createOneZonePriceCategory(input: { zonePriceCategory: $input }) {
+    ...zonePriceCategory
+  }
+}
+
+mutation updateZonePriceCategory($id: ID!, $input: ZonePriceCategoryInput!) {
+  updateOneZonePriceCategory(input: { id: $id, update: $input }) {
+    ...zonePriceCategory
+  }
+}
+
+mutation deleteZonePriceCategory($id: ID!) {
+  deleteOneZonePriceCategory(input: { id: $id }) {
+    id
+  }
+}

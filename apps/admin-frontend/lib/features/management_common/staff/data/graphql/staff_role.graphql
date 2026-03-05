@@ -1,0 +1,29 @@
+query staffRoles($filter: OperatorRoleFilter, $sorting: [OperatorRoleSort!]!) {
+  staffRoles: operatorRoles(filter: $filter, sorting: $sorting) {
+    ...staffRole
+  }
+}
+
+query staffRoleDetails($id: ID!) {
+  operatorRole(id: $id) {
+    ...staffRole
+  }
+}
+
+mutation updateStaffRole($id: ID!, $input: OperatorRoleInput!) {
+  updateOneOperatorRole(input: { id: $id, update: $input }) {
+    ...staffRole
+  }
+}
+
+mutation createStaffRole($input: OperatorRoleInput!) {
+  createOneOperatorRole(input: { operatorRole: $input }) {
+    ...staffRole
+  }
+}
+
+mutation deleteStaffRole($id: ID!) {
+  deleteOneOperatorRole(input: { id: $id }) {
+    id
+  }
+}

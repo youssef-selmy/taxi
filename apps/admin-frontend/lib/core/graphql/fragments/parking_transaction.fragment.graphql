@@ -1,0 +1,35 @@
+fragment parkingTransaction on ParkingTransaction {
+  id
+  createdAt
+  transactionDate
+  documentNumber
+  description
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+  status
+  debitType
+  creditType
+  currency
+  amount
+  type
+}
+
+fragment parkingTransactionPayout on ParkingTransaction {
+  id
+  status
+  creditType
+  debitType
+  amount
+  currency
+  type
+  customer {
+    ...CustomerCompact
+  }
+  payoutAccount {
+    ...payoutAccount
+  }
+}

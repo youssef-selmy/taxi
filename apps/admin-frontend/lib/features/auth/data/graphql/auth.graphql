@@ -1,0 +1,6 @@
+mutation DisableServer($ip: String!, $purchaseCode: String) {
+  disablePreviousServer(ip: $ip, purchaseCode: $purchaseCode) {
+    status
+    message
+  }
+}

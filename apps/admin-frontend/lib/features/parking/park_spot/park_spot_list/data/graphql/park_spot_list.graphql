@@ -1,0 +1,15 @@
+query parkSpots(
+  $filter: ParkSpotFilter
+  $paging: OffsetPaging
+  $sorting: [ParkSpotSort!]!
+) {
+  parkSpots(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...parkingListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

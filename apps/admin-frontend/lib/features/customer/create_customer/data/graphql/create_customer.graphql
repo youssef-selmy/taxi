@@ -1,0 +1,5 @@
+mutation createCustomer($input: CreateOneRiderInput!) {
+  createOneRider(input: $input) {
+    id
+  }
+}

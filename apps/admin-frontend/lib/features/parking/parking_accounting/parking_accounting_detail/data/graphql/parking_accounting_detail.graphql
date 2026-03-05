@@ -1,0 +1,24 @@
+query parkingWalletDetailSummary($parkingId: ID!) {
+  rider(id: $parkingId) {
+    ...CustomerCompact
+    parkingWallets {
+      ...parkingWallet
+    }
+  }
+}
+
+query parkingTransactions(
+  $filter: ParkingTransactionFilter
+  $paging: OffsetPaging
+  $sorting: [ParkingTransactionSort!]!
+) {
+  parkingTransactions(filter: $filter, sorting: $sorting, paging: $paging) {
+    nodes {
+      ...parkingTransaction
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

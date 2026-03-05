@@ -1,0 +1,9 @@
+fragment OffsetPageInfo on OffsetPageInfo {
+  hasNextPage
+  hasPreviousPage
+}
+
+fragment PageInfo on PageInformation {
+  hasNextPage
+  hasPreviousPage
+}

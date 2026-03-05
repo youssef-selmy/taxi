@@ -1,0 +1,11 @@
+query shopDetail($id: ID!) {
+  shop(id: $id) {
+    ...shopDetail
+  }
+}
+
+mutation updateShop($id: ID!, $update: UpsertShopInput!) {
+  updateOneShop(input: { id: $id, update: $update }) {
+    ...shopDetail
+  }
+}

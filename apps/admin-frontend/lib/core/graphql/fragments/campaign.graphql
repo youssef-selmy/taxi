@@ -1,0 +1,47 @@
+fragment campaignListItem on Campaign {
+  id
+  name
+  isEnabled
+  startAt
+  expireAt
+  appType
+  codesAggregate {
+    count {
+      id
+    }
+  }
+}
+
+fragment campaignDetails on Campaign {
+  id
+  name
+  appType
+  isEnabled
+  description
+  manyTimesUserCanUse
+  manyUsersCanUse
+  currency
+  discountFlat
+  discountPercent
+  minimumCost
+  maximumCost
+  startAt
+  expireAt
+  usedCodesCount: codesAggregate(filter: { customerId: { isNot: null } }) {
+    count {
+      id
+    }
+  }
+  unusedCodesCount: codesAggregate(filter: { customerId: { is: true } }) {
+    count {
+      id
+    }
+  }
+}
+
+fragment campaignCode on CampaignCode {
+  id
+  code
+  usedAt
+  customerId
+}

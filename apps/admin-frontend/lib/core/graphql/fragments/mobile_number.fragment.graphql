@@ -1,0 +1,4 @@
+fragment mobileNumber on PhoneNumber {
+  countryCode
+  number
+}

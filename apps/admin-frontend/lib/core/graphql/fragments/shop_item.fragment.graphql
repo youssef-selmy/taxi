@@ -1,0 +1,37 @@
+fragment shopItemListItem on Item {
+  id
+  image {
+    ...Media
+  }
+  name
+  basePrice
+  ratingAggregate {
+    ...ratingAggregate
+  }
+  categories {
+    ...shopItemCategoryListItem
+  }
+  presets {
+    ...shopItemPresetListItem
+  }
+  variants {
+    ...ItemVariant
+  }
+  options {
+    ...ItemOption
+  }
+}
+
+fragment ItemVariant on ItemVariant {
+  id
+  name
+  description
+  price
+}
+
+fragment ItemOption on ItemOption {
+  id
+  name
+  description
+  price
+}

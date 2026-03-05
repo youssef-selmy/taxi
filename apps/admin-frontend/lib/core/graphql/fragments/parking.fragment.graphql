@@ -1,0 +1,80 @@
+fragment parkingListItem on ParkSpot {
+  id
+  createdAt
+  name
+  type
+  phoneNumber
+  mainImage {
+    ...Media
+  }
+  address
+  ratingAggregate {
+    ...ratingAggregate
+  }
+  owner {
+    parkingWallets {
+      ...parkingWallet
+    }
+  }
+  parkOrders {
+    totalCount
+  }
+  status
+}
+
+fragment parkingCompact on ParkSpot {
+  id
+  name
+  address
+  mainImage {
+    ...Media
+  }
+  location {
+    ...Coordinate
+  }
+  phoneNumber
+  type
+  carSpaces
+}
+
+fragment parkSpotDetail on ParkSpot {
+  id
+  name
+  type
+  status
+  lastActivityAt
+  createdAt
+  ratingAggregate {
+    ...ratingAggregate
+  }
+  phoneNumber
+  email
+  currency
+  weeklySchedule {
+    ...weekdaySchedule
+  }
+  owner {
+    ...customerDetails
+  }
+  description
+  location {
+    ...Coordinate
+  }
+  mainImage {
+    ...Media
+  }
+  images {
+    ...Media
+  }
+  facilities
+  carSpaces
+  carPrice
+  carSize
+  bikeSpaces
+  bikePrice
+  truckSpaces
+  truckPrice
+  openHour
+  closeHour
+  address
+}

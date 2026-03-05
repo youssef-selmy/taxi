@@ -1,0 +1,16 @@
+fragment shopOrderSupportRequest on ShopSupportRequest {
+  id
+  createdAt
+  status
+  cart {
+    shop {
+      ...shopBasic
+    }
+  }
+  requestedByShop
+  content
+  order {
+    ...shopOrderListItem
+  }
+  subject
+}

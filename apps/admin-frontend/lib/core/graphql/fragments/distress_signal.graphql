@@ -1,0 +1,58 @@
+# fragment DistressSignalNotification on DistressSignal {
+#   id
+#   submittedByRider
+#   createdAt
+#   order {
+#     driver {
+#       ...DriverName
+#     }
+#     rider {
+#       ...CustomerCompact
+#     }
+#   }
+# }
+
+fragment DistressSignal on DistressSignal {
+  id
+  submittedByRider
+  createdAt
+  status
+  reason {
+    ...SosReassonDetail
+  }
+  comment
+}
+fragment distressSignalDetail on DistressSignal {
+  id
+  submittedByRider
+  createdAt
+  order {
+    id
+    driver {
+      ...DriverName
+    }
+    rider {
+      ...CustomerCompact
+    }
+  }
+  status
+  reason {
+    ...SosReassonDetail
+  }
+  comment
+}
+
+fragment SosReassonList on SOSReason {
+  id
+  name
+  isActive
+  sos {
+    totalCount
+  }
+}
+
+fragment SosReassonDetail on SOSReason {
+  id
+  name
+  isActive
+}

@@ -1,0 +1,11 @@
+fragment sessionInfo on SessionInfo {
+  createdAt
+  lastActivityAt
+  ip
+  ipLocation
+  deviceName
+  appType
+  devicePlatform
+  deviceType
+  token
+}

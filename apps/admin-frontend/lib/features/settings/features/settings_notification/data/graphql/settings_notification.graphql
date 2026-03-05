@@ -1,0 +1,11 @@
+query currentUserNotificationSettings {
+  me {
+    enabledNotifications
+  }
+}
+
+mutation updateNotificationSettings($input: [EnabledNotification!]!) {
+  updateProfile(input: { enabledNotifications: $input }) {
+    enabledNotifications
+  }
+}

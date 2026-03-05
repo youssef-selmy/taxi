@@ -1,0 +1,10 @@
+fragment providerTransaction on ProviderTransaction{
+  id
+  description
+  action
+  amount
+  currency
+  createdAt
+  deductType
+  rechargeType
+}

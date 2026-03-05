@@ -1,0 +1,6 @@
+fragment driverShiftRule on DriverShiftRule{
+    id
+    maxHoursPerFrequency
+    mandatoryBreakMinutes
+    timeFrequency
+}

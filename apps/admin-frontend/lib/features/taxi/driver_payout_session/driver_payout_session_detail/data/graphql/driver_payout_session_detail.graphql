@@ -1,0 +1,50 @@
+query taxiPayoutSession($id: ID!) {
+  taxiPayoutSession(id: $id) {
+    ...taxiPayoutSessionDetail
+  }
+}
+
+query payoutSessionPayoutMethodDriverTransactions(
+  $payoutSessionPayoutMethodId: ID!
+  $paging: OffsetPaging
+) {
+  driverTransactions(
+    filter: { payoutSessionMethodId: { eq: $payoutSessionPayoutMethodId } }
+    paging: $paging
+  ) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...driverTransactionPayout
+    }
+  }
+}
+
+mutation taxiAutomaticPayout($payoutSessionId: ID!, $payoutMethodId: ID!) {
+  runTaxiAutoPayout(
+    input: {
+      payoutMethodId: $payoutMethodId
+      payoutSessionId: $payoutSessionId
+    }
+  )
+}
+
+mutation taxiExportPayoutToCSV($payoutSessionId: ID!, $payoutMethodId: ID!) {
+  exportTaxiPayoutSessionToCsv(
+    input: {
+      payoutMethodId: $payoutMethodId
+      payoutSessionId: $payoutSessionId
+    }
+  )
+}
+
+mutation updateTaxiPayoutSessionStatus(
+  $id: ID!
+  $status: PayoutSessionStatus!
+) {
+  updateOneTaxiPayoutSession(input: { id: $id, update: { status: $status } }) {
+    ...taxiPayoutSessionDetail
+  }
+}

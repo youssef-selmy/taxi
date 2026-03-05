@@ -1,0 +1,39 @@
+query parkingWalletsSummary($currency: String) {
+  walletsCount: parkingWalletAggregate(
+    filter: { currency: { eq: $currency } }
+  ) {
+    count {
+      id
+    }
+  }
+  totalWalletBalance: parkingWalletAggregate(
+    filter: { currency: { eq: $currency } }
+  ) {
+    sum {
+      balance
+    }
+  }
+}
+
+query parkingWallets(
+  $paging: OffsetPaging
+  $currency: String
+  $sorting: [ParkingWalletSort!]!
+) {
+  parkingWallets(
+    filter: { currency: { eq: $currency } }
+    sorting: $sorting
+    paging: $paging
+  ) {
+    nodes {
+      ...parkingWallet
+      customer {
+        ...CustomerCompact
+      }
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

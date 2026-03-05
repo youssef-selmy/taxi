@@ -1,0 +1,15 @@
+fragment shopItemPresetListItem on ShopItemPreset {
+  id
+  name
+  products {
+    totalCount
+  }
+}
+
+fragment shopItemPresetDetail on ShopItemPreset {
+  id
+  name
+  weeklySchedule {
+    ...weekdaySchedule
+  }
+}

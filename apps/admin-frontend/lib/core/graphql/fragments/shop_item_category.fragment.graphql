@@ -1,0 +1,15 @@
+fragment shopItemCategoryListItem on ItemCategory {
+  id
+  name
+  products {
+    totalCount
+  }
+}
+
+fragment shopItemCategoryDetail on ItemCategory {
+  id
+  name
+  presets {
+    ...shopItemPresetListItem
+  }
+}

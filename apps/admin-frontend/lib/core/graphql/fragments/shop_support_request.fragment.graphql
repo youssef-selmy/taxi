@@ -1,0 +1,103 @@
+fragment shopSupportRequest on ShopSupportRequest {
+  id
+  subject
+  content
+  status
+  createdAt
+  status
+  orderId
+  requestedByShop
+  cart {
+    shop {
+      ...shopBasicInfo
+    }
+  }
+  order {
+    customer {
+      ...CustomerCompact
+    }
+    carts {
+      shop {
+        ...shopBasicInfo
+      }
+    }
+  }
+  assignedToStaffs {
+    ...staffListItem
+  }
+}
+
+# fragment shopSupportRequestNotification on ShopSupportRequest {
+#   id
+#   requestedByShop
+#   cart {
+#     shop {
+#       ...shopBasicInfo
+#     }
+#   }
+#   order {
+#     customer {
+#       ...CustomerCompact
+#     }
+#     carts {
+#       shop {
+#         ...shopBasicInfo
+#       }
+#     }
+#   }
+# }
+
+fragment shopSupportRequestDetail on ShopSupportRequest {
+  id
+  subject
+  createdAt
+  status
+  content
+  cart {
+    shop {
+      ...shopBasicInfo
+    }
+  }
+  order {
+    id
+    customer {
+      ...CustomerCompact
+    }
+    carts {
+      shop {
+        ...shopBasicInfo
+      }
+    }
+  }
+  requestedByShop
+
+  activities {
+    ...shopSupportRequestActivity
+  }
+
+  assignedToStaffs {
+    ...staffListItem
+  }
+}
+
+fragment shopSupportRequestActivity on ShopSupportRequestActivity {
+  id
+  type
+  comment
+  actor {
+    ...staffListItem
+  }
+  statusFrom
+  statusTo
+  assignedToStaffs {
+    ...staffListItem
+  }
+  createdAt
+  assignedToStaffs {
+    ...staffListItem
+  }
+
+  unassignedFromStaffs {
+    ...staffListItem
+  }
+}

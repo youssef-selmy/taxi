@@ -1,0 +1,107 @@
+query shopPresets(
+  $filter: ShopItemPresetFilter!
+  $paging: OffsetPaging
+  $sorting: [ShopItemPresetSort!]!
+) {
+  shopItemPresets(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...shopItemPresetListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query shopItemCategories(
+  $filter: ItemCategoryFilter!
+  $paging: OffsetPaging
+  $sorting: [ItemCategorySort!]!
+) {
+  itemCategories(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...shopItemCategoryListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query shopItems(
+  $filter: ItemFilter!
+  $paging: OffsetPaging
+  $sorting: [ItemSort!]!
+) {
+  items(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...shopItemListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query itemPreset($id: ID!) {
+  shopItemPreset(id: $id) {
+    ...shopItemPresetDetail
+  }
+}
+
+mutation deleteItemPreset($id: ID!) {
+  deleteOneShopItemPreset(input: { id: $id }) {
+    id
+  }
+}
+
+query itemCategory($id: ID!) {
+  itemCategory(id: $id) {
+    ...shopItemCategoryDetail
+  }
+}
+
+mutation deleteItemCategory($id: ID!) {
+  deleteOneItemCategory(input: { id: $id }) {
+    id
+  }
+}
+
+query shopItem($id: ID!) {
+  item(id: $id) {
+    ...shopItemListItem
+  }
+}
+
+mutation deleteShopItem($id: ID!) {
+  deleteOneItem(input: { id: $id }) {
+    id
+  }
+}
+
+mutation createShopItemCategory($input: CreateItemCategoryInput!) {
+  createOneItemCategory(input: { itemCategory: $input }) {
+    ...shopItemCategoryDetail
+  }
+}
+
+mutation updateShopItemCategory($id: ID!, $update: UpdateItemCategoryInput!) {
+  updateOneItemCategory(input: { id: $id, update: $update }) {
+    ...shopItemCategoryDetail
+  }
+}
+
+mutation createShopItemPreset($input: CreateShopItemPresetInput!) {
+  createOneShopItemPreset(input: { shopItemPreset: $input }) {
+    ...shopItemPresetDetail
+  }
+}
+
+mutation updateShopItemPreset($id: ID!, $update: UpdateShopItemPresetInput!) {
+  updateOneShopItemPreset(input: { id: $id, update: $update }) {
+    ...shopItemPresetDetail
+  }
+}

@@ -1,0 +1,60 @@
+fragment taxiSupportRequest on TaxiSupportRequest {
+  id
+  subject
+  status
+  inscriptionTimestamp
+  status
+  requestId
+  content
+  requestedByDriver
+  assignedToStaffs {
+    ...staffListItem
+  }
+}
+
+fragment taxiSupportRequestDetail on TaxiSupportRequest {
+  id
+  subject
+  inscriptionTimestamp
+  status
+  content
+  request {
+    id
+    rider {
+      ...CustomerCompact
+    }
+    driver {
+      ...DriverName
+    }
+  }
+  requestedByDriver
+
+  activities {
+    ...taxiSupportRequestActivity
+  }
+
+  assignedToStaffs {
+    ...staffListItem
+  }
+}
+
+fragment taxiSupportRequestActivity on TaxiSupportRequestActivity {
+  id
+  type
+  comment
+  actor {
+    ...staffListItem
+  }
+  statusFrom
+  statusTo
+  assignedToStaffs {
+    ...staffListItem
+  }
+  createdAt
+  assignedToStaffs {
+    ...staffListItem
+  }
+  unassignedFromStaffs {
+    ...staffListItem
+  }
+}

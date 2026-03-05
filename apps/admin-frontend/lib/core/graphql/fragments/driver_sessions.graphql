@@ -1,0 +1,7 @@
+fragment driverSessions on DriverSession {
+  id
+  driverId
+  sessionInfo {
+    ...sessionInfo
+  }
+}

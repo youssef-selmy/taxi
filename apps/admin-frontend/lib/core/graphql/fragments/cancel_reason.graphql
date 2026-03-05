@@ -1,0 +1,11 @@
+fragment cancelReason on OrderCancelReason {
+  id
+  title
+  isEnabled
+  userType
+  ordersAggregate {
+    count {
+      id
+    }
+  }
+}

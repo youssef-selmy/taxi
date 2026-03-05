@@ -1,0 +1,38 @@
+fragment parkingFeedback on ParkingFeedback {
+  id
+  score
+  status
+  comment
+  createdAt
+  order {
+    id
+    vehicleType
+    carSize
+    parkSpot {
+      ...parkingCompact
+    }
+    carOwner {
+      ...CustomerCompact
+    }
+  }
+  parameters {
+    ...parkingFeedbackParameter
+  }
+}
+
+fragment parkingFeedbackParameter on ParkingFeedbackParameter {
+  id
+  name
+  isGood
+}
+
+fragment parkingFeedbackParameterListItem on ParkingFeedbackParameter {
+  id
+  name
+  isGood
+  feedbacksAggregate {
+    count {
+      id
+    }
+  }
+}

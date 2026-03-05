@@ -1,0 +1,119 @@
+fragment taxiOrderListItem on TaxiOrder {
+  id
+  createdAt
+  waypoints {
+    ...Waypoint
+  }
+  createdAt
+  scheduledAt
+  totalCost
+  currency
+  couponDiscount
+  status
+  paymentMethod {
+    ...PaymentMethod
+  }
+  driver {
+    fullName
+    imageUrl
+    mobileNumber
+    location {
+      ...Coordinate
+    }
+  }
+  rider {
+    fullName
+    imageUrl
+    rating
+    mobileNumber
+  }
+}
+
+fragment taxiOrderDetail on TaxiOrder {
+  id
+  createdAt
+  waypoints {
+    ...Waypoint
+  }
+  status
+  scheduledAt
+  waitMinutes
+  totalCost
+  currency
+  pickupEta
+  dropoffEta
+  activities {
+    ...taxiOrderActivity
+  }
+  couponDiscount
+  directions {
+    ...Coordinate
+  }
+  fleet {
+    id
+    name
+    imageUrl
+  }
+  currency
+  paymentMethod {
+    ...PaymentMethod
+  }
+  service {
+    name
+    imageUrl
+  }
+  options {
+    name
+    icon
+  }
+  status
+  driversSentTo
+  driver {
+    fullName
+    imageUrl
+    mobileNumber
+    rating
+    vehicleModel
+    vehicleColor
+    vehiclePlate
+    location {
+      ...Coordinate
+    }
+  }
+  rider {
+    fullName
+    imageUrl
+    rating
+    mobileNumber
+  }
+
+  chatMessages {
+    createdAt
+    seenAt
+    senderFullName
+  }
+}
+
+fragment taxiOrderActivity on RequestActivity {
+  id
+  createdAt
+  type
+}
+
+fragment conversation on OrderMessage {
+  id
+  sentAt
+  sentByDriver
+  status
+  content
+}
+
+fragment taxiOrderNote on TaxiOrderNote {
+  id
+  createdAt
+  orderId
+  note
+  staff {
+    ...staffListItem
+  }
+}

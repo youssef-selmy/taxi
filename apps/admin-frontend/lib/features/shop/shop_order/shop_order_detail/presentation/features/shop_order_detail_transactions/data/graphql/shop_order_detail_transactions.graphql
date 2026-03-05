@@ -1,0 +1,27 @@
+query getShopOrderTransactions($orderId: ID!) {
+  shopOrder(id: $orderId) {
+    currency
+    shopTransactions: carts {
+      shop {
+        ...shopBasic
+      }
+      shopTransactions {
+        ...shopTransaction
+      }
+    }
+    providerTransactions: carts {
+      shop {
+        ...shopBasic
+      }
+      providerTransactions {
+        ...providerTransaction
+      }
+    }
+    riderTransactions {
+      ...customerTransaction
+    }
+    driverTransactions {
+      ...driverTransaction
+    }
+  }
+}

@@ -1,0 +1,24 @@
+query driverWalletDetailSummary($driverId: ID!) {
+  driver(id: $driverId) {
+    ...DriverName
+    wallet {
+      ...driverWallet
+    }
+  }
+}
+
+query driverTransactions(
+  $filter: DriverTransactionFilter
+  $paging: OffsetPaging
+  $sorting: [DriverTransactionSort!]!
+) {
+  driverTransactions(filter: $filter, sorting: $sorting, paging: $paging) {
+    nodes {
+      ...driverTransaction
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

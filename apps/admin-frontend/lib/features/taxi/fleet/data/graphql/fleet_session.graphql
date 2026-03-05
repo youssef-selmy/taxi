@@ -1,0 +1,9 @@
+query fleetStaffSession {
+  fleetStaffSessions {
+    ...fleetStaffSessions
+  }
+}
+
+mutation terminateFleetStaffSession($id: ID!) {
+  terminateFleetStaffSession(id: $id)
+}

@@ -1,0 +1,57 @@
+query driverStatistics($currency: String!) {
+  totalEarnings: driverWalletAggregate(
+    filter: { currency: { eq: $currency } }
+  ) {
+    sum {
+      balance
+    }
+  }
+  activeDrivers: drivers {
+    totalCount
+  }
+  averageRatings: driverAggregate(filter: { rating: { isNot: false } }) {
+    avg {
+      rating
+    }
+  }
+  totalTripsCompleted: orders(
+    filter: { status: { in: [Finished, WaitingForReview] } }
+  ) {
+    totalCount
+  }
+}
+
+query topEarningDrivers($currency: String!) {
+  topEarningDrivers(currency: $currency) {
+    ...leaderboardItem
+  }
+}
+
+query topTripsCompletedDrivers {
+  topTripsCompletedDrivers {
+    ...leaderboardItem
+  }
+}
+
+query activeInactiveDrivers {
+  activeInactiveDrivers {
+    ...ActiveInactiveUsers
+  }
+}
+
+query rideCountByStatus {
+  orderAggregate(
+    filter: {
+      status: {
+        in: [Finished, WaitingForReview, DriverCanceled, RiderCanceled]
+      }
+    }
+  ) {
+    count {
+      id
+    }
+    groupBy {
+      status
+    }
+  }
+}

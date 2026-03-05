@@ -1,0 +1,70 @@
+fragment DriverName on Driver {
+  id
+  firstName
+  lastName
+  mobileNumber
+  countryIso
+  media {
+    ...Media
+  }
+  status
+  registrationTimestamp
+  lastSeenTimestamp
+  rating
+}
+
+fragment driverListItem on Driver {
+  id
+  firstName
+  lastName
+  mobileNumber
+  countryIso
+  registrationTimestamp
+  media {
+    ...Media
+  }
+  status
+  wallet {
+    ...driverWallet
+  }
+  orders {
+    totalCount
+  }
+  rating
+  lastSeenTimestamp
+}
+
+fragment driverDetail on Driver {
+  id
+  media {
+    ...Media
+  }
+  firstName
+  lastName
+  mobileNumber
+  countryIso
+  email
+  gender
+  fleetId
+  carId
+  carColorId
+  carProductionYear
+  carPlate
+  accountNumber
+  bankName
+  bankRoutingNumber
+  bankSwift
+  address
+  canDeliver
+  maxDeliveryPackageSize
+  enabledServices {
+    driverEnabled
+    service {
+      ...taxiPricing
+    }
+  }
+  rating
+  lastSeenTimestamp
+  registrationTimestamp
+  status
+}

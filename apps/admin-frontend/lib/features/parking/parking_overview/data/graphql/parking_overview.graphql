@@ -1,0 +1,77 @@
+query overviewKPIs($currency: String!) {
+  totalOrders: orders(filter: { currency: { eq: $currency } }) {
+    totalCount
+  }
+  totalRevenue: providerTransactionAggregate(
+    filter: { currency: { eq: $currency }, rechargeType: { in: [Commission] } }
+  ) {
+    sum {
+      amount
+    }
+    
+  }
+
+  totalParkings: parkSpots {
+    totalCount
+  }
+  totalCustomers: riders {
+    totalCount
+  }
+
+  
+}
+
+query activeOrders($currency: String!) {
+  activeOrders: parkOrders(
+    filter: {
+      currency: { eq: $currency }
+      status: { in: [ACCEPTED, PAID, PENDING] }
+    }
+  ) {
+    nodes {
+      ...parkingOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query pendingParkings {
+  parkSpots(filter: { status: { in: [Pending] } }) {
+    nodes {
+      ...parkingListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query pendingSupportRequests {
+  parkingSupportRequests(
+    filter: { status: { in: [Submitted, UnderInvestigation] } }
+  ) {
+    nodes {
+      ...parkingSupportRequest
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query topSpendingCustomers {
+  topSpendingCustomers {
+    ...leaderboardItem
+  }
+}
+
+query topEarningParkings($currency: String!) {
+  topEarningParkSpots(currency: $currency) {
+    ...leaderboardItem
+  }
+}

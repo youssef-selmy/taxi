@@ -1,0 +1,31 @@
+fragment shopDocument on ShopDocument {
+  id
+  notificationDaysBeforeExpiry
+  title
+  isEnabled
+  isRequired
+  hasExpiryDate
+  retentionPolicies {
+    ...shopDocumentRetentionPolicy
+  }
+}
+
+fragment shopDocumentRetentionPolicy on ShopDocumentRetentionPolicy {
+  id
+  deleteAfterDays
+  title
+}
+
+fragment shopToShopDocument on ShopToShopDocument {
+  id
+  shopDocument {
+    ...shopDocument
+  }
+  retentionPolicy {
+    ...shopDocumentRetentionPolicy
+  }
+  media {
+    ...Media
+  }
+  expiresAt
+}

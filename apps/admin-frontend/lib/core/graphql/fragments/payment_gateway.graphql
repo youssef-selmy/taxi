@@ -1,0 +1,33 @@
+fragment paymentGatewayListItem on PaymentGateway {
+  id
+  title
+  type
+  enabled
+  media {
+    ...Media
+  }
+  totalTransactions: riderTransactionsAggregate(
+    filter: { status: { eq: Done } }
+  ) {
+    sum {
+      amount
+    }
+    groupBy {
+      currency
+    }
+  }
+}
+
+fragment paymentGatewayDetails on PaymentGateway {
+  id
+  title
+  privateKey
+  publicKey
+  saltKey
+  merchantId
+  enabled
+  type
+  media {
+    ...Media
+  }
+}

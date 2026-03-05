@@ -1,0 +1,47 @@
+query driverDetails {
+  carModels(paging: { limit: 50 }) {
+    nodes {
+      ...vehicleModel
+    }
+  }
+  carColors(paging: { limit: 50 }) {
+    nodes {
+      ...vehicleColor
+    }
+  }
+  fleets(paging: { limit: 50 }) {
+    nodes {
+      ...fleetListItem
+    }
+  }
+}
+
+query driverDocuments {
+  driverDocuments {
+    ...driverDocument
+  }
+}
+
+query services {
+  serviceCategories {
+    ...taxiPricingCategory
+  }
+}
+
+mutation createDriver($input: CreateOneDriverInput!) {
+  createOneDriver(input: $input) {
+    ...driverDetail
+  }
+}
+
+mutation createDriverToDriverDocument(
+  $input: CreateOneDriverToDriverDocumentInput!
+) {
+  createOneDriverToDriverDocument(input: $input) {
+    ...driverToDriverDocument
+  }
+}
+
+mutation setEnabledServices($input: SetActiveServicesOnDriverInput!) {
+  setActivatedServicesOnDriver(input: $input)
+}

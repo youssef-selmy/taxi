@@ -1,0 +1,32 @@
+fragment driverDocument on DriverDocument {
+  id
+  notificationDaysBeforeExpiry
+  numberOfImages
+  title
+  isEnabled
+  isRequired
+  hasExpiryDate
+  retentionPolicies {
+    ...driverDocumentRetentionPolicy
+  }
+}
+
+fragment driverDocumentRetentionPolicy on DriverDocumentRetentionPolicy {
+  id
+  deleteAfterDays
+  title
+}
+
+fragment driverToDriverDocument on DriverToDriverDocument {
+  id
+  driverDocument {
+    ...driverDocument
+  }
+  retentionPolicy {
+    ...driverDocumentRetentionPolicy
+  }
+  media {
+    ...Media
+  }
+  expiresAt
+}

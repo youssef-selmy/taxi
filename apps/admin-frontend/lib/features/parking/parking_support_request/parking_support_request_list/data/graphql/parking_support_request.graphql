@@ -1,0 +1,15 @@
+query parkingSupportRequests(
+  $filter: ParkingSupportRequestFilter!
+  $paging: OffsetPaging
+  $sorting: [ParkingSupportRequestSort!]!
+) {
+  parkingSupportRequests(paging: $paging, filter: $filter, sorting: $sorting) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...parkingSupportRequest
+    }
+  }
+}

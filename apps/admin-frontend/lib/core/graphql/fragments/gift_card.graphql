@@ -1,0 +1,48 @@
+fragment giftBatchListItem on GiftBatch {
+  id
+  name
+  amount
+  currency
+  availableFrom
+  expireAt
+  giftCodesAggregate {
+    count {
+      id
+    }
+  }
+}
+
+fragment giftBatchDetails on GiftBatch {
+  id
+  name
+  amount
+  currency
+  availableFrom
+  expireAt
+  usedCodesCount: giftCodesAggregate(filter: { usedAt: { isNot: null } }) {
+    count {
+      id
+    }
+  }
+  unusedCodesCount: giftCodesAggregate(filter: { usedAt: { is: null } }) {
+    count {
+      id
+    }
+  }
+}
+
+fragment giftCode on GiftCode {
+  id
+  code
+  usedAt
+}
+
+fragment giftCodeConnection on GiftCodeConnection {
+  nodes {
+    ...giftCode
+  }
+  pageInfo {
+    ...OffsetPageInfo
+  }
+  totalCount
+}

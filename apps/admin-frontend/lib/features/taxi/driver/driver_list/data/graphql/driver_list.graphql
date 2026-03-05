@@ -1,0 +1,27 @@
+query drivers(
+  $paging: OffsetPaging
+  $filter: DriverFilter
+  $sorting: [DriverSort!]!
+) {
+  drivers(paging: $paging, filter: $filter, sorting: $sorting) {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    nodes {
+      ...driverListItem
+    }
+  }
+}
+
+mutation updateOneDriver($input: UpdateOneDriverInput!) {
+  updateOneDriver(input: $input) {
+    ...driverListItem
+  }
+}
+
+mutation updateDriverStatus($id: ID!, $status: DriverStatus!) {
+  updateDriverStatus(id: $id, status: $status) {
+    ...driverListItem
+  }
+}

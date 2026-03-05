@@ -1,0 +1,50 @@
+query shopsPendingPayoutSessions {
+  pendingSessions: shopPayoutSessions(
+    filter: { status: { eq: PENDING } }
+    paging: { limit: 100 }
+  ) {
+    nodes {
+      ...shopPayoutSessionListItem
+    }
+    totalCount
+  }
+}
+
+query shopsPayoutSessions(
+  $paging: OffsetPaging
+  $sorting: [ShopPayoutSessionSort!]!
+  $filter: ShopPayoutSessionFilter
+) {
+  shopPayoutSessions(paging: $paging, sorting: $sorting, filter: $filter) {
+    nodes {
+      ...shopPayoutSessionListItem
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}
+
+query shopsPayoutTransactions(
+  $paging: OffsetPaging
+  $filter: ShopTransactionFilter
+  $sorting: [ShopTransactionSort!]!
+) {
+  payoutTransactions: shopTransactions(
+    filter: $filter
+    paging: $paging
+    sorting: $sorting
+  ) {
+    nodes {
+      ...shopTransaction
+      shop {
+        ...shopBasicInfo
+      }
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}

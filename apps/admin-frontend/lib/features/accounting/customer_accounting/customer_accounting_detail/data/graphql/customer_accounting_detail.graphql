@@ -1,0 +1,24 @@
+query customerWalletDetailSummary($customerId: ID!) {
+  rider(id: $customerId) {
+    ...CustomerCompact
+    wallet {
+      ...customerWallet
+    }
+  }
+}
+
+query customerTransactions(
+  $filter: RiderTransactionFilter
+  $paging: OffsetPaging
+  $sorting: [RiderTransactionSort!]!
+) {
+  riderTransactions(filter: $filter, sorting: $sorting, paging: $paging) {
+    nodes {
+      ...customerTransaction
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

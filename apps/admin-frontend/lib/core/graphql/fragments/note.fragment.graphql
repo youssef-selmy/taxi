@@ -1,0 +1,4 @@
+fragment note on Note {
+  createdAt
+  note
+}

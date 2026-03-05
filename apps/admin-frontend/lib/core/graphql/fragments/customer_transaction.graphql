@@ -1,0 +1,18 @@
+fragment customerTransaction on RiderTransaction {
+  id
+  action
+  rechargeType
+  deductType
+  status
+  amount
+  currency
+  createdAt
+  refrenceNumber
+  description
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+}

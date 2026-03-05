@@ -1,0 +1,37 @@
+query shopWalletsSummary($currency: String) {
+  walletsCount: shopWalletAggregate(filter: { currency: { eq: $currency } }) {
+    count {
+      id
+    }
+  }
+  totalWalletBalance: shopWalletAggregate(
+    filter: { currency: { eq: $currency } }
+  ) {
+    sum {
+      balance
+    }
+  }
+}
+
+query shopWallets(
+  $paging: OffsetPaging
+  $currency: String
+  $sorting: [ShopWalletSort!]!
+) {
+  shopWallets(
+    filter: { currency: { eq: $currency } }
+    sorting: $sorting
+    paging: $paging
+  ) {
+    nodes {
+      ...shopWallet
+      shop {
+        ...shopBasicInfo
+      }
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

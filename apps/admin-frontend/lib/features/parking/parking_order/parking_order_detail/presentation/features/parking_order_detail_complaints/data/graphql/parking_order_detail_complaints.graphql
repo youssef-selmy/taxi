@@ -1,0 +1,7 @@
+query getParkingOrderSupportRequest($parkingId: IDFilterComparison!) {
+  parkingOrderComplaints: parkingSupportRequests(filter: { id: $parkingId }) {
+    nodes {
+      ...parkingOrderSupportRequest
+    }
+  }
+}

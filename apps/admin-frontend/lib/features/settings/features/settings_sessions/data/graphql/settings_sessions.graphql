@@ -1,0 +1,12 @@
+query currentUserSessions {
+  currentUserSessions {
+    id
+    sessionInfo {
+      ...sessionInfo
+    }
+  }
+}
+
+mutation terminateStaffSession($id: ID!) {
+  terminateStaffSession(id: $id)
+}

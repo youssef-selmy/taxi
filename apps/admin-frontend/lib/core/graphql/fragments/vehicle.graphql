@@ -1,0 +1,9 @@
+fragment vehicleColor on CarColor {
+  id
+  name
+}
+
+fragment vehicleModel on CarModel {
+  id
+  name
+}

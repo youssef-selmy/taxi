@@ -1,0 +1,11 @@
+query DispatchConfig {
+  dispatchConfig {
+    ...DispatchConfig
+  }
+}
+
+mutation UpdateDispatchConfig($input: DispatchConfigInput!) {
+  updateDispatchConfig(input: $input) {
+    ...DispatchConfig
+  }
+}

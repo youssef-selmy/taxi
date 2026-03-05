@@ -1,0 +1,34 @@
+query parkingSupportRequest($id: ID!) {
+  parkingSupportRequest(id: $id) {
+    ...parkingSupportRequestDetail
+  }
+  staffs: operators(paging: { limit: 50 }) {
+    nodes {
+      ...staffListItem
+    }
+  }
+}
+
+mutation addCommentToParkingSupportRequest(
+  $input: CreateParkingSupportRequestCommentInput!
+) {
+  addCommentToParkingSupportRequest(input: $input) {
+    ...parkingSupportRequestActivity
+  }
+}
+
+mutation assignStaffsToParkingSupportRequest(
+  $input: AssignParkingSupportRequestInput!
+) {
+  assignParkingSupportRequestToStaff(input: $input) {
+    ...parkingSupportRequestActivity
+  }
+}
+
+mutation updateParkingSupportRequestStatus(
+  $input: ChangeParkingSupportRequestStatusInput!
+) {
+  changeParkingSupportRequestStatus(input: $input) {
+    ...parkingSupportRequestActivity
+  }
+}

@@ -1,0 +1,24 @@
+fragment profile on Operator {
+  id
+  firstName
+  lastName
+  mobileNumber
+  userName
+  email
+  media {
+    ...Media
+  }
+  role {
+    ...profileRole
+  }
+}
+
+fragment profileRole on OperatorRole {
+  id
+  title
+  permissions
+  taxiPermissions
+  shopPermissions
+  parkingPermissions
+  allowedApps
+}

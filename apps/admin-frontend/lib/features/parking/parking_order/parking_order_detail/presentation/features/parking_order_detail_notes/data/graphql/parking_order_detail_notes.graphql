@@ -1,0 +1,15 @@
+query getParkingOrderNotes($parkingId: ID!) {
+  parkOrder(id: $parkingId) {
+    notes {
+      ...orderParkingNotes
+    }
+  }
+}
+
+mutation createParkingOrderNote($parkOrderId: ID!, $note: String!) {
+  createOneParkOrderNote(
+    input: { parkOrderNote: { parkOrderId: $parkOrderId, note: $note } }
+  ) {
+    id
+  }
+}

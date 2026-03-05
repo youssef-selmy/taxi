@@ -1,0 +1,50 @@
+query parkingsPendingPayoutSessions {
+  pendingSessions: parkingPayoutSessions(
+    filter: { status: { eq: PENDING } }
+    paging: { limit: 100 }
+  ) {
+    nodes {
+      ...parkingPayoutSessionListItem
+    }
+    totalCount
+  }
+}
+
+query parkingsPayoutSessions(
+  $paging: OffsetPaging
+  $sorting: [ParkingPayoutSessionSort!]!
+  $filter: ParkingPayoutSessionFilter
+) {
+  parkingPayoutSessions(paging: $paging, sorting: $sorting, filter: $filter) {
+    nodes {
+      ...parkingPayoutSessionListItem
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}
+
+query parkingsPayoutTransactions(
+  $paging: OffsetPaging
+  $filter: ParkingTransactionFilter
+  $sorting: [ParkingTransactionSort!]!
+) {
+  payoutTransactions: parkingTransactions(
+    filter: $filter
+    paging: $paging
+    sorting: $sorting
+  ) {
+    nodes {
+      ...parkingTransaction
+      customer {
+        ...CustomerCompact
+      }
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}

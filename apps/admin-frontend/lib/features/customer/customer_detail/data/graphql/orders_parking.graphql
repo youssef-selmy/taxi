@@ -1,0 +1,45 @@
+query customerOrdersParking(
+  $filter: ParkOrderFilter
+  $paging: OffsetPaging
+  $sorting: [ParkOrderSort!]!
+) {
+  parkOrders(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...parkingOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query exportParkingOrders(
+  $filter: ParkOrderFilter
+  $format: ExportFormat!
+  $sorting: [ParkOrderSort!]!
+) {
+  exportParkOrders(
+    filter: $filter
+    format: $format
+    sorting: $sorting
+    fields: [
+      { label: "Order ID", field: "id" }
+      { label: "Created At", field: "createdAt" }
+      { label: "Status", field: "status" }
+      { label: "Payment Mode", field: "paymentMethod" }
+      { label: "Vehicle Type", field: "vehicleType" }
+      { label: "Car Size", field: "carSize" }
+      { label: "Currency", field: "currency" }
+      { label: "Fullfillment Time", field: "fullfillmentTime" }
+      { label: "Customer Id", field: "carOwnerId" }
+      { label: "Park Spot Id", field: "parkSpotId" }
+      { label: "Spot Owner Id", field: "spotOwnerId" }
+      { label: "Enter Time", field: "enterTime" }
+      { label: "Exit Time", field: "exitTime" }
+      { label: "Tax", field: "tax" }
+      { label: "Discount", field: "discount" }
+      { label: "Total Cost", field: "price" }
+    ]
+  )
+}

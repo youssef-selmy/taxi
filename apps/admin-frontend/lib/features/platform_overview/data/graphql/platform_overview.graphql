@@ -1,0 +1,96 @@
+query pendingSupportRequestsCount {
+  taxiSupportRequests(filter: { status: { neq: Resolved } }) {
+    totalCount
+  }
+  shopSupportRequests(filter: { status: { neq: Resolved } }) {
+    totalCount
+  }
+  parkingSupportRequests(filter: { status: { neq: Resolved } }) {
+    totalCount
+  }
+}
+
+query pendingOrders {
+  taxiOrders: orders(
+    filter: { status: { in: [Booked, Requested, NotFound, NoCloseFound] } }
+  ) {
+    totalCount
+  }
+  shopOrders: shopOrders(
+    filter: {
+      status: { in: [New, Processing, ReadyForPickup, OutForDelivery] }
+    }
+  ) {
+    totalCount
+  }
+  parkOrders: parkOrders(filter: { status: { in: [PENDING, ACCEPTED] } }) {
+    totalCount
+  }
+}
+
+query platfromOverviewKPIs($currency: String!, $period: KPIPeriod!) {
+  platformKPI(input: { currency: $currency, period: $period }) {
+    totalOrders {
+      ...platformKPIItem
+    }
+    totalRevenue {
+      ...platformKPIItem
+    }
+    activeCustomers {
+      ...platformKPIItem
+    }
+  }
+}
+fragment platformKPIItem on PlatformKPIItem {
+  name
+  unit
+  total
+  change
+  breakdown {
+    app
+    value
+    percentage
+  }
+}
+
+query shopOrders(
+  $paging: OffsetPaging
+  $filter: ShopOrderFilter
+  $sorting: [ShopOrderSort!]!
+) {
+  shopOrders(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...shopOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query parkingOrders(
+  $paging: OffsetPaging
+  $filter: ParkOrderFilter
+  $sorting: [ParkOrderSort!]!
+) {
+  parkOrders(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...parkingOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query orderVolumeTimeSeries($period: KPIPeriod!) {
+  orderVolumeTimeSeries(period: $period) {
+    app
+    buckets {
+      date
+      orderCount
+    }
+  }
+}

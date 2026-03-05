@@ -1,0 +1,1 @@
+enum LeaderboardMode { totalOrders, totalSpendingOrEarning }

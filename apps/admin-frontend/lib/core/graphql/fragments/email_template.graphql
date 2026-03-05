@@ -1,0 +1,27 @@
+fragment emailTemplateListItem on EmailTemplate {
+  id
+  name
+  eventType
+  contentSource
+  isActive
+  locale
+  cc
+  createdAt
+  updatedAt
+}
+
+fragment emailTemplateDetails on EmailTemplate {
+  id
+  name
+  eventType
+  subject
+  contentSource
+  bodyHtml
+  bodyPlainText
+  providerTemplateId
+  isActive
+  locale
+  cc
+  createdAt
+  updatedAt
+}

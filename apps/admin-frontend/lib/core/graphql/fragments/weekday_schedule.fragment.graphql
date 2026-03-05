@@ -1,0 +1,7 @@
+fragment weekdaySchedule on WeekdaySchedule {
+  weekday
+  openingHours {
+    open
+    close
+  }
+}

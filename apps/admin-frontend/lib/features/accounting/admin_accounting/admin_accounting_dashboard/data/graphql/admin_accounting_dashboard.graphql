@@ -1,0 +1,81 @@
+query adminWalletSummary(
+  $currency: String!
+  $chartFilterInput: ChartFilterInput!
+) {
+  adminWallets: providerWallets(filter: { currency: { eq: $currency } }) {
+    ...adminWallet
+  }
+  totalRevenue(currency: $currency) {
+    ...totalDailyPair
+  }
+  totaloutstandingUserBalances(currency: $currency) {
+    ...totalDailyPair
+  }
+  totalExpenses(currency: $currency) {
+    ...totalDailyPair
+  }
+  providerWalletBalanceHistory(currency: $currency, input: $chartFilterInput) {
+    ...financialTimeline
+  }
+  providerExpenseBreakdownHistory(
+    currency: $currency
+    input: $chartFilterInput
+  ) {
+    expenseType
+    dateString
+    anyDate
+    value
+  }
+  providerRevenueExpenseHistory(currency: $currency, input: $chartFilterInput) {
+    anyDate
+    dateString
+    revenue
+    expense
+  }
+}
+
+fragment totalDailyPair on TotalDailyPair {
+  total
+  daily
+}
+
+query adminTransactions(
+  $paging: OffsetPaging
+  $sorting: [ProviderTransactionSort!]!
+  $filter: ProviderTransactionFilter
+) {
+  adminTransactions: providerTransactions(
+    paging: $paging
+    sorting: $sorting
+    filter: $filter
+  ) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...adminTransactionListItem
+    }
+  }
+}
+
+query exportAdminTransactions(
+  $sorting: [ProviderTransactionSort!]!
+  $filter: ProviderTransactionFilter
+  $format: ExportFormat!
+) {
+  exportProviderTransactions(
+    sorting: $sorting
+    filter: $filter
+    format: $format
+    fields: [
+      { field: "createdAt", label: "Created At" }
+      { field: "action", label: "Action" }
+      { field: "amount", label: "Amount" }
+      { field: "currency", label: "Currency" }
+      { field: "status", label: "Status" }
+      { field: "referenceNumber", label: "Reference Number" }
+      { field: "description", label: "Description" }
+    ]
+  )
+}

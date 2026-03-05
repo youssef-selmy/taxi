@@ -1,0 +1,23 @@
+query shopCategory($id: ID!) {
+  shopCategory(id: $id) {
+    ...shopCategory
+  }
+}
+
+mutation createShopCategory($input: CreateShopCategoryInput!) {
+  createOneShopCategory(input: { shopCategory: $input }) {
+    ...shopCategory
+  }
+}
+
+mutation updateShopCategory($id: ID!, $input: UpdateShopCategoryInput!) {
+  updateOneShopCategory(input: { id: $id, update: $input }) {
+    ...shopCategory
+  }
+}
+
+mutation deleteShopCategory($id: ID!) {
+  deleteOneShopCategory(input: { id: $id }) {
+    id
+  }
+}

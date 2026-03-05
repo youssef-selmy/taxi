@@ -1,0 +1,10 @@
+query SearchPlaces($query: String!, $language: String, $location: PointInput) {
+  getPlaces(keyword: $query, language: $language, location: $location) {
+    ...Place
+  }
+}
+query ReverseGeocode($lat: Float!, $lng: Float!, $language: String) {
+  reverseGeocode(location: { lat: $lat, lng: $lng }, language: $language) {
+    ...Place
+  }
+}

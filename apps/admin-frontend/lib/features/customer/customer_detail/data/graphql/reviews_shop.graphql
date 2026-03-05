@@ -1,0 +1,11 @@
+query customerShopReviews($customerId: ID!) {
+  shopFeedbacks(filter: { customerId: { eq: $customerId } }) {
+    nodes {
+      ...shopFeedback
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

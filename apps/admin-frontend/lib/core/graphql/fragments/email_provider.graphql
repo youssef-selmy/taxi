@@ -1,0 +1,22 @@
+fragment emailProviderListItem on EmailProvider {
+  id
+  name
+  type
+  isDefault
+  emailsAggregate {
+    count {
+      id
+    }
+  }
+}
+
+fragment emailProviderDetails on EmailProvider {
+  id
+  name
+  type
+  isDefault
+  apiKey
+  fromEmail
+  fromName
+  replyToEmail
+}

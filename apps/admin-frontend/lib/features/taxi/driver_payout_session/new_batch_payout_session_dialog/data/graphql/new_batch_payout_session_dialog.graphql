@@ -1,0 +1,13 @@
+query payoutMethods {
+  payoutMethods(paging: { limit: 100 }) {
+    nodes {
+      ...payoutMethodCompact
+    }
+  }
+}
+
+mutation createBatchPayoutSession($input: CreatePayoutSessionInput!) {
+  createTaxiPayoutSession(input: $input) {
+    id
+  }
+}

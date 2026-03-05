@@ -1,0 +1,32 @@
+fragment driverTransaction on DriverTransaction {
+  id
+  action
+  rechargeType
+  deductType
+  status
+  amount
+  currency
+  createdAt
+  refrenceNumber
+  description
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+}
+
+fragment driverTransactionPayout on DriverTransaction {
+  id
+  status
+  amount
+  currency
+  action
+  driver {
+    ...DriverName
+  }
+  payoutAccount {
+    ...payoutAccount
+  }
+}

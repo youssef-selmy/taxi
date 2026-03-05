@@ -1,0 +1,15 @@
+query shopSupportRequests(
+  $filter: ShopSupportRequestFilter!
+  $paging: OffsetPaging
+  $sorting: [ShopSupportRequestSort!]!
+) {
+  shopSupportRequests(paging: $paging, filter: $filter, sorting: $sorting) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...shopSupportRequest
+    }
+  }
+}

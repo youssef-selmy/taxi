@@ -1,0 +1,16 @@
+query Customers($paging: OffsetPaging, $query: String) {
+  riders(
+    filter: {
+      or: { lastName: { like: $query }, mobileNumber: { like: $query } }
+    }
+    paging: $paging
+  ) {
+    nodes {
+      ...CustomerCompact
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

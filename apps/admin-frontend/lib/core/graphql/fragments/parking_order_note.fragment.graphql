@@ -1,0 +1,11 @@
+fragment orderParkingNotes on ParkOrderNote{
+  id
+  parkOrderId
+  note
+  staff{
+    ...staffListItem
+  }
+  createdAt
+}
+
+

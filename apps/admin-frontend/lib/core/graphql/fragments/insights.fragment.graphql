@@ -1,0 +1,55 @@
+fragment customerPerApp on CustomerLoginPerApp {
+  app
+  count
+}
+
+fragment RevenuePerApp on RevenuePerApp {
+  revenue
+  app
+  date
+}
+
+fragment PlatformDistribution on PlatformDistribution {
+  count
+  platform
+}
+
+fragment GenderDistribution on GenderDistribution {
+  gender
+  count
+}
+fragment RetentionRate on RetentionRate {
+  date
+  retentionRate
+}
+
+fragment ActiveInactiveUsers on ActiveInactiveUsers {
+  activityLevel
+  count
+  date
+}
+fragment CountryDistribution on CountryDistribution {
+  count
+  country
+}
+
+fragment nameCount on NameCount {
+  name
+  count
+}
+
+fragment userTypeCount on UserTypeCountPair {
+  userType
+  count
+}
+
+fragment usedUnusedCountPair on UsedUnusedCountPairDTO {
+  used
+  unused
+}
+
+fragment financialTimeline on FinancialTimeline {
+  dateString
+  anyDate
+  amount
+}

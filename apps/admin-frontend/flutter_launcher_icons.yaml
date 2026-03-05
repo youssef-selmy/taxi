@@ -1,0 +1,23 @@
+# In order to generate the icons, run the following command:
+# dart run flutter_launcher_icons
+
+flutter_launcher_icons:
+  image_path: "assets/logo.png"
+
+  android: true
+  min_sdk_android: 21
+  adaptive_icon_background: "#413bff"
+  adaptive_icon_foreground: "assets/logo.png"
+  adaptive_icon_monochrome: "assets/logo.png"
+
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#413bff"
+
+  web:
+    generate: true
+    background_color: "#413bff"
+    theme_color: "#413bff"
+
+  macos:
+    generate: true

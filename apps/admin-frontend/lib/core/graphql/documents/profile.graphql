@@ -1,0 +1,27 @@
+query Login($email: String!, $password: String!) {
+  login2(userName: $email, password: $password) {
+    ...token
+  }
+}
+
+query refreshToken($refreshToken: String!) {
+  refreshToken(refreshToken: $refreshToken) {
+    ...token
+  }
+}
+
+query Profile {
+  me {
+    ...profile
+  }
+}
+
+query supportedCurrencies {
+  supportedCurrencies
+}
+
+mutation updateProfile($input: UpdateProfileInput!) {
+  updateProfile(input: $input) {
+    ...profile
+  }
+}

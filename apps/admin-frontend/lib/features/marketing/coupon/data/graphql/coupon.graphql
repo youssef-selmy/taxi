@@ -1,0 +1,53 @@
+query campaigns(
+  $paging: OffsetPaging
+  $filter: CampaignFilter
+  $sorting: [CampaignSort!]!
+) {
+  campaigns(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...campaignListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query campaign($id: ID!) {
+  campaign(id: $id) {
+    ...campaignDetails
+  }
+}
+
+query campaignCodes(
+  $paging: OffsetPaging
+  $sorting: [CampaignCodeSort!]!
+  $filter: CampaignCodeFilter!
+) {
+  campaignCodes(filter: $filter, sorting: $sorting, paging: $paging) {
+    nodes {
+      ...campaignCode
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+mutation createCampaign($input: CreateCampaignInput!) {
+  createCampaign(input: $input) {
+    ...campaignListItem
+  }
+}
+
+mutation deleteCampaign($id: ID!) {
+  deleteOneCampaign(input: { id: $id }) {
+    id
+  }
+}
+
+query exportCampaignCodes($campaignId: ID!) {
+  exportCampaignCodes(batchId: $campaignId)
+}

@@ -1,0 +1,84 @@
+fragment parkingSupportRequest on ParkingSupportRequest {
+  id
+  subject
+  content
+  status
+  createdAt
+  status
+  parkOrder {
+    id
+    carOwner {
+      ...CustomerCompact
+    }
+    spotOwner {
+      ...CustomerCompact
+    }
+  }
+  content
+  requestedByOwner
+  assignedToStaffs {
+    ...staffListItem
+  }
+}
+
+# fragment parkingSupportRequestNotification on ParkingSupportRequest {
+#   id
+#   requestedByOwner
+#   parkOrder {
+#     carOwner {
+#       ...CustomerCompact
+#     }
+#     spotOwner {
+#       ...CustomerCompact
+#     }
+#   }
+# }
+
+fragment parkingSupportRequestDetail on ParkingSupportRequest {
+  id
+  subject
+  createdAt
+  status
+  parkOrderId
+  content
+  parkOrder {
+    id
+    carOwner {
+      ...CustomerCompact
+    }
+    spotOwner {
+      ...CustomerCompact
+    }
+  }
+  requestedByOwner
+
+  activities {
+    ...parkingSupportRequestActivity
+  }
+
+  assignedToStaffs {
+    ...staffListItem
+  }
+}
+
+fragment parkingSupportRequestActivity on ParkingSupportRequestActivity {
+  id
+  type
+  comment
+  actor {
+    ...staffListItem
+  }
+  statusFrom
+  statusTo
+  assignedToStaffs {
+    ...staffListItem
+  }
+  createdAt
+  assignedToStaffs {
+    ...staffListItem
+  }
+
+  unassignedFromStaffs {
+    ...staffListItem
+  }
+}

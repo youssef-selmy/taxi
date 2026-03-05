@@ -1,0 +1,36 @@
+fragment payoutMethodListItem on PayoutMethod {
+  id
+  name
+  currency
+  enabled
+  media {
+    ...Media
+  }
+}
+
+fragment payoutMethodDetail on PayoutMethod {
+  id
+  name
+  type
+  description
+  currency
+  media {
+    ...Media
+  }
+  saltKey
+  privateKey
+  privateKey
+  publicKey
+  merchantId
+}
+
+fragment payoutMethodCompact on PayoutMethod {
+  id
+  name
+  type
+  currency
+  balance
+  media {
+    ...Media
+  }
+}

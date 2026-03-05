@@ -1,0 +1,11 @@
+query parkSpot($id: ID!) {
+  parkSpot(id: $id) {
+    ...parkSpotDetail
+  }
+}
+
+mutation createParkSpot($input: CreateParkSpotInput!) {
+  createParkingSpot(input: $input) {
+    ...parkSpotDetail
+  }
+}

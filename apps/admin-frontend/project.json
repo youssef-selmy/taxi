@@ -1,0 +1,33 @@
+{
+  "name": "admin-frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/admin-frontend",
+  "tags": [],
+  "targets": {
+    "publish-android": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run publish-frontend -- --platform=android --services=admin-frontend --mode=beta -y"
+      }
+    },
+    "publish-ios": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run publish-frontend -- --platform=ios --services=admin-frontend --mode=beta -y"
+      }
+    },
+    "publish-web": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run publish-frontend -- --platform=web --services=admin-frontend --mode=beta -y"
+      }
+    },
+    "publish-all": {
+      "executor": "nx:run-commands",
+      "parallelism": true,
+      "options": {
+        "command": "npm run publish-frontend -- --platform=android,ios,web --services=admin-frontend --mode=beta -y"
+      }
+    }
+  }
+}

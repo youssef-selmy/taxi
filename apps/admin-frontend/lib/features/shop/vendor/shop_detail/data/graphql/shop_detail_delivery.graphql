@@ -1,0 +1,46 @@
+query shopDeliveryZones(
+  $filter: ShopDeliveryZoneFilter!
+  $sorting: [ShopDeliveryZoneSort!]!
+  $paging: OffsetPaging
+) {
+  shopDeliveryRegions: shopDeliveryZones(
+    filter: $filter
+    sorting: $sorting
+    paging: $paging
+  ) {
+    nodes {
+      ...shopDeliveryRegion
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query shopDeliveryZone($id: ID!) {
+  shopDeliveryRegion: shopDeliveryZone(id: $id) {
+    ...shopDeliveryRegion
+  }
+}
+
+mutation createShopDeliveryZone($input: CreateShopDeliveryZoneInput!) {
+  createOneShopDeliveryZone(input: { shopDeliveryZone: $input }) {
+    ...shopDeliveryRegion
+  }
+}
+
+mutation updateShopDeliveryZone(
+  $id: ID!
+  $update: UpdateShopDeliveryZoneInput!
+) {
+  updateOneShopDeliveryZone(input: { id: $id, update: $update }) {
+    ...shopDeliveryRegion
+  }
+}
+
+mutation deleteShopDeliveryZone($id: ID!) {
+  deleteOneShopDeliveryZone(input: { id: $id }) {
+    id
+  }
+}

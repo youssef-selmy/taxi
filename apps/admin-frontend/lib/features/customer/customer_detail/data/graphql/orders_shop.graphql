@@ -1,0 +1,42 @@
+query customerOrdersShop(
+  $filter: ShopOrderFilter
+  $paging: OffsetPaging
+  $sorting: [ShopOrderSort!]!
+) {
+  shopOrders(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...shopOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query exportShopOrders(
+  $filter: ShopOrderFilter
+  $format: ExportFormat!
+  $sorting: [ShopOrderSort!]!
+) {
+  exportShopOrders(
+    filter: $filter
+    format: $format
+    sorting: $sorting
+    fields: [
+      { label: "Order ID", field: "id" }
+      { label: "Created At", field: "createdAt" }
+      { label: "Delivery Method", field: "deliveryMethod" }
+      { label: "Status", field: "status" }
+      { label: "Currency", field: "currency" }
+      { label: "Fullfillment Time", field: "fullfillmentTime" }
+      { label: "Customer Id", field: "customerId" }
+      { label: "Shop Id", field: "shopId" }
+      { label: "Driver Id", field: "driverId" }
+      { label: "Delivery Fee", field: "deliveryFee" }
+      { label: "Tax", field: "tax" }
+      { label: "Discount", field: "discount" }
+      { label: "Total Cost", field: "total" }
+    ]
+  )
+}

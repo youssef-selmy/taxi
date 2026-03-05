@@ -1,0 +1,21 @@
+query taxiOrders(
+  $filter: TaxiOrderFilterInput!
+  $paging: PaginationInput
+  $sorting: TaxiOrderSortInput
+) {
+  taxiOrders(filter: $filter, paging: $paging, sorting: $sorting) {
+    edges {
+      ...taxiOrderListItem
+    }
+    pageInfo {
+      ...PageInfo
+    }
+    totalCount
+  }
+}
+
+query taxiOrderDetail($id: ID!) {
+  taxiOrder(id: $id) {
+    ...taxiOrderDetail
+  }
+}

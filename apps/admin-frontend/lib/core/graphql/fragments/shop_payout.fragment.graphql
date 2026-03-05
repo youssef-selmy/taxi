@@ -1,0 +1,64 @@
+fragment shopPayoutSessionListItem on ShopPayoutSession {
+  id
+  status
+  totalAmount
+  currency
+  createdAt
+  payoutMethods {
+    ...payoutMethodCompact
+  }
+  shopTransactions(paging: { limit: 2 }) {
+    nodes {
+      shop {
+        ...shopBasicInfo
+      }
+    }
+    totalCount
+  }
+}
+
+fragment shopPayoutSessionDetail on ShopPayoutSession {
+  id
+  totalAmount
+  createdAt
+  status
+  currency
+  shopsCount: shopTransactionsAggregate {
+    count {
+      id
+    }
+  }
+  payoutMethodDetails {
+    ...shopPayoutSessionPayoutMethodDetail
+  }
+
+  paidShops: shopTransactionsAggregate(filter: { status: { eq: Done } }) {
+    sum {
+      amount
+    }
+  }
+  unpaidShops: shopTransactionsAggregate(
+    filter: { status: { eq: Processing } }
+  ) {
+    sum {
+      amount
+    }
+  }
+}
+
+fragment shopPayoutSessionPayoutMethodDetail on ShopPayoutSessionPayoutMethodDetail {
+  id
+  status
+
+  statistics: shopTransactionsAggregate {
+    count {
+      id
+    }
+    sum {
+      amount
+    }
+  }
+  payoutMethod {
+    ...payoutMethodCompact
+  }
+}

@@ -1,0 +1,13 @@
+query parkingLoginSessions($customerId: ID!) {
+  parkingLoginSessions(filter: { customerId: { eq: $customerId } }) {
+    id
+    customerId
+    sessionInfo {
+      ...sessionInfo
+    }
+  }
+}
+
+mutation terminateParkingLoginSession($id: ID!) {
+  terminateParkingLoginSession(sessionId: $id)
+}

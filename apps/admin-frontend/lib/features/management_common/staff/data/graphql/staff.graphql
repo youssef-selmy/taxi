@@ -1,0 +1,51 @@
+query staffs(
+  $paging: OffsetPaging
+  $filter: OperatorFilter
+  $sorting: [OperatorSort!]!
+) {
+  staffs: operators(paging: $paging, filter: $filter, sorting: $sorting) {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    nodes {
+      ...staffListItem
+    }
+  }
+}
+
+query staffDetails($id: ID!) {
+  operator(id: $id) {
+    ...staffDetails
+  }
+}
+
+mutation updateOneStaff($id: ID!, $input: UpdateOperatorInput!) {
+  updateOneOperator(input: { id: $id, update: $input }) {
+    ...staffDetails
+  }
+}
+
+mutation createOneStaff($input: CreateOperatorInput!) {
+  createOneOperator(input: { operator: $input }) {
+    ...staffDetails
+  }
+}
+mutation deleteOneStaff($id: ID!) {
+  deleteOneOperator(input: { id: $id }) {
+    id
+  }
+}
+
+query staffSessions(
+  $filter: OperatorSessionFilter
+  $sorting: [OperatorSessionSort!]!
+) {
+  operatorSessions(filter: $filter, sorting: $sorting) {
+    ...staffSession
+  }
+}
+
+mutation terminateStaffSession($id: ID!) {
+  terminateStaffSession(id: $id)
+}

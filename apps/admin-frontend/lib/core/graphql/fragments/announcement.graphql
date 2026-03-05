@@ -1,0 +1,22 @@
+fragment announcementListItem on Announcement {
+  id
+  title
+  userType
+  appType
+  startAt
+  expireAt
+}
+
+fragment announcementDetails on Announcement {
+  id
+  title
+  description
+  appType
+  url
+  userType
+  startAt
+  expireAt
+  media {
+    ...Media
+  }
+}

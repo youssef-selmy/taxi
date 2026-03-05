@@ -1,0 +1,44 @@
+query shopCreditRecords(
+  $paging: OffsetPaging
+  $filter: ShopTransactionFilter
+  $sorting: [ShopTransactionSort!]
+) {
+  shopTransactions(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...shopTransaction
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}
+
+query shopWallets($shopId: ID!) {
+  shopWallets(filter: { shopId: { eq: $shopId } }) {
+    nodes {
+      ...shopWallet
+    }
+  }
+}
+
+query exportShopTransactions(
+  $format: ExportFormat!
+  $filter: ShopTransactionFilter
+  $sorting: [ShopTransactionSort!]
+) {
+  exportShopTransactions(
+    format: $format
+    filter: $filter
+    sorting: $sorting
+    fields: [
+      { label: "Transaction ID", field: "id" }
+      { label: "Created At", field: "createdAt" }
+      { label: "Type", field: "type" }
+      { label: "Amount", field: "amount" }
+      { label: "Currency", field: "currency" }
+      { label: "Description", field: "description" }
+      { label: "Shop Id", field: "shopId" }
+    ]
+  )
+}

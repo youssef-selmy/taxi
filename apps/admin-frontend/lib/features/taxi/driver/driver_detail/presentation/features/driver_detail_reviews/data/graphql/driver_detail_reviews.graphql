@@ -1,0 +1,11 @@
+query driverReviews($id: ID!) {
+  reviews: feedbacks(filter: { driverId: { eq: $id } }) {
+    totalCount
+    nodes {
+      ...reviewTaxi
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}

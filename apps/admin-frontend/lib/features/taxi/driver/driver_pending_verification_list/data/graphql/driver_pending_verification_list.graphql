@@ -1,0 +1,15 @@
+query drivers(
+  $paging: OffsetPaging
+  $filter: DriverFilter
+  $sorting: [DriverSort!]!
+) {
+  drivers(paging: $paging, filter: $filter, sorting: $sorting) {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    nodes {
+      ...DriverName
+    }
+  }
+}

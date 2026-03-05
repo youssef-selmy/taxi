@@ -1,0 +1,12 @@
+query shopOrderReviews($orderId: ID!) {
+  shopOrder(id: $orderId) {
+    carts {
+      shop {
+        ...shopBasic
+      }
+      feedbacks {
+        ...shopFeedback
+      }
+    }
+  }
+}

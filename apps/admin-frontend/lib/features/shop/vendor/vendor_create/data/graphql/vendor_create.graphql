@@ -1,0 +1,30 @@
+query shop($id: ID!) {
+  shop(id: $id) {
+    ...shopDetail
+  }
+}
+
+query shopCategories {
+  shopCategories(paging: { limit: 100 }) {
+    nodes {
+      ...shopCategoryCompact
+    }
+  }
+}
+
+mutation createShop($input: UpsertShopInput!) {
+  createOneShop(input: { shop: $input }) {
+    ...shopDetail
+  }
+}
+mutation setCategoriesOnShop($shopId: ID!, $categoryIds: [ID!]!) {
+  setCategoriesOnShop(input: { id: $shopId, relationIds: $categoryIds }) {
+    ...shopDetail
+  }
+}
+
+mutation updateShop($id: ID!, $update: UpsertShopInput!) {
+  updateOneShop(input: { id: $id, update: $update }) {
+    ...shopDetail
+  }
+}

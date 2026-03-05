@@ -1,0 +1,33 @@
+query ratingPoints {
+  ratingPoints: feedbackParameters {
+    ...reviewTaxiParameterListItem
+  }
+}
+
+query ratingPoint($id: ID!) {
+  ratingPoint: feedbackParameter(id: $id) {
+    ...reviewTaxiParameterListItem
+  }
+}
+
+mutation createRatingPoint($input: FeedbackParameterInput!) {
+  createRatingPoint: createOneFeedbackParameter(
+    input: { feedbackParameter: $input }
+  ) {
+    ...reviewTaxiParameterListItem
+  }
+}
+
+mutation updateRatingPoint($id: ID!, $input: FeedbackParameterInput!) {
+  updateRatingPoint: updateOneFeedbackParameter(
+    input: { id: $id, update: $input }
+  ) {
+    ...reviewTaxiParameterListItem
+  }
+}
+
+mutation deleteRatingPoint($id: ID!) {
+  deleteRatingPoint: deleteOneFeedbackParameter(input: { id: $id }) {
+    id
+  }
+}

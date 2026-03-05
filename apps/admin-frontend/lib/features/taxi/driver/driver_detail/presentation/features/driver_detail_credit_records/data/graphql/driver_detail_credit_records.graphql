@@ -1,0 +1,44 @@
+query driverCreditRecords(
+  $filter: DriverTransactionFilter!
+  $paging: OffsetPaging
+  $sorting: [DriverTransactionSort!]
+) {
+  driverTransactions(filter: $filter, paging: $paging, sorting: $sorting) {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    nodes {
+      ...driverTransaction
+    }
+  }
+}
+
+query driverWallets($id: ID!) {
+  driverWallets(filter: { driverId: { eq: $id } }) {
+    nodes {
+      ...driverWallet
+    }
+  }
+}
+
+query exportDriverTransactions(
+  $filter: DriverTransactionFilter!
+  $format: ExportFormat!
+  $sorting: [DriverTransactionSort!]
+) {
+  exportDriverTransactions(
+    filter: $filter
+    format: $format
+    sorting: $sorting
+    fields: [
+      { label: "Transaction ID", field: "id" }
+      { label: "Created At", field: "createdAt" }
+      { label: "Type", field: "type" }
+      { label: "Amount", field: "amount" }
+      { label: "Currency", field: "currency" }
+      { label: "Description", field: "description" }
+      { label: "Driver Id", field: "driverId" }
+    ]
+  )
+}

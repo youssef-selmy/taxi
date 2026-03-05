@@ -1,0 +1,8 @@
+icomoon_generator:
+  input_json_file: "fonts/selection.json"
+  output_class_file: "lib/my_icons.dart"
+
+  class_name: "MyIcons"
+  format: true
+
+  verbose: true

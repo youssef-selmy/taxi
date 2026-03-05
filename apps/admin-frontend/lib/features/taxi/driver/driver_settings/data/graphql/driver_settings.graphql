@@ -1,0 +1,71 @@
+query driverShiftRules {
+  driverShiftRules {
+    ...driverShiftRule
+  }
+}
+
+query driverDocuments {
+  driverDocuments {
+    ...driverDocument
+  }
+}
+
+mutation driverShiftRuleCreate($input: CreateManyDriverShiftRulesInput!) {
+  createManyDriverShiftRules(input: $input) {
+    ...driverShiftRule
+  }
+}
+
+mutation driverShiftRuleUpdate($input: UpdateOneDriverShiftRuleInput!) {
+  updateOneDriverShiftRule(input: $input) {
+    ...driverShiftRule
+  }
+}
+
+mutation driverShiftRuleDelete($input: DeleteManyDriverShiftRulesInput!) {
+  deleteManyDriverShiftRules(input: $input) {
+    deletedCount
+  }
+}
+
+mutation driverDocumentCreate($input: CreateManyDriverDocumentsInput!) {
+  createManyDriverDocuments(input: $input) {
+    ...driverDocument
+  }
+}
+
+mutation driverDocumentUpdate($input: UpdateOneDriverDocumentInput!) {
+  updateOneDriverDocument(input: $input) {
+    ...driverDocument
+  }
+}
+
+mutation driverDocumentDelete($input: DeleteManyDriverDocumentsInput!) {
+  deleteManyDriverDocuments(input: $input) {
+    deletedCount
+  }
+}
+
+mutation driverDocumentRetentionPolicyCreate(
+  $input: CreateManyDriverDocumentRetentionPoliciesInput!
+) {
+  createManyDriverDocumentRetentionPolicies(input: $input) {
+    ...driverDocumentRetentionPolicy
+  }
+}
+
+mutation driverDocumentRetentionPolicyUpdate(
+  $input: UpdateOneDriverDocumentRetentionPolicyInput!
+) {
+  updateOneDriverDocumentRetentionPolicy(input: $input) {
+    ...driverDocumentRetentionPolicy
+  }
+}
+
+mutation driverDocumentRetentionPolicyDelete(
+  $input: DeleteManyDriverDocumentRetentionPoliciesInput!
+) {
+  deleteManyDriverDocumentRetentionPolicies(input: $input) {
+    deletedCount
+  }
+}

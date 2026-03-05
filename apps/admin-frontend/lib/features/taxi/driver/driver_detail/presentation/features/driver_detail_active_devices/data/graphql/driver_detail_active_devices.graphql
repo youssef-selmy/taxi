@@ -1,0 +1,16 @@
+query driverActiveDevices($id : ID!){
+   driverActiveDevices : driverSessions(filter:  {
+      driverId:  {
+         eq: $id
+      }
+   }){
+        ...driverSessions
+    }
+}
+
+mutation deleteDriverActiveDevice($input : DeleteOneDriverSessionInput!){
+   deleteOneDriverSession(input : $input){
+      id
+      driverId
+   }
+}

@@ -1,0 +1,26 @@
+query parkingOrderList(
+  $filter: ParkOrderFilter!
+  $paging: OffsetPaging
+  $sorting: [ParkOrderSort!]!
+) {
+  parkOrders(paging: $paging, filter: $filter, sorting: $sorting) {
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+    nodes {
+      ...parkingOrderListItem
+    }
+  }
+}
+
+query getParkingOrdersOverview {
+  groupByStatus: parkOrderAggregate {
+    count {
+      id
+    }
+    groupBy {
+      status
+    }
+  }
+}

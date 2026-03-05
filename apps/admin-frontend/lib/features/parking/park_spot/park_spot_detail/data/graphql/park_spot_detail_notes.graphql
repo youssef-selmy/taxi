@@ -1,0 +1,13 @@
+query parkSpotNotes($parkSpotId: ID!) {
+  parkSpotNotes(filter: { parkSpotId: { eq: $parkSpotId } }) {
+    ...parkingNote
+  }
+}
+
+mutation createParkSpotNote($parkSpotId: ID!, $note: String!) {
+  createOneParkSpotNote(
+    input: { parkSpotNote: { note: $note, parkSpotId: $parkSpotId } }
+  ) {
+    ...parkingNote
+  }
+}

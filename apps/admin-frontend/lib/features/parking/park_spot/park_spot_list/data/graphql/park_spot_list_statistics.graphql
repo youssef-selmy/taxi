@@ -1,0 +1,29 @@
+query parSpotsStatistics($currency: String!) {
+  countParkSpots: parkSpots {
+    totalCount
+  }
+  totalOrdersCompleted: parkOrders(filter: { status: { eq: COMPLETED } }) {
+    totalCount
+  }
+  avarageRating: parkingFeedbackAggregate {
+    avg {
+      score
+    }
+  }
+  totalEarning: parkOrderAggregate(filter: { status: { eq: COMPLETED } }) {
+    sum {
+      price
+    }
+  }
+  spotsPerType: parkSpotAggregate {
+    count {
+      id
+    }
+    groupBy {
+      type
+    }
+  }
+  topEarningParkSpots: topEarningParkSpots(currency: $currency) {
+    ...leaderboardItem
+  }
+}

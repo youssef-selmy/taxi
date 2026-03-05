@@ -1,0 +1,31 @@
+query ConfigInformation {
+  licenseInformation {
+    ...license
+  }
+  configInformation {
+    ...Config
+  }
+}
+mutation updateLicense($purchaseCode: String!, $email: String!) {
+  updatePurchaseCode(purchaseCode: $purchaseCode, email: $email) {
+    status
+    message
+    data {
+      ...license
+    }
+    clients {
+      id
+      ip
+      enabled
+      lastVerifiedAt
+      firstVerifiedAt
+    }
+  }
+}
+
+mutation updateConfig($config: UpdateConfigInputV2!) {
+  updateConfigurations(input: $config) {
+    status
+    message
+  }
+}

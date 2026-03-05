@@ -1,0 +1,21 @@
+query retrieveCheckoutOptions(
+  $customerId: ID!
+  $input: CalculateDeliveryFeeInput!
+) {
+  calculateDeliveryFee(input: $input) {
+    batchDeliveryFee
+    splitDeliveryFee
+    batchDeliveryDuration
+  }
+  savedPaymentMethods(filter: { riderId: { eq: $customerId } }) {
+    nodes {
+      ...SavedPaymentMethod
+    }
+  }
+}
+
+mutation createShopOrder($input: ShopOrderInput!) {
+  createShopOrder(input: $input) {
+    id
+  }
+}

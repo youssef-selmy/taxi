@@ -1,0 +1,90 @@
+query fleetsList(
+  $paging: OffsetPaging
+  $filter: FleetFilter
+  $sorting: [FleetSort!]!
+) {
+  fleets(paging: $paging, filter: $filter, sorting: $sorting) {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+
+    nodes {
+      ...fleetListItem
+    }
+  }
+}
+
+query fleetDetails($id: ID!) {
+  fleet(id: $id) {
+    ...fleetDetails
+  }
+}
+
+mutation createOneFleet($input: CreateFleetInput!) {
+  createOneFleet(input: { fleet: $input }) {
+    ...fleetDetails
+  }
+}
+
+mutation updateOneFleet($id: ID!, $input: UpdateFleetInput!) {
+  updateOneFleet(input: { id: $id, update: $input }) {
+    ...fleetDetails
+  }
+}
+mutation deleteFleet($id: ID!) {
+  deleteOneFleet(input: { id: $id }) {
+    id
+  }
+}
+
+query fleetTransactions(
+  $filter: FleetTransactionFilter
+  $paging: OffsetPaging
+  $sorting: [FleetTransactionSort!]!
+) {
+  fleetTransactions(filter: $filter, paging: $paging, sorting: $sorting) {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+
+    nodes {
+      ...fleetTransaction
+    }
+  }
+}
+
+query fleetWallet {
+  fleetWallets {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+
+    nodes {
+      ...fleetWallet
+    }
+  }
+}
+
+query exportFleetTransactions(
+  $filter: FleetTransactionFilter
+  $format: ExportFormat!
+  $sorting: [FleetTransactionSort!]!
+) {
+  exportFleetTransactions(
+    filter: $filter
+    format: $format
+    sorting: $sorting
+    fields: [
+      { label: "Transaction ID", field: "id" }
+      { label: "Created At", field: "createdAt" }
+      { label: "Type", field: "type" }
+      { label: "Amount", field: "amount" }
+      { label: "Currency", field: "currency" }
+      { label: "Description", field: "description" }
+      { label: "Fleet Id", field: "fleetId" }
+    ]
+  )
+}

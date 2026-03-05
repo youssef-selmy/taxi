@@ -1,0 +1,8 @@
+query cancelReasonInsights {
+  cancelReasonPopularityByName {
+    ...nameCount
+  }
+  cancelReasonPopularityByUserType {
+    ...userTypeCount
+  }
+}

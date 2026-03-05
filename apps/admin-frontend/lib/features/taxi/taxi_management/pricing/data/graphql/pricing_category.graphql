@@ -1,0 +1,29 @@
+query taxiPricingCategories {
+  serviceCategories {
+    ...taxiPricingCategory
+  }
+}
+
+query taxiPricingCategory($id: ID!) {
+  serviceCategory(id: $id) {
+    ...taxiPricingCategory
+  }
+}
+
+mutation createTaxiPricingCategory($input: ServiceCategoryInput!) {
+  createOneServiceCategory(input: { serviceCategory: $input }) {
+    ...taxiPricingCategory
+  }
+}
+
+mutation updateTaxiPricingCategory($id: ID!, $input: ServiceCategoryInput!) {
+  updateOneServiceCategory(input: { id: $id, update: $input }) {
+    ...taxiPricingCategory
+  }
+}
+
+mutation deleteTaxiPricingCategory($id: ID!) {
+  deleteOneServiceCategory(input: { id: $id }) {
+    id
+  }
+}

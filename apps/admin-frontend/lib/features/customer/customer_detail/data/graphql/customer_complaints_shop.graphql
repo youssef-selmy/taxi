@@ -1,0 +1,15 @@
+query customerComplaintsShop(
+  $filter: ShopSupportRequestFilter!
+  $paging: OffsetPaging
+  $sorting: [ShopSupportRequestSort!]
+) {
+  shopSupportRequests(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...shopSupportRequest
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

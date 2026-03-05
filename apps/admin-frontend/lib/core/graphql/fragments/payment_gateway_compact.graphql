@@ -1,0 +1,7 @@
+fragment paymentGatewayCompact on PaymentGateway {
+  id
+  media {
+    ...Media
+  }
+  title
+}

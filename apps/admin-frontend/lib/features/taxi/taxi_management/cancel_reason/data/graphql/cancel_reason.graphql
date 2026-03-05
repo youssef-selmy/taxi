@@ -1,0 +1,35 @@
+query cancelReasons {
+  orderCancelReasons(paging: { limit: 100 }) {
+    nodes {
+      ...cancelReason
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query cancelReason($id: ID!) {
+  orderCancelReason(id: $id) {
+    ...cancelReason
+  }
+}
+
+mutation createCancelReason($input: OrderCancelReasonInput!) {
+  createOneOrderCancelReason(input: { orderCancelReason: $input }) {
+    ...cancelReason
+  }
+}
+
+mutation updateCancelReason($id: ID!, $input: OrderCancelReasonInput!) {
+  updateOneOrderCancelReason(input: { id: $id, update: $input }) {
+    ...cancelReason
+  }
+}
+
+mutation deleteCancelReason($id: ID!) {
+  deleteOneOrderCancelReason(input: { id: $id }) {
+    id
+  }
+}

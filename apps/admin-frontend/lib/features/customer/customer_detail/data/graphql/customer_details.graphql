@@ -1,0 +1,29 @@
+query customerDetailsRoot($id: ID!) {
+  rider(id: $id) {
+    ...customerDetails
+  }
+}
+
+mutation updateCustomerDetails($input: UpdateOneRiderInput!) {
+  updateOneRider(input: $input) {
+    ...customerDetails
+  }
+}
+
+query customerNotes($customerId: ID!) {
+  customerNotes(filter: { customerId: { eq: $customerId } }) {
+    ...customerNote
+  }
+}
+
+mutation createCustomerNote($input: CreateOneCustomerNoteInput!) {
+  createOneCustomerNote(input: $input) {
+    ...customerNote
+  }
+}
+
+mutation deleteCustomer($customerId: ID!) {
+  deleteOneRider(id: $customerId) {
+    id
+  }
+}

@@ -1,0 +1,13 @@
+query getTaxiOrderDetailChatHistories($orderId: ID!) {
+  order(id: $orderId) {
+    driver {
+      ...DriverName
+    }
+    rider {
+      ...CustomerCompact
+    }
+    chatHistories: conversation {
+      ...conversation
+    }
+  }
+}

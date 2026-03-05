@@ -1,0 +1,11 @@
+fragment adminTransactionListItem on ProviderTransaction {
+  id
+  action
+  deductType
+  rechargeType
+  expenseType
+  amount
+  currency
+  createdAt
+  refrenceNumber
+}

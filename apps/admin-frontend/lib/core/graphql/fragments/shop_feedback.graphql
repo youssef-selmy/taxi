@@ -1,0 +1,30 @@
+fragment shopFeedback on ShopFeedback {
+  id
+  score
+  comment
+  status
+  createdAt
+  orderCart {
+    order {
+      id
+      customer {
+        ...CustomerCompact
+      }
+    }
+    products {
+      ...shopOrderCartItem
+    }
+    shop {
+      ...shopBasic
+    }
+  }
+  parameters {
+    ...shopFeedbackParameter
+  }
+}
+
+fragment shopFeedbackParameter on ShopFeedbackParameter {
+  id
+  isGood
+  name
+}

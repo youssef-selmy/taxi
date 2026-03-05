@@ -1,0 +1,68 @@
+query taxiPricings($filter: ServiceFilter) {
+  services(
+    filter: $filter
+    sorting: { field: displayPriority, direction: DESC }
+  ) {
+    ...taxiPricingListItem
+  }
+}
+
+query taxiPricing($id: ID!) {
+  service(id: $id) {
+    ...taxiPricing
+  }
+}
+
+query taxiPricingFieldOptions {
+  serviceCategories {
+    ...taxiPricingCategory
+  }
+  serviceOptions {
+    ...taxiOrderOption
+  }
+  regions(paging: { limit: 100 }) {
+    nodes {
+      ...regionWithCategory
+    }
+  }
+}
+
+mutation createTaxiPricing($input: ServiceInput!) {
+  createOneService(input: { service: $input }) {
+    ...taxiPricing
+  }
+}
+mutation setRegionsOnService($id: ID!, $regionIds: [ID!]!) {
+  setRegionsOnService(input: { id: $id, relationIds: $regionIds }) {
+    id
+  }
+}
+
+mutation setOptionsOnService($id: ID!, $optionIds: [ID!]!) {
+  setOptionsOnService(input: { id: $id, relationIds: $optionIds }) {
+    id
+  }
+}
+
+mutation updateTaxiPricing(
+  $id: ID!
+  $input: ServiceInput!
+  $regionIds: [ID!]!
+  $optionIds: [ID!]!
+) {
+  updateOneService(input: { id: $id, update: $input }) {
+    ...taxiPricing
+  }
+  setRegionsOnService(input: { id: $id, relationIds: $regionIds }) {
+    id
+  }
+  setOptionsOnService(input: { id: $id, relationIds: $optionIds }) {
+    id
+  }
+}
+
+mutation deleteTaxiPricing($id: ID!) {
+  deleteOneService(input: { id: $id }) {
+    id
+  }
+}

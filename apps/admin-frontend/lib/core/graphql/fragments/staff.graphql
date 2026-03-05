@@ -1,0 +1,39 @@
+fragment staffRole on OperatorRole {
+  id
+  title
+  permissions
+  taxiPermissions
+  shopPermissions
+  parkingPermissions
+  allowedApps
+}
+
+fragment staffListItem on Operator {
+  id
+  createdAt
+  updatedAt
+  userName
+  firstName
+  lastName
+  isBlocked
+  lastActivity
+  mobileNumber
+  media {
+    ...Media
+  }
+  role {
+    ...staffRole
+  }
+}
+
+fragment staffDetails on Operator {
+  ...staffListItem
+  email
+}
+
+fragment staffSession on OperatorSession {
+  id
+  sessionInfo {
+    ...sessionInfo
+  }
+}

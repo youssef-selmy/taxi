@@ -1,0 +1,16 @@
+query systemSettings {
+  currentConfiguration {
+    ...systemConfiguration
+  }
+}
+
+mutation updateSystemSettings($input: UpdateConfigInputV2!) {
+  updateConfigurations(input: $input) {
+    ...updateConfigResult
+  }
+}
+
+fragment updateConfigResult on UpdateConfigResult {
+  status
+  message
+}

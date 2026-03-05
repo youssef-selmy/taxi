@@ -1,0 +1,14 @@
+icon_font:
+  input_svg_dir: "assets/ionicons/"
+  output_font_file: "fonts/ionicons.otf"
+
+  output_class_file: "lib/ionicons.dart"
+  class_name: "Ionicons"
+  format: false
+
+  font_name: "Ionicons"
+  normalize: false
+  ignore_shapes: false
+
+  recursive: false
+  verbose: true

@@ -1,0 +1,5 @@
+mutation insertAdminTransaction($input: ProviderTransactionInput!) {
+  createOneProviderTransaction(input: { providerTransaction: $input }) {
+    ...adminTransactionListItem
+  }
+}

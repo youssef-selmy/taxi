@@ -1,0 +1,73 @@
+query overviewKPIs($currency: String!) {
+  totalOrders: orders(filter: { currency: { eq: $currency } }) {
+    totalCount
+  }
+  totalRevenue: providerTransactionAggregate(
+    filter: { currency: { eq: $currency }, rechargeType: { in: [Commission] } }
+  ) {
+    sum {
+      amount
+    }
+  }
+  totalShops: shops {
+    totalCount
+  }
+  totalCustomers: riders {
+    totalCount
+  }
+}
+
+query activeOrders($currency: String!) {
+  activeOrders: shopOrders(
+    filter: {
+      currency: { eq: $currency }
+      status: { in: [OnHold, New, OutForDelivery, Processing] }
+    }
+  ) {
+    nodes {
+      ...shopOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query pendingShops {
+  shops(filter: { status: { in: [PendingApproval] } }) {
+    nodes {
+      ...shopListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query pendingSupportRequests {
+  shopSupportRequests(
+    filter: { status: { in: [Submitted, UnderInvestigation] } }
+  ) {
+    nodes {
+      ...shopSupportRequest
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query topSpendingCustomers {
+  topSpendingCustomers {
+    ...leaderboardItem
+  }
+}
+
+query topEarningShops {
+  topEarningShops {
+    ...leaderboardItem
+  }
+}

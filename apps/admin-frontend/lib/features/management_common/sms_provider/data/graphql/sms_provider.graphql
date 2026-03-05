@@ -1,0 +1,45 @@
+query smsProviders(
+  $paging: OffsetPaging
+  $filter: SMSProviderFilter
+  $sorting: [SMSProviderSort!]!
+) {
+  smsProviders(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...smsProviderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query smsProvider($id: ID!) {
+  smsProvider(id: $id) {
+    ...smsProviderDetails
+  }
+}
+
+mutation updateSMSProvider($id: ID!, $input: SMSProviderInput!) {
+  updateOneSMSProvider(input: { id: $id, update: $input }) {
+    ...smsProviderDetails
+  }
+}
+
+mutation createSMSProvider($input: SMSProviderInput!) {
+  createOneSMSProvider(input: { sMSProvider: $input }) {
+    ...smsProviderDetails
+  }
+}
+
+mutation deleteSMSProvider($id: ID!) {
+  deleteOneSMSProvider(input: { id: $id }) {
+    id
+  }
+}
+
+mutation markSMSProviderAsDefault($id: ID!) {
+  markSMSProviderAsDefault(id: $id) {
+    ...smsProviderDetails
+  }
+}

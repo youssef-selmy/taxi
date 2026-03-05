@@ -1,0 +1,28 @@
+fragment LocationCluster on ClusteredLocation {
+  h3Index
+  location {
+    ...Coordinate
+  }
+  count
+}
+
+fragment LocationWithId on DriverLocationUpdate {
+  driverId
+  lastUpdatedAt
+  orderIds
+  point {
+    ...Coordinate
+  }
+}
+fragment DriverLocation on OnlineDriverWithData {
+  id
+  firstName
+  lastName
+  avatarUrl
+  rating
+  mobileNumber
+  lastUpdatedAt
+  location {
+    ...Coordinate
+  }
+}

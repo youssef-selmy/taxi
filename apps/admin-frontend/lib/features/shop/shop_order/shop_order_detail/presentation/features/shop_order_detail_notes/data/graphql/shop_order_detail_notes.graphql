@@ -1,0 +1,11 @@
+query getShopOrderNotes($orderId: IDFilterComparison!) {
+  shopOrderNotes(filter: { orderId: $orderId }) {
+    ...shopOrderNote
+  }
+}
+
+mutation createShopOrderNote($input: CreateShopOrderNoteInput!) {
+  createOneShopOrderNote(input: { shopOrderNote: $input }) {
+    ...shopOrderNote
+  }
+}

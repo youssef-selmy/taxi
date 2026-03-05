@@ -1,0 +1,10 @@
+fragment personalInfo on PersonalInfo {
+  firstName
+  lastName
+  email
+  mobileNumber {
+    ...mobileNumber
+  }
+  gender
+  address
+}

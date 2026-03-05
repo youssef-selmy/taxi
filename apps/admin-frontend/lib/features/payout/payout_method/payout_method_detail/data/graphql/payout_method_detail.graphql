@@ -1,0 +1,23 @@
+query payoutMethod($id: ID!) {
+  payoutMethod(id: $id) {
+    ...payoutMethodDetail
+  }
+}
+
+mutation updatePayoutMethod($id: ID!, $update: CreatePayoutMethodInput!) {
+  updateOnePayoutMethod(input: { id: $id, update: $update }) {
+    ...payoutMethodDetail
+  }
+}
+
+mutation createPayoutMethod($input: CreatePayoutMethodInput!) {
+  createOnePayoutMethod(input: { payoutMethod: $input }) {
+    ...payoutMethodDetail
+  }
+}
+
+mutation deletePayoutMethod($id: ID!) {
+  deleteOnePayoutMethod(input: { id: $id }) {
+    id
+  }
+}

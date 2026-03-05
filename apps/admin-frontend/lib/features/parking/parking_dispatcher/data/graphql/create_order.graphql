@@ -1,0 +1,5 @@
+mutation createParkingOrder($input: CreateParkOrderInput!) {
+  createOneParkOrder(input: { parkOrder: $input }) {
+    ...parkingOrderListItem
+  }
+}

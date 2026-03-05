@@ -1,0 +1,17 @@
+query getShopOrderComplaints($orderId: ID!) {
+  shopComplaints: shopSupportRequests(
+    filter: { orderId: {eq:  $orderId}, requestedByShop: { is: true } }
+  ) {
+
+    nodes {
+      ...shopOrderSupportRequest
+    }
+  }
+  customerComplaints: shopSupportRequests(
+    filter: { orderId: {eq:  $orderId}, requestedByShop: { is: false } }
+  ) {
+    nodes {
+      ...shopOrderSupportRequest
+    }
+  }
+}

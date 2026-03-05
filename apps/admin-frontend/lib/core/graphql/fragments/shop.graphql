@@ -1,0 +1,122 @@
+fragment DispatcherShop on DispatcherShop {
+  id
+  name
+  status
+  currency
+  location {
+    ...Coordinate
+  }
+  deliveryFee
+  minDeliveryTime
+  maxDeliveryTime
+  minimumOrderAmount
+  ratingAggregate {
+    ...ratingAggregate
+  }
+  image {
+    ...Media
+  }
+  headerSmall {
+    ...Media
+  }
+}
+fragment shopBasicInfo on Shop {
+  id
+  name
+  mobileNumber {
+    ...mobileNumber
+  }
+  image {
+    ...Media
+  }
+}
+
+fragment shopBasic on Shop {
+  id
+  name
+  categories {
+    name
+    image {
+      ...Media
+    }
+  }
+  image {
+    ...Media
+  }
+  location {
+    ...Coordinate
+  }
+  currency
+  address
+  ratingAggregate {
+    ...ratingAggregate
+  }
+  createdAt
+}
+
+fragment shopListItem on Shop {
+  id
+  name
+  createdAt
+  lastActivityAt
+  mobileNumber {
+    ...mobileNumber
+  }
+  ratingAggregate {
+    ...ratingAggregate
+  }
+  status
+  orderQueueLevel
+  image {
+    ...Media
+  }
+  categories {
+    ...shopCategoryCompact
+  }
+  wallet {
+    ...shopWallet
+  }
+  carts {
+    totalCount
+  }
+}
+
+fragment shopDetail on Shop {
+  id
+  image {
+    ...Media
+  }
+  name
+  status
+  currency
+  lastActivityAt
+  ratingAggregate {
+    ...ratingAggregate
+  }
+  createdAt
+  password
+  orderQueueLevel
+  description
+  email
+  mobileNumber {
+    ...mobileNumber
+  }
+  categories {
+    ...shopCategoryCompact
+  }
+  weeklySchedule {
+    ...weekdaySchedule
+  }
+  address
+  location {
+    ...Coordinate
+  }
+  ownerInformation {
+    ...personalInfo
+  }
+  isExpressDeliveryAvailable
+  expressDeliveryShopCommission
+  isShopDeliveryAvailable
+  isOnlinePaymentAvailable
+  isCashOnDeliveryAvailable
+}

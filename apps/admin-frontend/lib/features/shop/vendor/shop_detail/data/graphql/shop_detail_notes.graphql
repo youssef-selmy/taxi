@@ -1,0 +1,13 @@
+query shopNotes($shopId: ID!) {
+  shopNotes(filter: { shopId: { eq: $shopId } }) {
+    ...shopNote
+  }
+}
+
+mutation createShopNote($shopId: ID!, $note: String!) {
+  createOneShopNote(
+    input: { shopNote: { note: $note, shopId: $shopId } }
+  ) {
+    ...shopNote
+  }
+}

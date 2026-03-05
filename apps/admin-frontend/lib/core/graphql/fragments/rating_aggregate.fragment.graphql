@@ -1,0 +1,4 @@
+fragment ratingAggregate on RatingAggregate {
+  rating
+  reviewCount
+}

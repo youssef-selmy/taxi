@@ -1,0 +1,9 @@
+query customersList(
+  $paging: OffsetPaging
+  $filter: RiderFilter
+  $sorting: [RiderSort!]
+) {
+  customers: riders(paging: $paging, filter: $filter, sorting: $sorting) {
+    ...CustomersListConnection
+  }
+}

@@ -1,0 +1,44 @@
+query parkSpotActiveOrders($parkSpotId: ID!) {
+  parkOrders(
+    filter: {
+      status: { in: [PENDING, ACCEPTED, PAID] }
+      parkSpotId: { eq: $parkSpotId }
+    }
+    paging: { limit: 50 }
+  ) {
+    nodes {
+      ...parkingOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query parkSpotOrders(
+  $paging: OffsetPaging
+  $filter: ParkOrderFilter
+  $sorting: [ParkOrderSort!]!
+) {
+  parkOrders(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...parkingOrderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query parkOrderDetail($parkOrderId: ID!) {
+  parkOrder(id: $parkOrderId) {
+    ...parkingOrderDetail
+  }
+  parkSpotDetail: parkOrder(id: $parkOrderId) {
+    parkSpot {
+      ...parkSpotDetail
+    }
+  }
+}

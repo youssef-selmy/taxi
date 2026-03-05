@@ -1,0 +1,9 @@
+fragment shopNote on ShopNote {
+  id
+  note {
+    ...note
+  }
+  staff {
+    ...staffListItem
+  }
+}

@@ -1,0 +1,9 @@
+fragment driverNote on DriverNote {
+  id
+  createdAt
+  driverId
+  note
+  staff {
+    ...staffListItem
+  }
+}

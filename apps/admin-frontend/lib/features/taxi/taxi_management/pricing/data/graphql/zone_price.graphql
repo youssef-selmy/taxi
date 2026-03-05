@@ -1,0 +1,72 @@
+query zonePrices($filter: ZonePriceFilter, $paging: OffsetPaging) {
+  zonePrices(filter: $filter, paging: $paging) {
+    nodes {
+      ...zonePriceListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query zonePrice($id: ID!) {
+  zonePrice(id: $id) {
+    ...zonePrice
+  }
+}
+
+query zonePriceFieldOptions {
+  services {
+    ...taxiPricingListItem
+  }
+  fleets(paging: { limit: 100 }) {
+    nodes {
+      ...fleetListItem
+    }
+  }
+}
+
+mutation createZonePrice($input: ZonePriceInput!) {
+  createOneZonePrice(input: { zonePrice: $input }) {
+    ...zonePrice
+  }
+}
+
+mutation assignServiceAndFleetIds(
+  $zonePriceId: ID!
+  $serviceIds: [ID!]!
+  $fleetIds: [ID!]!
+) {
+  setServicesOnZonePrice(
+    input: { id: $zonePriceId, relationIds: $serviceIds }
+  ) {
+    ...zonePrice
+  }
+  setFleetsOnZonePrice(input: { id: $zonePriceId, relationIds: $fleetIds }) {
+    ...zonePrice
+  }
+}
+
+mutation updateZonePrice(
+  $id: ID!
+  $input: ZonePriceInput!
+  $serviceIds: [ID!]!
+  $fleetIds: [ID!]!
+) {
+  updateOneZonePrice(input: { id: $id, update: $input }) {
+    ...zonePrice
+  }
+  setServicesOnZonePrice(input: { id: $id, relationIds: $serviceIds }) {
+    ...zonePrice
+  }
+  setFleetsOnZonePrice(input: { id: $id, relationIds: $fleetIds }) {
+    ...zonePrice
+  }
+}
+
+mutation deleteZonePrice($id: ID!) {
+  deleteOneZonePrice(input: { id: $id }) {
+    id
+  }
+}

@@ -1,0 +1,11 @@
+query shopFeedbacks($shopId: ID!) {
+  shopFeedbacks(filter: { shopId: { eq: $shopId } }) {
+    nodes {
+      ...shopFeedback
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

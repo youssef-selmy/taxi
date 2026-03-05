@@ -1,0 +1,47 @@
+query shopDocuments {
+  shopDocuments {
+    ...shopDocument
+  }
+}
+
+mutation shopDocumentCreate($input: CreateManyShopDocumentsInput!) {
+  createManyShopDocuments(input: $input) {
+    ...shopDocument
+  }
+}
+
+mutation shopDocumentUpdate($input: UpdateOneShopDocumentInput!) {
+  updateOneShopDocument(input: $input) {
+    ...shopDocument
+  }
+}
+
+mutation shopDocumentDelete($input: DeleteManyShopDocumentsInput!) {
+  deleteManyShopDocuments(input: $input) {
+    deletedCount
+  }
+}
+
+mutation shopDocumentRetentionPolicyCreate(
+  $input: CreateManyShopDocumentRetentionPoliciesInput!
+) {
+  createManyShopDocumentRetentionPolicies(input: $input) {
+    ...shopDocumentRetentionPolicy
+  }
+}
+
+mutation shopDocumentRetentionPolicyUpdate(
+  $input: UpdateOneShopDocumentRetentionPolicyInput!
+) {
+  updateOneShopDocumentRetentionPolicy(input: $input) {
+    ...shopDocumentRetentionPolicy
+  }
+}
+
+mutation shopDocumentRetentionPolicyDelete(
+  $input: DeleteManyShopDocumentRetentionPoliciesInput!
+) {
+  deleteManyShopDocumentRetentionPolicies(input: $input) {
+    deletedCount
+  }
+}

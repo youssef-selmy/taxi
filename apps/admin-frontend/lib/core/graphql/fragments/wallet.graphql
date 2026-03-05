@@ -1,0 +1,29 @@
+fragment customerWallet on RiderWallet {
+  currency
+  balance
+}
+
+fragment driverWallet on DriverWallet {
+  balance
+  currency
+}
+
+fragment adminWallet on ProviderWallet {
+  balance
+  currency
+}
+
+fragment fleetWallet on FleetWallet {
+  balance
+  currency
+}
+
+fragment shopWallet on ShopWallet {
+  balance
+  currency
+}
+
+fragment parkingWallet on ParkingWallet {
+  balance
+  currency
+}

@@ -1,0 +1,24 @@
+query shopWalletDetailSummary($shopId: ID!) {
+  shop(id: $shopId) {
+    ...shopBasicInfo
+    wallet {
+      ...shopWallet
+    }
+  }
+}
+
+query shopTransactions(
+  $filter: ShopTransactionFilter
+  $paging: OffsetPaging
+  $sorting: [ShopTransactionSort!]!
+) {
+  shopTransactions(filter: $filter, sorting: $sorting, paging: $paging) {
+    nodes {
+      ...shopTransaction
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

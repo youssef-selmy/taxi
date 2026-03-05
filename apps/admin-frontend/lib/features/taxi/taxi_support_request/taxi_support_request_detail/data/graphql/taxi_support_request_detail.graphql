@@ -1,0 +1,32 @@
+query taxiSupportRequest($id: ID!) {
+  taxiSupportRequest(id: $id) {
+    ...taxiSupportRequestDetail
+  }
+  staffs: operators(paging: { limit: 50 }) {
+    nodes {
+      ...staffListItem
+    }
+  }
+}
+
+mutation addCommentSupportRequestActivity(
+  $input: CreateTaxiSupportRequestCommentInput!
+) {
+  addCommentToTaxiSupportRequest(input: $input) {
+    ...taxiSupportRequestActivity
+  }
+}
+
+mutation assignSupportRequestActivity($input: AssignTaxiSupportRequestInput!) {
+  assignTaxiSupportRequestToStaff(input: $input) {
+    ...taxiSupportRequestActivity
+  }
+}
+
+mutation changeSupportRequestStatus(
+  $input: ChangeTaxiSupportRequestStatusInput!
+) {
+  changeTaxiSupportRequestStatus(input: $input) {
+    ...taxiSupportRequestActivity
+  }
+}

@@ -1,0 +1,10 @@
+fragment payoutAccount on PayoutAccount {
+  id
+  last4
+  type
+  currency
+  accountNumber
+  payoutMethod {
+    ...payoutMethodCompact
+  }
+}

@@ -1,0 +1,34 @@
+query shopSupportRequest($id: ID!) {
+  shopSupportRequest(id: $id) {
+    ...shopSupportRequestDetail
+  }
+  staffs: operators(paging: { limit: 50 }) {
+    nodes {
+      ...staffListItem
+    }
+  }
+}
+
+mutation addCommentToShopSupportRequest(
+  $input: CreateShopSupportRequestCommentInput!
+) {
+  addCommentToShopSupportRequest(input: $input) {
+    ...shopSupportRequestActivity
+  }
+}
+
+mutation assignStaffsToShopSupportRequest(
+  $input: AssignShopSupportRequestInput!
+) {
+  assignShopSupportRequestToStaff(input: $input) {
+    ...shopSupportRequestActivity
+  }
+}
+
+mutation updateShopSupportRequestStatus(
+  $input: ChangeShopSupportRequestStatusInput!
+) {
+  changeShopSupportRequestStatus(input: $input) {
+    ...shopSupportRequestActivity
+  }
+}

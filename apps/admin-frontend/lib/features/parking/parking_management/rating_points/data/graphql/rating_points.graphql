@@ -1,0 +1,33 @@
+query ratingPoints {
+  ratingPoints: parkingFeedbackParameters {
+    ...parkingFeedbackParameterListItem
+  }
+}
+
+query ratingPoint($id: ID!) {
+  ratingPoint: parkingFeedbackParameter(id: $id) {
+    ...parkingFeedbackParameterListItem
+  }
+}
+
+mutation createRatingPoint($input: CreateParkingFeedbackParameter!) {
+  createRatingPoint: createOneParkingFeedbackParameter(
+    input: { parkingFeedbackParameter: $input }
+  ) {
+    ...parkingFeedbackParameterListItem
+  }
+}
+
+mutation updateRatingPoint($id: ID!, $input: UpdateParkingFeedbackParameter!) {
+  updateRatingPoint: updateOneParkingFeedbackParameter(
+    input: { id: $id, update: $input }
+  ) {
+    ...parkingFeedbackParameterListItem
+  }
+}
+
+mutation deleteRatingPoint($id: ID!) {
+  deleteRatingPoint: deleteOneParkingFeedbackParameter(input: { id: $id }) {
+    id
+  }
+}

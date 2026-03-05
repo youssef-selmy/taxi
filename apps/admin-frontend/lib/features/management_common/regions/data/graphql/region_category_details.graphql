@@ -1,0 +1,27 @@
+query regionCategory($id: ID!) {
+  regionCategory(id: $id) {
+    ...regionCategory
+  }
+}
+
+mutation createRegionCategory($name: String!, $currency: String!) {
+  createOneRegionCategory(
+    input: { regionCategory: { name: $name, currency: $currency } }
+  ) {
+    ...regionCategory
+  }
+}
+
+mutation updateRegionCategory($id: ID!, $name: String!, $currency: String!) {
+  updateOneRegionCategory(
+    input: { id: $id, update: { name: $name, currency: $currency } }
+  ) {
+    ...regionCategory
+  }
+}
+
+mutation deleteRegionCategory($id: ID!) {
+  deleteOneRegionCategory(input: { id: $id }) {
+    id
+  }
+}

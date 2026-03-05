@@ -1,0 +1,7 @@
+query CustomerAddresses($customerId: ID!) {
+  addresses(filter: { riderId: { eq: $customerId } }) {
+    nodes {
+      ...Address
+    }
+  }
+}

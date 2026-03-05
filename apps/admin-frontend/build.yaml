@@ -1,0 +1,85 @@
+targets:
+  $default:
+    sources:
+      - pubspec.yaml
+      - $package$
+      - lib/**
+      - assets/**
+    builders:
+      graphql_codegen:
+        generate_for:
+          - lib/schema.graphql
+          - lib/**/*.graphql
+        options:
+          addTypename: true
+          addTypenameExcludedPaths:
+            - subscription
+          scopes:
+            - lib/**
+          clients:
+            - graphql
+          scalars:
+            DateTime:
+              type: DateTime
+              fromJsonFunctionName: fromGraphQLDateTimeToDartDateTime
+              toJsonFunctionName: fromDartDateTimeToGraphQLDateTime
+              import: package:admin_frontend/core/graphql/scalars/datetime.dart
+            Timestamp:
+              type: DateTime
+              fromJsonFunctionName: fromGraphQLTimestampToDartDateTime
+              toJsonFunctionName: fromDartDateTimeToGraphQLTimestamp
+              import: package:admin_frontend/core/graphql/scalars/timestamp.dart
+            ConnectionCursor:
+              type: String
+              fromJsonFunctionName: fromGraphQLConnectionCursorToDartString
+              toJsonFunctionName: fromDartStringToGraphQLConnectionCursor
+              import: package:admin_frontend/core/graphql/scalars/connection_cursor.dart
+
+      auto_route_generator:auto_route_generator: # this for @RoutePage
+        options:
+          enable_cached_builds: true
+        generate_for:
+          - lib/features/**/**_screen.dart
+          - lib/features/**/**_page.dart
+          - lib/features/**/**_dialog.dart
+      auto_route_generator:auto_router_generator: # this for @AutoRouterConfig
+        options:
+          enable_cached_builds: true
+        generate_for:
+          - lib/core/router/app_router.dart
+          - lib/features/**/router.dart
+
+      freezed:
+        generate_for:
+          - lib/**/*.event.dart
+          - lib/**/*.state.dart
+          - lib/**/*.model.dart
+          - lib/**/*.bloc.dart
+          - lib/**/*.cubit.dart
+        options:
+          format: false
+          when: false
+          map: false
+
+      # json_serializable:
+      #   generate_for:
+      #     - lib/**/*.event.dart
+      #     - lib/**/*.state.dart
+      #     - lib/**/*.model.dart
+      #     - lib/**/*.bloc.dart
+      #     - lib/**/*.cubit.dart
+
+      injectable_generator:injectable_builder:
+        generate_for:
+          - lib/core/locator/locator.dart
+          - lib/core/router/app_router.dart
+          - lib/**/*.bloc.dart
+          - lib/**/*.cubit.dart
+          - lib/**/*repository.prod.dart
+          - lib/**/*repository.mock.dart
+          - lib/**/*datasource.prod.dart
+          - lib/**/*datasource.mock.dart
+
+      injectable_generator:injectable_config_builder:
+        generate_for:
+          - lib/core/locator/locator.dart

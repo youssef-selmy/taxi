@@ -1,0 +1,5 @@
+mutation insertShopTransaction($input: CreateShopTransactionInput!) {
+  createOneShopTransaction(input: { shopTransaction: $input }) {
+    ...shopTransaction
+  }
+}

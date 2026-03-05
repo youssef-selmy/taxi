@@ -1,0 +1,5 @@
+query parkingOrderDetail($id: ID!) {
+  parkOrder(id: $id) {
+    ...parkingOrderDetail
+  }
+}

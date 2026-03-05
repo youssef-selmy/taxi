@@ -1,0 +1,7 @@
+fragment taxiOrderOption on ServiceOption {
+  id
+  name
+  type
+  icon
+  additionalFee
+}

@@ -1,0 +1,11 @@
+query customerParkingReviews($customerId: ID!) {
+  parkingFeedbacks(filter: { order: { carOwnerId: { eq: $customerId } } }) {
+    nodes {
+      ...parkingFeedback
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

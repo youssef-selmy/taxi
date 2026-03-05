@@ -1,0 +1,5 @@
+mutation insertParkingTransaction($input: CreateParkingTransactionInput!) {
+  createOneParkingTransaction(input: { parkingTransaction: $input }) {
+    ...parkingTransaction
+  }
+}

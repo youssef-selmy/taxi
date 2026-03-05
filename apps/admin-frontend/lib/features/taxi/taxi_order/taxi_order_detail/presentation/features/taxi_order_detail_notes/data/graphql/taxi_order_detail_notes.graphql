@@ -1,0 +1,15 @@
+query taxiOrderNotes($orderId : ID!) {
+  taxiOrderNotes (filter:  {orderId: {eq: $orderId} }) {
+    nodes {
+      ...taxiOrderNote
+    }
+}
+}
+
+mutation crateTaxiOrderNote($input : CreateTaxiOrderNoteInput!){
+    createTaxiOrderNote(input: $input){
+        ...taxiOrderNote
+    }
+}
+
+

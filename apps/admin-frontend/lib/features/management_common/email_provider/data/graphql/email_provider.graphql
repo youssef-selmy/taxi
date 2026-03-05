@@ -1,0 +1,45 @@
+query emailProviders(
+  $paging: OffsetPaging
+  $filter: EmailProviderFilter
+  $sorting: [EmailProviderSort!]!
+) {
+  emailProviders(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...emailProviderListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}
+
+query emailProvider($id: ID!) {
+  emailProvider(id: $id) {
+    ...emailProviderDetails
+  }
+}
+
+mutation updateEmailProvider($id: ID!, $input: EmailProviderInput!) {
+  updateOneEmailProvider(input: { id: $id, update: $input }) {
+    ...emailProviderDetails
+  }
+}
+
+mutation createEmailProvider($input: EmailProviderInput!) {
+  createOneEmailProvider(input: { emailProvider: $input }) {
+    ...emailProviderDetails
+  }
+}
+
+mutation deleteEmailProvider($id: ID!) {
+  deleteOneEmailProvider(input: { id: $id }) {
+    id
+  }
+}
+
+mutation markEmailProviderAsDefault($id: ID!) {
+  markEmailProviderAsDefault(id: $id) {
+    ...emailProviderDetails
+  }
+}

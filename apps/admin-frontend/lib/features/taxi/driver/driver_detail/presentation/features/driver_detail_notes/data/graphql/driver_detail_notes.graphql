@@ -1,0 +1,13 @@
+query driverDetailNotes($id: ID!) {
+  driverNotes(filter: { driverId: { eq: $id } }) {
+    nodes {
+      ...driverNote
+    }
+  }
+}
+
+mutation createDriverNote($input: CreateOneDriverNoteInput!) {
+  createOneDriverNote(input: $input) {
+    ...driverNote
+  }
+}

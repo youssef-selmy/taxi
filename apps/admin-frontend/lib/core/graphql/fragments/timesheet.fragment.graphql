@@ -1,0 +1,7 @@
+fragment Timesheet on DriverTimesheet {
+  date
+  timeRanges {
+    startTime
+    endTime
+  }
+}

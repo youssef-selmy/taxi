@@ -1,0 +1,43 @@
+query parkSpotCreditRecords(
+  $paging: OffsetPaging
+  $filter: ParkingTransactionFilter
+  $sorting: [ParkingTransactionSort!]
+) {
+  parkingTransactions(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...parkingTransaction
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}
+
+query parkingWallets($ownerId: ID!) {
+  parkingWallets(filter: { customerId: { eq: $ownerId } }) {
+    nodes {
+      ...parkingWallet
+    }
+  }
+}
+query exportParkingTransactions(
+  $filter: ParkingTransactionFilter
+  $format: ExportFormat!
+  $sorting: [ParkingTransactionSort!]!
+) {
+  exportParkingTransactions(
+    filter: $filter
+    format: $format
+    sorting: $sorting
+    fields: [
+      { label: "Transaction ID", field: "id" }
+      { label: "Created At", field: "createdAt" }
+      { label: "Type", field: "type" }
+      { label: "Amount", field: "amount" }
+      { label: "Currency", field: "currency" }
+      { label: "Description", field: "description" }
+      { label: "Park Spot Id", field: "parkSpotId" }
+    ]
+  )
+}

@@ -1,0 +1,10 @@
+fragment customerNote on CustomerNote {
+  id
+  note
+  createdAt
+  createdBy {
+    id
+    firstName
+    lastName
+  }
+}

@@ -1,0 +1,17 @@
+query shopOrderDetail($id: ID!) {
+  shopOrder(id: $id) {
+    ...orderShopDetail
+  }
+}
+
+mutation cancelShopOrderCarts($input: CancelShopOrderCartsInput!) {
+  cancelShopOrderCarts(input: $input) {
+    ...orderShopDetail
+  }
+}
+
+mutation removeItemsFromCart($input: RemoveItemFromCartInput!) {
+  removeItemFromCart(input: $input) {
+    ...orderShopDetail
+  }
+}

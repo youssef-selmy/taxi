@@ -1,0 +1,80 @@
+fragment taxiPricingCategory on ServiceCategory {
+  id
+  name
+  services {
+    ...taxiPricingListItem
+  }
+}
+
+fragment taxiPricingListItem on Service {
+  id
+  categoryId
+  name
+  description
+  personCapacity
+  media {
+    ...Media
+  }
+}
+
+fragment taxiPricing on Service {
+  id
+  name
+  description
+  roundingFactor
+  orderTypes
+  baseFare
+  perHundredMeters
+  perMinuteDrive
+  perMinuteWait
+  prepayPercent
+  minimumFee
+  maximumDestinationDistance
+  paymentMethod
+  cancellationTotalFee
+  cancellationDriverShare
+  providerShareFlat
+  personCapacity
+  twoWayAvailable
+  displayPriority
+  timeMultipliers {
+    ...timeMultiplier
+  }
+  distanceMultipliers {
+    distanceFrom
+    distanceTo
+    multiply
+  }
+  weekdayMultipliers {
+    weekday
+    multiply
+  }
+  dateRangeMultipliers {
+    startDate
+    endDate
+    multiply
+  }
+  media {
+    ...Media
+  }
+  regions {
+    ...regionWithCategory
+  }
+  options {
+    ...taxiOrderOption
+  }
+  categoryId
+  searchRadius
+  providerSharePercent
+  maximumDestinationDistance
+  pricingMode
+  rangePolicy
+  priceRangeMinPercent
+  priceRangeMaxPercent
+}
+
+fragment timeMultiplier on TimeMultiplier {
+  startTime
+  endTime
+  multiply
+}

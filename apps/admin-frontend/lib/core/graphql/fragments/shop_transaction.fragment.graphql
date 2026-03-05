@@ -1,0 +1,35 @@
+fragment shopTransaction on ShopTransaction {
+  id
+  createdAt
+  status
+  transactionDate
+  type
+  creditType
+  currency
+  amount
+  documentNumber
+  description
+  debitType
+  paymentGateway {
+    ...paymentGatewayCompact
+  }
+  savedPaymentMethod {
+    ...SavedPaymentMethod
+  }
+}
+
+fragment shopTransactionPayout on ShopTransaction {
+  id
+  status
+  amount
+  currency
+  type
+  creditType
+  debitType
+  shop {
+    ...shopBasicInfo
+  }
+  payoutAccount {
+    ...payoutAccount
+  }
+}

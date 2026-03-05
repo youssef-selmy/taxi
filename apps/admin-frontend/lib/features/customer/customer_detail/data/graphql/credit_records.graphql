@@ -1,0 +1,43 @@
+query customerCreditRecords(
+  $paging: OffsetPaging
+  $filter: RiderTransactionFilter
+  $sorting: [RiderTransactionSort!]
+) {
+  riderTransactions(paging: $paging, filter: $filter, sorting: $sorting) {
+    nodes {
+      ...customerTransaction
+    }
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+  }
+}
+
+query customerWallets($riderId: ID!) {
+  riderWallets(filter: { riderId: { eq: $riderId } }) {
+    nodes {
+      ...customerWallet
+    }
+  }
+}
+
+query exportCustomerTransactions(
+  $filter: RiderTransactionFilter
+  $sorting: [RiderTransactionSort!]
+  $format: ExportFormat!
+) {
+  exportRiderTransactions(
+    filter: $filter
+    sorting: $sorting
+    format: $format
+    fields: [
+      { field: "createdAt", label: "Created At" }
+      { field: "action", label: "Action" }
+      { field: "amount", label: "Amount" }
+      { field: "currency", label: "Currency" }
+      { field: "status", label: "Status" }
+      { field: "refrenceNumber", label: "Description" }
+    ]
+  )
+}

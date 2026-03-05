@@ -1,0 +1,9 @@
+query customerSessions($customerId: ID!) {
+  customerSessions(filter: { customerId: { eq: $customerId } }) {
+    ...customerSession
+  }
+}
+
+mutation terminateCustomerLoginSession($sessionId: ID!) {
+  terminateCustomerLoginSession(sessionId: $sessionId)
+}

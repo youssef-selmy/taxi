@@ -1,0 +1,6 @@
+fragment customerSession on CustomerSession {
+  id
+  sessionInfo {
+    ...sessionInfo
+  }
+}

@@ -1,0 +1,15 @@
+query shopCategories(
+  $paging: OffsetPaging
+  $filter: ShopCategoryFilter
+  $sorting: [ShopCategorySort!]!
+) {
+  shopCategories(filter: $filter, sorting: $sorting, paging: $paging) {
+    nodes {
+      ...shopCategory
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

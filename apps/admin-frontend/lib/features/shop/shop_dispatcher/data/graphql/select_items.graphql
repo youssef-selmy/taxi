@@ -1,0 +1,36 @@
+query shopCategories($customerId: ID!) {
+  shopCategories {
+    nodes {
+      ...shopCategory
+    }
+  }
+  rider(id: $customerId) {
+    wallet {
+      ...customerWallet
+    }
+  }
+}
+
+query shops($addressId: ID!, $categoryId: ID!, $query: String) {
+  dispatcherShops(
+    input: { addressId: $addressId, categoryId: $categoryId, query: $query }
+  ) {
+    ...DispatcherShop
+  }
+}
+
+query items($shopId: ID!) {
+  shop(id: $shopId) {
+    id
+    name
+    # TODO: Show appropriate item preset
+    productCategories {
+      ...shopItemCategoryListItem
+      subItems: products(paging: { limit: 50 }) {
+        nodes {
+          ...shopItemListItem
+        }
+      }
+    }
+  }
+}

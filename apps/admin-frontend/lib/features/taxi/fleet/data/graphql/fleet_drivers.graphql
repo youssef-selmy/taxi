@@ -1,0 +1,15 @@
+query fleetDrivers(
+  $paging: OffsetPaging
+  $sorting: [DriverSort!]!
+  $filter: DriverFilter!
+) {
+  drivers(filter: $filter, paging: $paging, sorting: $sorting) {
+    nodes {
+      ...driverListItem
+    }
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    totalCount
+  }
+}

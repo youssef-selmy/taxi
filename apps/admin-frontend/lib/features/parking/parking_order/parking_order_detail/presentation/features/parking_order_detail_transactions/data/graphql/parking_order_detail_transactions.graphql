@@ -1,0 +1,21 @@
+query parkingOrderTransactions($parkingId: ID!) {
+  parkOrder(id: $parkingId) {
+    currency
+    parkOwnerTransactions {
+      ...customerTransaction
+    }
+    providerTransactions {
+      ...providerTransaction
+    }
+
+    customerTransactions {
+      ...customerTransaction
+    }
+  }
+  parkingTransactions{
+   nodes{
+    ...parkingTransaction
+   }
+  }
+}
+

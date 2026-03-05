@@ -1,0 +1,71 @@
+query shopOrders(
+  $paging: OffsetPaging
+  $filter: ShopOrderFilter
+  $sorting: [ShopOrderSort!]!
+) {
+  shopOrders(paging: $paging, filter: $filter, sorting: $sorting) {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    nodes {
+      ...shopOrderListItem
+    }
+  }
+}
+
+query getShopOrdersOverview(
+  $lastWeekStartDate: DateTime!
+  $lastWeekEndDate: DateTime!
+  $thisWeekStartDate: DateTime!
+  $thisWeekEndDate: DateTime!
+) {
+  shopOrderAggregate {
+    avg {
+      total
+    }
+  }
+  totalOrders: shopOrderAggregate {
+    count {
+      total
+    }
+  }
+  lastWeekOrder: shopOrderAggregate(
+    filter: {
+      createdAt: {
+        between: { lower: $lastWeekStartDate, upper: $lastWeekEndDate }
+      }
+    }
+  ) {
+    count {
+      id
+    }
+  }
+  thisWeekOrders: shopOrderAggregate(
+    filter: {
+      createdAt: {
+        between: { lower: $thisWeekStartDate, upper: $thisWeekEndDate }
+      }
+    }
+  ) {
+    count {
+      id
+    }
+  }
+  groupByStatus: shopOrderAggregate {
+    count {
+      id
+    }
+    groupBy {
+      status
+    }
+  }
+}
+
+query shopCategories {
+  shopCategories {
+    nodes {
+      ...shopCategory
+    }
+  }
+}

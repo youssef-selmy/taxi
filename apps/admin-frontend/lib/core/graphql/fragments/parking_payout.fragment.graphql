@@ -1,0 +1,63 @@
+fragment parkingPayoutSessionListItem on ParkingPayoutSession {
+  id
+  status
+  totalAmount
+  currency
+  createdAt
+  payoutMethods {
+    ...payoutMethodCompact
+  }
+  parkingTransactions(paging: { limit: 2 }) {
+    nodes {
+      customer {
+        ...CustomerCompact
+      }
+    }
+    totalCount
+  }
+}
+
+fragment parkingPayoutSessionDetail on ParkingPayoutSession {
+  id
+  totalAmount
+  createdAt
+  status
+  currency
+  parkingCount: parkingTransactionsAggregate {
+    count {
+      id
+    }
+  }
+  payoutMethodDetails {
+    ...parkingPayoutSessionPayoutMethodDetail
+  }
+
+  paidParkings: parkingTransactionsAggregate(filter: { status: { eq: Done } }) {
+    sum {
+      amount
+    }
+  }
+  unpaidParkings: parkingTransactionsAggregate(
+    filter: { status: { eq: Processing } }
+  ) {
+    sum {
+      amount
+    }
+  }
+}
+
+fragment parkingPayoutSessionPayoutMethodDetail on ParkingPayoutSessionPayoutMethodDetail {
+  id
+  status
+  statistics: parkingTransactionsAggregate {
+    count {
+      id
+    }
+    sum {
+      amount
+    }
+  }
+  payoutMethod {
+    ...payoutMethodCompact
+  }
+}

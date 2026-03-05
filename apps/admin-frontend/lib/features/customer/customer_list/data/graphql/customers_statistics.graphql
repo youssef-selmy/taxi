@@ -1,0 +1,38 @@
+query CustomersStatistics($filter: ChartFilterInput!) {
+  customersPerApp {
+    ...customerPerApp
+  }
+  revenuePerApp(input: $filter) {
+    ...RevenuePerApp
+  }
+  customerPlatformDistribution {
+    ...PlatformDistribution
+  }
+  topSpendingCustomers {
+    ...leaderboardItem
+  }
+  genderDistribution {
+    ...GenderDistribution
+  }
+  retentionRate(input: $filter) {
+    ...RetentionRate
+  }
+  activeInactiveUsers(input: $filter) {
+    ...ActiveInactiveUsers
+  }
+  countryDistribution {
+    ...CountryDistribution
+  }
+}
+
+query revenuePerApp($filter: ChartFilterInput!) {
+  revenuePerApp(input: $filter) {
+    ...RevenuePerApp
+  }
+}
+
+query retentionRate($filter: ChartFilterInput!) {
+  retentionRate(input: $filter) {
+    ...RetentionRate
+  }
+}

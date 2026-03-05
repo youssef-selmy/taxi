@@ -1,0 +1,25 @@
+fragment smsProviderListItem on SMSProvider {
+  id
+  name
+  type
+  isDefault
+  messagesAggregate {
+    count {
+      id
+    }
+  }
+}
+
+fragment smsProviderDetails on SMSProvider {
+  id
+  name
+  type
+  isDefault
+  accountId
+  authToken
+  fromNumber
+  smsType
+  verificationTemplate
+  callMaskingNumber
+  callMaskingEnabled
+}

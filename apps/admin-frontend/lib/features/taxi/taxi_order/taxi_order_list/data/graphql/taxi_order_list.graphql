@@ -1,0 +1,117 @@
+query getOrdersOverview(
+  $lastWeekStartDate: DateTime!
+  $lastWeekEndDate: DateTime!
+  $thisWeekStartDate: DateTime!
+  $thisWeekEndDate: DateTime!
+) {
+  totalRides: orderAggregate {
+    count {
+      id
+    }
+  }
+  lastWeekRides: orderAggregate(
+    filter: {
+      createdOn: {
+        between: { lower: $lastWeekStartDate, upper: $lastWeekEndDate }
+      }
+    }
+  ) {
+    count {
+      id
+    }
+  }
+  thisWeekRides: orderAggregate(
+    filter: {
+      createdOn: {
+        between: { lower: $thisWeekStartDate, upper: $thisWeekEndDate }
+      }
+    }
+  ) {
+    count {
+      id
+    }
+  }
+  groupByStatus: orderAggregate {
+    count {
+      id
+    }
+    groupBy {
+      status
+    }
+  }
+  averageTotalRideCost: orderAggregate {
+    avg {
+      costAfterCoupon
+    }
+  }
+  averageThisWeekRideCost: orderAggregate(
+    filter: {
+      createdOn: {
+        between: { lower: $thisWeekStartDate, upper: $thisWeekEndDate }
+      }
+    }
+  ) {
+    avg {
+      costAfterCoupon
+    }
+  }
+  averageLastWeekRideCost: orderAggregate(
+    filter: {
+      createdOn: {
+        between: { lower: $lastWeekStartDate, upper: $lastWeekEndDate }
+      }
+    }
+  ) {
+    avg {
+      costAfterCoupon
+    }
+  }
+  totalSuccessRate: taxiOrderSuccessRate
+  thisWeekSuccessRate: taxiOrderSuccessRate(
+    startTime: $thisWeekStartDate
+    endTime: $thisWeekEndDate
+  )
+  lastWeekSuccessRate: taxiOrderSuccessRate(
+    startTime: $lastWeekStartDate
+    endTime: $lastWeekEndDate
+  )
+  averageTotalRideDuration: orderAggregate {
+    avg {
+      durationBest
+    }
+  }
+  averageThisWeekRideDuration: orderAggregate(
+    filter: {
+      createdOn: {
+        between: { lower: $thisWeekStartDate, upper: $thisWeekEndDate }
+      }
+    }
+  ) {
+    avg {
+      durationBest
+    }
+  }
+  averageLastWeekRideDuration: orderAggregate(
+    filter: {
+      createdOn: {
+        between: { lower: $lastWeekStartDate, upper: $lastWeekEndDate }
+      }
+    }
+  ) {
+    avg {
+      durationBest
+    }
+  }
+}
+
+query fleets {
+  fleets {
+    totalCount
+    pageInfo {
+      ...OffsetPageInfo
+    }
+    nodes {
+      ...fleetListItem
+    }
+  }
+}

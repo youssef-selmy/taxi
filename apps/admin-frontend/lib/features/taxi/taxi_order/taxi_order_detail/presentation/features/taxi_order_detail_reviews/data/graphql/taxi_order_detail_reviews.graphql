@@ -1,0 +1,7 @@
+query taxiOrderDetailReviews ($orderId : ID!){
+   taxiOrderReviews : feedbacks(filter:  {id:  {eq: $orderId}}) {
+        nodes {
+            ...reviewTaxi
+        }
+    }
+}
