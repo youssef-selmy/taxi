@@ -9,14 +9,10 @@ services:
       - .env
     ports:
       - "3307:3306"
-
   redis:
     image: redis
     volumes:
       - redisvol:/data
-    ports:
-      - "6379:6379"
-
   taxi-rider-api:
     build:
       context: .
@@ -28,15 +24,11 @@ services:
       - "taxi-admin-api"
     volumes:
       - ./config-new:/app/config
+      - ./license-verify:/app/node_modules/license-verify
     env_file:
       - .env
-    environment:
-      - NODE_ENV=production
-      - HOST=0.0.0.0
-      - PORT=3000
     ports:
       - "4000:3000"
-
   taxi-driver-api:
     build:
       context: .
@@ -48,15 +40,11 @@ services:
       - "taxi-admin-api"
     volumes:
       - ./config-new:/app/config
+      - ./license-verify:/app/node_modules/license-verify
     env_file:
       - .env
-    environment:
-      - NODE_ENV=production
-      - HOST=0.0.0.0
-      - PORT=3000
     ports:
       - "4002:3000"
-
   taxi-admin-api:
     build:
       context: .
@@ -67,39 +55,28 @@ services:
       - "redis"
     volumes:
       - ./config-new:/app/config
+      - ./license-verify:/app/node_modules/license-verify
     env_file:
       - .env
-    environment:
-      - NODE_ENV=production
-      - HOST=0.0.0.0
-      - PORT=3000
     ports:
       - "4001:3000"
-
   admin-panel:
     build:
       context: ./apps/admin-frontend
       dockerfile: Dockerfile
     restart: always
     ports:
-      - "4003:80"
-    env_file:
-      - ./apps/admin-frontend/.env.dev
-
+      - "4003:8080"
   payment-gateways:
     build:
-      context: ./apps/payment-gateways/Dockerfile
+      context: .
+      dockerfile: ./apps/payment-gateways/Dockerfile
     depends_on:
       - "taxi-rider-api"
-    env_file:
-      - .env
-    environment:
-      - NODE_ENV=production
-      - HOST=0.0.0.0
-      - PORT=3333
     ports:
       - "3333:3333"
-
+    env_file:
+      - .env
 volumes:
   redisvol:
   mysqlvol:
