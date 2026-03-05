@@ -62,8 +62,8 @@ services:
       - "4001:3000"
   admin-panel:
     build:
-      context: ./apps/admin-frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./apps/admin-frontend/Dockerfile
     restart: always
     ports:
       - "4003:8080"
