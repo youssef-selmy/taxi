@@ -1,14 +1,14 @@
-# Use lightweight Nginx image
+FROM ghcr.io/cirruslabs/flutter:3.38.2 AS builder
+WORKDIR /app
+
+COPY . .
+RUN flutter pub get
+RUN flutter build web --release
+
 FROM nginx:alpine
 
-# Remove default Nginx static files
 RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app/build/web /usr/share/nginx/html
 
-# Copy Flutter web build files
-COPY build/web /usr/share/nginx/html
-
-# Expose port 80
 EXPOSE 80
-
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
