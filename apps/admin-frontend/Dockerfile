@@ -4,6 +4,7 @@ WORKDIR /workspace
 COPY . .
 WORKDIR /workspace/apps/admin-frontend
 RUN flutter pub get
+RUN dart run build_runner build --delete-conflicting-outputs
 RUN flutter build web --release
 
 FROM nginx:alpine
