@@ -10,4 +10,4 @@ COPY libs ./libs
 RUN npm ci
 
 EXPOSE 3000
-CMD ["node", "-r", "ts-node/register/transpile-only", "-r", "tsconfig-paths/register", "apps/driver-api/src/main.ts"]
+CMD ["npx", "ts-node", "-r", "tsconfig-paths/register", "apps/driver-api/src/main.ts"]
