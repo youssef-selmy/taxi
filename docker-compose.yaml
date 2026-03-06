@@ -92,4 +92,3 @@ services:
 volumes:
   redisvol:
   mysqlvol:
-  taxiassets:
