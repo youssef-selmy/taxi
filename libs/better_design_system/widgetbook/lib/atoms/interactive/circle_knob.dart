@@ -1,0 +1,25 @@
+import 'package:better_design_system/atoms/interactive/circle_knob.dart';
+import 'package:better_design_system/colors/semantic_color.dart';
+import 'package:flutter/material.dart';
+import 'package:widgetbook/widgetbook.dart';
+import 'package:widgetbook_annotation/widgetbook_annotation.dart';
+
+@UseCase(name: 'Default', type: AppCircleKnob)
+Widget appCircleKnobUseCase(BuildContext context) {
+  return Center(
+    child: AppCircleKnob(
+      state: context.knobs.object.dropdown(
+        label: 'State',
+        options: KnobState.values,
+        initialOption: KnobState.active,
+        labelBuilder: (state) => state.name,
+      ),
+      semanticColor: context.knobs.object.dropdown(
+        label: 'Semantic Color',
+        options: SemanticColor.values,
+        initialOption: SemanticColor.primary,
+        labelBuilder: (color) => color.name,
+      ),
+    ),
+  );
+}

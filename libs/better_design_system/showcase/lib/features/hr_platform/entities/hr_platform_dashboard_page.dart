@@ -1,0 +1,16 @@
+enum HrPlatformSidebarPage {
+  dashboard,
+  projects,
+  tasks,
+  calendar,
+  inbox,
+  performance,
+  reportAndAnalytics,
+  employees,
+  recruitment,
+  payroll,
+  settings,
+  helpCenter,
+  menu,
+  support,
+}

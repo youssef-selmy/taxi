@@ -1,0 +1,818 @@
+import 'package:flutter/material.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/atoms/navbar/navbar.dart';
+import 'package:better_design_system/organisms/profile_button/profile_button.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:image_faker/image_faker.dart';
+import 'package:better_design_system/atoms/buttons/soft_button.dart';
+import 'package:better_design_showcase/features/ecommerce/presentation/components/ecommerce_home/components/ecommerce_category_item.dart';
+import 'package:better_design_showcase/features/ecommerce/presentation/components/ecommerce_item.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/atoms/tab_menu_horizontal/tab_menu_horizontal.dart';
+
+class EcommerceHomeDesktop extends StatelessWidget {
+  const EcommerceHomeDesktop({super.key, this.header});
+
+  final Widget? header;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (header != null) header!,
+        const EcommerceNavbarSecond(),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 32,
+                left: 108,
+                right: 108,
+                bottom: 100,
+              ),
+              child: Column(
+                children: [
+                  const EcommerceGrayContainer(height: 517),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 64),
+                    child: const EcommerceCategoryBar(),
+                  ),
+                  const EcommerceHotSaleCard(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 64),
+                    child: Row(
+                      spacing: 24,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            spacing: 16,
+                            children: [
+                              const EcommerceGrayContainer(
+                                height: 362,
+                                showControls: false,
+                              ),
+                              const EcommerceGrayContainer(
+                                height: 209,
+                                showControls: false,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            spacing: 16,
+                            children: [
+                              const EcommerceGrayContainer(
+                                height: 215,
+                                showControls: false,
+                              ),
+                              const EcommerceGrayContainer(
+                                height: 356,
+                                showControls: false,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const EcommerceTodaysForYou(),
+                  const SizedBox(height: 64),
+                  const EcommerceGrayContainer(
+                    height: 362,
+                    showControls: false,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceNavbarSecond extends StatelessWidget {
+  const EcommerceNavbarSecond({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        AppNavbar(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+          prefix: Row(
+            children: [
+              Assets.images.logo.betterDesignSystemLogo.image(
+                fit: BoxFit.cover,
+                width: 40,
+                height: 40,
+              ),
+              const SizedBox(width: 12),
+              Text('Better', style: context.textTheme.titleSmall),
+            ],
+          ),
+          suffix: Row(
+            children: [
+              SizedBox(
+                width: 260,
+                child: AppTextField(
+                  density: TextFieldDensity.noDense,
+                  hint: 'Search',
+                  prefixIcon: Icon(
+                    BetterIcons.search01Filled,
+                    color: context.colors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              AppIconButton(
+                icon: BetterIcons.favouriteOutline,
+                style: IconButtonStyle.outline,
+                size: ButtonSize.medium,
+                iconSize: 22,
+                iconColor: context.colors.onSurfaceVariant,
+              ),
+              const SizedBox(width: 8),
+              AppIconButton(
+                icon: BetterIcons.shoppingBag02Outline,
+                style: IconButtonStyle.outline,
+                size: ButtonSize.medium,
+                iconSize: 22,
+                iconColor: context.colors.onSurfaceVariant,
+                badgeCount: 2,
+              ),
+              const SizedBox(width: 16),
+              AppProfileButton(
+                avatarUrl: ImageFaker().person.four,
+                title: 'Justin Schleifer',
+                items: [
+                  AppPopupMenuItem(
+                    title: 'Profile',
+                    onPressed: () {},
+                    icon: BetterIcons.userFilled,
+                  ),
+                  AppPopupMenuItem(
+                    title: 'Profile',
+                    onPressed: () {},
+                    icon: BetterIcons.wallet01Filled,
+                  ),
+                  AppPopupMenuItem(
+                    hasDivider: true,
+                    title: 'Logout',
+                    onPressed: () {},
+                    icon: BetterIcons.logout01Filled,
+                    color: SemanticColor.error,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        AppNavbar(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          prefix: Row(
+            children: [
+              AppNavbarActionItem(
+                icon: BetterIcons.menu01Outline,
+                onPressed: () {},
+                title: 'Categories',
+              ),
+              const SizedBox(width: 6),
+              AppNavbarActionItem(
+                icon: BetterIcons.discountTag02Outline,
+                onPressed: () {},
+                title: 'Hot Sale',
+              ),
+              const SizedBox(width: 6),
+              AppNavbarActionItem(
+                icon: BetterIcons.flashOutline,
+                onPressed: () {},
+                title: 'Best Sellers',
+              ),
+            ],
+          ),
+          suffix: Row(
+            children: [
+              AppTextButton(
+                onPressed: () {},
+                text: 'Cordova',
+                prefix: Icon(BetterIcons.location01Outline, size: 20),
+                size: ButtonSize.medium,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceCategoryBar extends StatelessWidget {
+  const EcommerceCategoryBar({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          spacing: 12,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            EcommerceCategoryItem(
+              label: 'Men',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.tShirt.svg(),
+            ),
+            EcommerceCategoryItem(
+              label: 'Women',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.dress03.svg(),
+            ),
+            EcommerceCategoryItem(
+              label: 'Kids',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.baby01.svg(),
+            ),
+            EcommerceCategoryItem(
+              label: 'Activewear',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.sleeveless.svg(),
+            ),
+            EcommerceCategoryItem(
+              label: 'Outerwear',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.hoodie.svg(),
+            ),
+            EcommerceCategoryItem(
+              label: 'Loungewear',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.turtleNeck.svg(),
+            ),
+            EcommerceCategoryItem(
+              label: 'Workwear',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.suit02.svg(),
+            ),
+            EcommerceCategoryItem(
+              label: 'Accessories',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.neckles.svg(),
+            ),
+            EcommerceCategoryItem(
+              label: 'Footwear',
+              isMobile: true,
+              svgPicture: Assets.images.clothes.runningShoes.svg(),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        EcommerceCategoryItem(
+          label: 'Men',
+          svgPicture: Assets.images.clothes.tShirt.svg(),
+        ),
+        EcommerceCategoryItem(
+          label: 'Women',
+          svgPicture: Assets.images.clothes.dress03.svg(),
+        ),
+        EcommerceCategoryItem(
+          label: 'Kids',
+          svgPicture: Assets.images.clothes.baby01.svg(),
+        ),
+        EcommerceCategoryItem(
+          label: 'Activewear',
+          svgPicture: Assets.images.clothes.sleeveless.svg(),
+        ),
+        EcommerceCategoryItem(
+          label: 'Outerwear',
+          svgPicture: Assets.images.clothes.hoodie.svg(),
+        ),
+        EcommerceCategoryItem(
+          label: 'Loungewear',
+          svgPicture: Assets.images.clothes.turtleNeck.svg(),
+        ),
+        EcommerceCategoryItem(
+          label: 'Workwear',
+          svgPicture: Assets.images.clothes.suit02.svg(),
+        ),
+        EcommerceCategoryItem(
+          label: 'Accessories',
+          svgPicture: Assets.images.clothes.neckles.svg(),
+        ),
+        EcommerceCategoryItem(
+          label: 'Footwear',
+          svgPicture: Assets.images.clothes.runningShoes.svg(),
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceGrayContainer extends StatelessWidget {
+  const EcommerceGrayContainer({
+    super.key,
+    this.height,
+    this.showControls = true,
+  });
+
+  final double? height;
+  final bool showControls;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: height,
+      decoration: BoxDecoration(
+        color: Color(0xFFD9D9D9),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          if (showControls)
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Row(
+                    children: [
+                      AppSoftButton(
+                        onPressed: () {},
+                        prefixIcon: BetterIcons.arrowLeft01Outline,
+                        size: ButtonSize.medium,
+                        color: SemanticColor.neutral,
+                      ),
+                      const Spacer(),
+                      AppSoftButton(
+                        onPressed: () {},
+                        prefixIcon: BetterIcons.arrowRight01Outline,
+                        size: ButtonSize.medium,
+                        color: SemanticColor.neutral,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          if (showControls)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: context.colors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: context.colors.surfaceVariant,
+                      border: Border.all(color: context.colors.outline),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: context.colors.surfaceVariant,
+                      border: Border.all(color: context.colors.outline),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceHotSaleCard extends StatelessWidget {
+  const EcommerceHotSaleCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = isMobile ? 16.0 : 24.0;
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: BoxDecoration(
+        color: context.colors.surfaceVariantLow,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          isMobile ? _buildMobileHeader(context) : _buildDesktopHeader(context),
+          if (!isMobile) const SizedBox(height: 24),
+          isMobile
+              ? _buildMobileItemsList(context)
+              : _buildDesktopItemsList(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMobileHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              BetterIcons.flashFilled,
+              color: context.colors.error,
+              size: 24,
+            ),
+            const SizedBox(width: 8),
+            Text('Hot Sale', style: context.textTheme.titleMedium),
+            const Spacer(),
+            AppTextButton(
+              onPressed: () {},
+              text: 'See All',
+              color: SemanticColor.primary,
+              size: ButtonSize.small,
+              suffixIcon: BetterIcons.arrowRight02Outline,
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        _buildCountdown(context),
+      ],
+    );
+  }
+
+  Widget _buildDesktopHeader(BuildContext context) {
+    return Row(
+      children: [
+        Icon(BetterIcons.flashFilled, color: context.colors.error),
+        const SizedBox(width: 8),
+        Text('Hot Sale', style: context.textTheme.titleLarge),
+        const SizedBox(width: 16),
+        _buildCountdown(context),
+        const Spacer(),
+        AppTextButton(
+          onPressed: () {},
+          text: 'See All',
+          color: SemanticColor.primary,
+          size: ButtonSize.medium,
+          suffixIcon: BetterIcons.arrowRight02Outline,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCountdown(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          'Ends in',
+          style: context.textTheme.bodySmall!.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(width: 8),
+        AppBadge(
+          text: '23:59:59',
+          size: BadgeSize.large,
+          color: SemanticColor.error,
+          style: BadgeStyle.fill,
+          isRounded: true,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMobileItemsList(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            spacing: 14,
+            children: [
+              SizedBox(
+                width: 176,
+                child: EcommerceItem.discount(
+                  image: Assets.images.products.image01.image(),
+                  category: 'Hoodie',
+                  description: 'Pullover hoodie - black',
+                  currentPrice: '\$110.99',
+                  originalPrice: '\$120.00',
+                ),
+              ),
+              SizedBox(
+                width: 176,
+                child: EcommerceItem.discount(
+                  image: Assets.images.products.image02.image(),
+                  category: 'Hat',
+                  description:
+                      'Nike Running Juniper Trail 2 Gore-TEX trainers in light grey',
+                  currentPrice: '\$110.99',
+                  originalPrice: '\$120.00',
+                ),
+              ),
+              SizedBox(
+                width: 176,
+                child: EcommerceItem.discount(
+                  image: Assets.images.products.image03.image(),
+                  category: 'Shoes',
+                  description: 'New Balance',
+                  currentPrice: '\$110.99',
+                  originalPrice: '\$120.00',
+                ),
+              ),
+              SizedBox(
+                width: 176,
+                child: EcommerceItem.discount(
+                  image: Assets.images.products.image04.image(),
+                  category: 'Bag',
+                  description: 'Under Armour HUSTLE SPORT - Rucksack',
+                  currentPrice: '\$110.99',
+                  originalPrice: '\$120.00',
+                ),
+              ),
+              SizedBox(
+                width: 176,
+                child: EcommerceItem.discount(
+                  image: Assets.images.products.image05.image(),
+                  category: 'Shoes',
+                  description: 'Vans',
+                  currentPrice: '\$110.99',
+                  originalPrice: '\$120.00',
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopItemsList(BuildContext context) {
+    return Row(
+      spacing: 14,
+      children: [
+        Expanded(
+          child: EcommerceItem.discount(
+            image: Assets.images.products.image01.image(),
+            category: 'Hoodie',
+            description: 'Pullover hoodie - black',
+            currentPrice: '\$110.99',
+            originalPrice: '\$120.00',
+          ),
+        ),
+        Expanded(
+          child: EcommerceItem.discount(
+            image: Assets.images.products.image02.image(),
+            category: 'Hat',
+            description:
+                'Nike Running Juniper Trail 2 Gore-TEX trainers in light grey',
+            currentPrice: '\$110.99',
+            originalPrice: '\$120.00',
+          ),
+        ),
+        Expanded(
+          child: EcommerceItem.discount(
+            image: Assets.images.products.image03.image(),
+            category: 'Shoes',
+            description: 'New Balance',
+            currentPrice: '\$110.99',
+            originalPrice: '\$120.00',
+          ),
+        ),
+        Expanded(
+          child: EcommerceItem.discount(
+            image: Assets.images.products.image04.image(),
+            category: 'Bag',
+            description: 'Under Armour HUSTLE SPORT - Rucksack',
+            currentPrice: '\$110.99',
+            originalPrice: '\$120.00',
+          ),
+        ),
+        Expanded(
+          child: EcommerceItem.discount(
+            image: Assets.images.products.image05.image(),
+            category: 'Shoes',
+            description: 'Vans',
+            currentPrice: '\$110.99',
+            originalPrice: '\$120.00',
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceTodaysForYou extends StatelessWidget {
+  const EcommerceTodaysForYou({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Todays For You', style: context.textTheme.titleMedium),
+          const SizedBox(height: 16),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                AppTabMenuHorizontal(
+                  style: TabMenuHorizontalStyle.soft,
+                  tabs: [
+                    TabMenuHorizontalOption(
+                      title: 'Featured items',
+                      value: 'Featured items',
+                    ),
+                    TabMenuHorizontalOption(
+                      title: 'Best seller',
+                      value: 'Best seller',
+                    ),
+                    TabMenuHorizontalOption(
+                      title: 'Special Discount',
+                      value: 'Special Discount',
+                    ),
+                    TabMenuHorizontalOption(
+                      title: 'Keep Stylish',
+                      value: 'Keep Stylish',
+                    ),
+                  ],
+                  selectedValue: 'Featured items',
+                  onChanged: (context) {},
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              spacing: 8,
+              children: [
+                SizedBox(
+                  width: 176,
+                  child: EcommerceItem.simple(
+                    image: Assets.images.products.image06.image(),
+                    category: 'Short',
+                    description: 'Short Cas',
+                    currentPrice: '\$20',
+                  ),
+                ),
+                SizedBox(
+                  width: 176,
+                  child: EcommerceItem.simple(
+                    image: Assets.images.products.image07.image(),
+                    category: 'Shirt',
+                    description: 'Tommy Jeans Jersey Tee',
+                    currentPrice: '\$20',
+                  ),
+                ),
+                SizedBox(
+                  width: 176,
+                  child: EcommerceItem.simple(
+                    image: Assets.images.products.image08.image(),
+                    category: 'Top',
+                    description: 'SLEEVELESS FNK',
+                    currentPrice: '\$20',
+                  ),
+                ),
+                SizedBox(
+                  width: 176,
+                  child: EcommerceItem.simple(
+                    image: Assets.images.products.image09.image(),
+                    category: 'Jacket',
+                    description:
+                        'Down trekking jacket with Primaloft Silver filling - grey',
+                    currentPrice: '\$20',
+                  ),
+                ),
+                SizedBox(
+                  width: 176,
+                  child: EcommerceItem.simple(
+                    image: Assets.images.products.image10.image(),
+                    category: 'Vests',
+                    description: 'Synthetic-fill down vest - olive',
+                    currentPrice: '\$20',
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text('Todays For You', style: context.textTheme.titleLarge),
+            const Spacer(),
+            AppTabMenuHorizontal(
+              style: TabMenuHorizontalStyle.soft,
+              tabs: [
+                TabMenuHorizontalOption(
+                  title: 'Featured items',
+                  value: 'Featured items',
+                ),
+                TabMenuHorizontalOption(
+                  title: 'Best seller',
+                  value: 'Best seller',
+                ),
+                TabMenuHorizontalOption(
+                  title: 'Special Discount',
+                  value: 'Special Discount',
+                ),
+                TabMenuHorizontalOption(
+                  title: 'Keep Stylish',
+                  value: 'Keep Stylish',
+                ),
+              ],
+              selectedValue: 'Featured items',
+              onChanged: (context) {},
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 24),
+        Row(
+          spacing: 24,
+          children: [
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image06.image(),
+                category: 'Short',
+                description: 'Short Cas',
+                currentPrice: '\$20',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image07.image(),
+                category: 'Shirt',
+                description: 'Tommy Jeans Jersey Tee',
+                currentPrice: '\$20',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image08.image(),
+                category: 'Top',
+                description: 'SLEEVELESS FNK',
+                currentPrice: '\$20',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image09.image(),
+                category: 'Jacket',
+                description:
+                    'Down trekking jacket with Primaloft Silver filling - grey',
+                currentPrice: '\$20',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image10.image(),
+                category: 'Vests',
+                description: 'Synthetic-fill down vest - olive',
+                currentPrice: '\$20',
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

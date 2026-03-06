@@ -1,0 +1,1 @@
+enum SidebarNavigationUserProfileStyle { soft, outline }

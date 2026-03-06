@@ -1,0 +1,100 @@
+name: Claude Code
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  claude:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read # Required for Claude to read CI results on PRs
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for better context
+
+      - name: Run Claude Code
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+          additional_permissions: |
+            actions: read
+
+          # Context-aware prompt for BetterUI
+          prompt: |
+            You are assisting with the BetterUI, a Flutter design system using Dart 3.10+.
+
+            **IMPORTANT: Read CLAUDE.md first** - it contains comprehensive coding standards and patterns.
+
+            ## Context
+            - Repository: ${{ github.repository }}
+            - Event: ${{ github.event_name }}
+            - Triggered by: @claude mention
+
+            ## Your Role
+            You will follow the user's specific instructions from their @claude mention.
+
+            ## Critical Standards to Follow
+            When reviewing or modifying code, ALWAYS enforce these BetterUI patterns:
+
+            ### 1. Color System (CRITICAL)
+            - ✅ USE: `context.colors.X` (ColorSystem extension)
+            - ❌ NEVER USE: `Theme.of(context).colorScheme.X`
+            - ✅ USE: `SemanticColor` enum for color parameters
+
+            ### 2. Responsive Design (CRITICAL)
+            - ✅ USE: `context.isDesktop`, `context.isMobile`, `context.isTablet`
+            - ✅ USE: `context.responsive()` for adaptive values
+            - ❌ AVOID: Hardcoded breakpoint checks
+
+            ### 3. Dart 3.10+ Patterns (ENFORCE)
+            - ✅ PREFER: Switch expressions over if/else chains for enums
+            - ✅ USE: Pattern matching where applicable
+            - ✅ USE: Const constructors where possible
+            - ✅ USE: `Row(spacing: X)` and `Column(spacing: X)` for spacing
+            - ❌ AVOID: Manual padding, SizedBox, or Wrap gymnastics between children
+
+            ### 4. Code Quality (ENFORCE)
+            - Extract duplicated code into helper methods or utilities
+            - Keep methods focused and under 50 lines
+            - Use descriptive names for variables and methods
+            - Add dartdoc comments for public APIs
+
+            ## Atomic Design Structure
+            - Atoms: Basic components (buttons, badges, inputs)
+            - Molecules: Simple combinations (cards, list items)
+            - Organisms: Complex components (data tables, navigation)
+            - Templates: Complete screen layouts
+
+            ## Component Requirements
+            - Prefix components with "App" (e.g., `AppButton`, `AppTag`)
+            - Use snake_case for file names
+            - Export related files at the top of main component file
+
+            ## When Making Changes
+            1. Read relevant sections from CLAUDE.md
+            2. Follow the established patterns in similar components
+            3. Run `dart fix --apply` to remove unused imports
+            4. For widgetbook changes: run `cd widgetbook && dart run build_runner build -d --delete-conflicting-outputs`
+            5. For showcase changes: run `cd showcase && dart run build_runner build -d --delete-conflicting-outputs`
+
+            Now proceed with the user's specific request while adhering to these standards.

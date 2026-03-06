@@ -1,0 +1,1 @@
+enum BreadcrumbSeparator { arrow, slash }

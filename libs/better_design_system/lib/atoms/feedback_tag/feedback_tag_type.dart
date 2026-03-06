@@ -1,0 +1,1 @@
+enum FeedbackTagType { like, disike }

@@ -1,0 +1,2024 @@
+import 'package:better_design_showcase/core/blocs/settings.cubit.dart';
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:better_design_system/atoms/navbar/navbar_icon.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_user_profile.dart';
+import 'package:better_design_system/atoms/toggle_switch_button_group/toggle_switch_button_group.dart';
+import 'package:better_design_system/organisms/profile_button/profile_button.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_showcase/features/hr_platform/entities/hr_platform_dashboard_page.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_logo.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_section.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:image_faker/image_faker.dart';
+import 'package:better_design_showcase/features/hr_platform/presentation/components/hr_platform_card_container.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:better_design_system/molecules/charts/bar_sparkline/bar_sparkline.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/molecules/charts/linear_sparkline/linear_sparkline.dart';
+import 'package:better_design_system/atoms/buttons/filled_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/radio/radio.dart';
+import 'package:better_design_system/molecules/date_picker/date_picker.dart';
+
+class HrPlatformDashboardDesktop extends StatelessWidget {
+  const HrPlatformDashboardDesktop({super.key, this.header});
+
+  final Widget? header;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (header != null) header!,
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HrPlatformSidebar(selectedItem: HrPlatformSidebarPage.dashboard),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Text('Dashboard', style: context.textTheme.bodyLarge),
+                          const SizedBox(width: 16),
+                          SizedBox(
+                            width: 230,
+                            child: AppDropdownField.single(
+                              hint: '01 Jun 2025 - 31 December 2025',
+                              type: DropdownFieldType.compact,
+                              borderRadius: BorderRadius.circular(16),
+                              items: [],
+                            ),
+                          ),
+                          const Spacer(),
+                          AppNavbarIcon(
+                            icon: BetterIcons.search01Filled,
+                            iconColor: context.colors.onSurfaceVariant,
+                            iconSize: 22,
+                            size: ButtonSize.medium,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          const SizedBox(width: 16),
+                          AppNavbarIcon(
+                            icon: BetterIcons.notification02Outline,
+                            iconColor: context.colors.onSurfaceVariant,
+                            iconSize: 24,
+                            badgeNumber: 2,
+                            size: ButtonSize.medium,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          const SizedBox(width: 16),
+                          AppProfileButton(
+                            avatarUrl: ImageFaker().person.four,
+                            title: 'Paityn Baptista',
+                            items: [
+                              AppPopupMenuItem(
+                                title: 'Profile',
+                                onPressed: () {},
+                                icon: BetterIcons.userFilled,
+                              ),
+                              AppPopupMenuItem(
+                                title: 'Profile',
+                                onPressed: () {},
+                                icon: BetterIcons.wallet01Filled,
+                              ),
+                              AppPopupMenuItem(
+                                hasDivider: true,
+                                title: 'Logout',
+                                onPressed: () {},
+                                icon: BetterIcons.logout01Filled,
+                                color: SemanticColor.error,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 40),
+                      Row(
+                        children: [
+                          Text(
+                            'Welcome, Paityn!',
+                            style: context.textTheme.headlineSmall,
+                          ),
+                          const Spacer(),
+                          AppToggleSwitchButtonGroup(
+                            options: [
+                              ToggleSwitchButtonGroupOption(
+                                value: 'HR Dashboard',
+                                label: 'HR Dashboard',
+                              ),
+                              ToggleSwitchButtonGroupOption(
+                                value: 'Recruitment Dashboard',
+                                label: 'Recruitment Dashboard',
+                              ),
+                            ],
+                            selectedValue: 'HR Dashboard',
+                            onChanged: (value) {},
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 16,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              spacing: 16,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  spacing: 16,
+                                  children: [
+                                    Expanded(
+                                      child: HrPlatformJobOverviewCard(),
+                                    ),
+                                    Expanded(child: HrPlatformJobLevelsCard()),
+                                  ],
+                                ),
+                                HrPlatformTimeWorkedCard(),
+                                Row(
+                                  spacing: 16,
+                                  children: [
+                                    Expanded(
+                                      child: HrPlatformTimeTrackerCard(),
+                                    ),
+                                    Expanded(child: HrPlatformNotesCard()),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(child: HrPlatformOnboardingCalendarCard()),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class HrPlatformSidebar extends StatefulWidget {
+  final ThemeMode? initialTheme;
+  const HrPlatformSidebar({
+    super.key,
+    this.selectedItem = HrPlatformSidebarPage.dashboard,
+    this.initialTheme,
+  });
+
+  final HrPlatformSidebarPage selectedItem;
+
+  @override
+  State<HrPlatformSidebar> createState() => _HrPlatformSidebarState();
+}
+
+class _HrPlatformSidebarState extends State<HrPlatformSidebar> {
+  late ThemeMode selectedThemeMode;
+
+  @override
+  void initState() {
+    selectedThemeMode =
+        widget.initialTheme ?? context.read<SettingsCubit>().state.themeMode;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: AppSidebarNavigation<HrPlatformSidebarPage>(
+        collapsable: true,
+        showDivider: true,
+        header: AppSidebarNavigationLogo(
+          logoUrl: ImageFaker().appLogo.taxi,
+          title: 'HR Platform',
+        ),
+        style: SidebarNavigationItemStyle.primary,
+        data: [
+          NavigationItem(
+            title: 'Dashboard',
+            value: HrPlatformSidebarPage.dashboard,
+            icon: (BetterIcons.home01Outline, BetterIcons.home01Filled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Projects',
+            value: HrPlatformSidebarPage.projects,
+            icon: (BetterIcons.noteOutline, BetterIcons.noteFilled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+            subItems: [
+              NavigationSubItem(
+                title: 'Overview',
+                value: HrPlatformSidebarPage.projects,
+              ),
+            ],
+          ),
+          NavigationItem(
+            title: 'Tasks',
+            value: HrPlatformSidebarPage.tasks,
+            icon: (
+              BetterIcons.checkmarkSquare02Outline,
+              BetterIcons.checkmarkSquare02Filled,
+            ),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+            badgeNumber: 2,
+          ),
+          NavigationItem(
+            title: 'Calendar',
+            value: HrPlatformSidebarPage.calendar,
+            icon: (BetterIcons.calendar01Outline, BetterIcons.calendar01Filled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Inbox',
+            value: HrPlatformSidebarPage.inbox,
+            icon: (BetterIcons.message02Outline, BetterIcons.message02Filled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Performance',
+            value: HrPlatformSidebarPage.performance,
+            icon: (
+              BetterIcons.analytics01Outline,
+              BetterIcons.analytics01Filled,
+            ),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Report & Analytics',
+            value: HrPlatformSidebarPage.reportAndAnalytics,
+            icon: (BetterIcons.chart03Outline, BetterIcons.chart03Filled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Employees',
+            value: HrPlatformSidebarPage.employees,
+            icon: (
+              BetterIcons.userGroup02Outline,
+              BetterIcons.userGroup03Filled,
+            ),
+            section: SidebarNavigationSection(
+              title: 'Management',
+              value: HrPlatformSidebarPage.employees,
+            ),
+          ),
+          NavigationItem(
+            title: 'Recruitment',
+            value: HrPlatformSidebarPage.recruitment,
+            icon: (BetterIcons.userAdd01Outline, BetterIcons.userAdd01Filled),
+            section: SidebarNavigationSection(
+              title: 'Management',
+              value: HrPlatformSidebarPage.employees,
+            ),
+          ),
+          NavigationItem(
+            title: 'Payroll',
+            value: HrPlatformSidebarPage.payroll,
+            icon: (BetterIcons.wallet01Outline, BetterIcons.wallet01Filled),
+            section: SidebarNavigationSection(
+              title: 'Management',
+              value: HrPlatformSidebarPage.employees,
+            ),
+          ),
+          NavigationItem(
+            title: 'Settings',
+            value: HrPlatformSidebarPage.settings,
+            icon: (BetterIcons.settings01Outline, BetterIcons.settings01Filled),
+            section: SidebarNavigationSection(
+              title: 'Support',
+              value: HrPlatformSidebarPage.support,
+            ),
+          ),
+          NavigationItem(
+            title: 'Help Center',
+            value: HrPlatformSidebarPage.helpCenter,
+            icon: (BetterIcons.helpCircleOutline, BetterIcons.helpCircleFilled),
+            section: SidebarNavigationSection(
+              title: 'Support',
+              value: HrPlatformSidebarPage.support,
+            ),
+          ),
+        ],
+        selectedItem: widget.selectedItem,
+        onItemSelected: (value) {},
+        footer: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  border: Border.all(color: context.colors.outline),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  spacing: 16,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          spacing: 4,
+                          children: <Widget>[
+                            Icon(
+                              BetterIcons.rocket01Outline,
+                              size: 24,
+                              color: context.colors.primary,
+                            ),
+                            Text(
+                              'Upgrade Plan',
+                              style: context.textTheme.labelLarge,
+                            ),
+                          ],
+                        ),
+
+                        AppIconButton(
+                          onPressed: () {},
+                          icon: BetterIcons.cancelCircleOutline,
+                          size: ButtonSize.medium,
+                        ),
+                      ],
+                    ),
+
+                    Text(
+                      'Upgrade your plan to premium now to access more features',
+                      style: context.textTheme.bodyMedium?.variant(context),
+                    ),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppOutlinedButton(
+                            onPressed: () {},
+                            text: 'Upgrade Now',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: AppToggleSwitchButtonGroup(
+                isExpanded: true,
+                isRounded: true,
+                options: [
+                  ToggleSwitchButtonGroupOption(
+                    value: ThemeMode.light,
+                    label: 'Light',
+                    icon: BetterIcons.sun02Outline,
+                    selectedIcon: BetterIcons.sun01Filled,
+                  ),
+                  ToggleSwitchButtonGroupOption(
+                    value: ThemeMode.dark,
+                    label: 'Dark',
+                    icon: BetterIcons.moon02Outline,
+                    selectedIcon: BetterIcons.moon02Filled,
+                  ),
+                ],
+                selectedValue: selectedThemeMode,
+                onChanged: (value) {
+                  setState(() {
+                    selectedThemeMode = value;
+                  });
+                },
+              ),
+            ),
+            const AppDivider(),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                child: AppSidebarNavigationUserProfile(
+                  avatarUrl: ImageFaker().person.seven,
+                  style: SidebarNavigationUserProfileStyle.soft,
+                  title: 'Gustavo Kenter',
+                  subtitle: 'Gustavo@better.com',
+                  onPressed: () {},
+                  icon: BetterIcons.moreVerticalCircle01Outline,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HrPlatformJobOverviewCard extends StatelessWidget {
+  const HrPlatformJobOverviewCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return HrPlatformCardContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Job Overview', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          // Pie Chart with Legend
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Pie Chart
+              SizedBox(
+                height: 130,
+                width: 130,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    PieChart(
+                      PieChartData(
+                        startDegreeOffset: 90,
+                        pieTouchData: PieTouchData(enabled: false),
+                        borderData: FlBorderData(show: false),
+                        sectionsSpace: 1.5,
+                        centerSpaceRadius: 55,
+                        sections: _buildPieChartSections(context),
+                      ),
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Total',
+                          style: context.textTheme.labelMedium!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text('712', style: context.textTheme.titleMedium),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              // Legend
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xFFB771E5),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Flexible(
+                          child: Text(
+                            'Active Job',
+                            style: context.textTheme.labelMedium,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xFF48CFCB),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Flexible(
+                          child: Text(
+                            'In Reviews Job',
+                            style: context.textTheme.labelMedium,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: const Color(0xFFF4A261),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Flexible(
+                          child: Text(
+                            'Finish Jobs',
+                            style: context.textTheme.labelMedium,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<PieChartSectionData> _buildPieChartSections(BuildContext context) {
+    final shoppingValue = 1.0;
+    final utilitiesValue = 0.5;
+    final othersValue = 0.5;
+
+    return [
+      // Active Job section
+      PieChartSectionData(
+        color: const Color(0xFFB771E5),
+        value: shoppingValue,
+        radius: 6.5,
+        showTitle: false,
+      ),
+      // In Reviews Job section
+      PieChartSectionData(
+        color: const Color(0xFF48CFCB),
+        value: utilitiesValue,
+        radius: 6.5,
+        showTitle: false,
+      ),
+      // Finish Jobs section
+      PieChartSectionData(
+        color: const Color(0xFFF4A261),
+        value: othersValue,
+        radius: 6.5,
+        showTitle: false,
+      ),
+    ];
+  }
+}
+
+class HrPlatformJobLevelsCard extends StatelessWidget {
+  const HrPlatformJobLevelsCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return HrPlatformCardContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Job Levels', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Text('3,154', style: context.textTheme.headlineMedium),
+              const SizedBox(width: 8),
+              Text(
+                'Total employees',
+                style: context.textTheme.labelMedium?.copyWith(
+                  color: context.colors.onSurfaceVariantLow,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 45,
+            width: double.infinity,
+            child: AppBarSparkline(
+              axis: Axis.vertical,
+              type: BarChartThinColoredType.stacked,
+              barWidth: 2,
+              data: [
+                // First 26 bars - Orange
+                ...List.generate(
+                  26,
+                  (i) => ChartSeriesData(
+                    name: 'Bar${i + 1}',
+                    points: [ChartPoint(name: 'Bar${i + 1}', value: 1)],
+                    color: const Color(0xFFF4A261),
+                  ),
+                ),
+                // Next 26 bars - Purple
+                ...List.generate(
+                  26,
+                  (i) => ChartSeriesData(
+                    name: 'Bar${i + 27}',
+                    points: [ChartPoint(name: 'Bar${i + 27}', value: 1)],
+                    color: const Color(0xFFB771E5),
+                  ),
+                ),
+                // Last 26 bars - Cyan
+                ...List.generate(
+                  26,
+                  (i) => ChartSeriesData(
+                    name: 'Bar${i + 53}',
+                    points: [ChartPoint(name: 'Bar${i + 53}', value: 1)],
+                    color: const Color(0xFF48CFCB),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFF4A261),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'Freelance',
+                style: context.textTheme.labelMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(width: 16),
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFFB771E5),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                'Full Time',
+                style: context.textTheme.labelMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(width: 16),
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: const Color(0xFF48CFCB),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                'Internship',
+                style: context.textTheme.labelMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Card displaying time worked statistics with responsive layouts.
+///
+/// Shows total hours worked, daily average, and a time trend chart.
+/// The layout adapts between mobile (vertical stacking) and desktop (horizontal layout).
+class HrPlatformTimeWorkedCard extends StatelessWidget {
+  /// Creates a [HrPlatformTimeWorkedCard].
+  ///
+  /// The [isMobile] parameter determines the layout style.
+  /// Defaults to false (desktop layout).
+  const HrPlatformTimeWorkedCard({super.key, this.isMobile = false});
+
+  /// Whether to use mobile layout (vertical) or desktop layout (horizontal).
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    return HrPlatformCardContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        spacing: 16,
+        children: [
+          _buildHeader(context),
+          _buildContent(context),
+          _buildChart(context),
+        ],
+      ),
+    );
+  }
+
+  /// Builds the header with title and action buttons.
+  Widget _buildHeader(BuildContext context) => Row(
+    children: [
+      Text('Time Worked', style: context.textTheme.titleSmall),
+      const Spacer(),
+      AppDropdownField.single(
+        prefixIcon: BetterIcons.calendar03Outline,
+        type: DropdownFieldType.compact,
+        items: [
+          AppDropdownItem<String>(value: 'Daily', title: 'Daily'),
+          AppDropdownItem<String>(value: 'Weekly', title: 'Weekly'),
+          AppDropdownItem<String>(value: 'Monthly', title: 'Monthly'),
+        ],
+        onChanged: (String? value) {},
+        initialValue: 'Monthly',
+        isFilled: false,
+        fillColor: context.colors.surface,
+        borderRadius: BorderRadius.circular(16),
+        width: 115,
+      ),
+      const SizedBox(width: 8),
+      AppIconButton(
+        icon: BetterIcons.moreVerticalCircle01Outline,
+        isCircular: true,
+        size: ButtonSize.medium,
+        style: IconButtonStyle.outline,
+        iconColor: context.colors.onSurfaceVariant,
+        iconSize: 18,
+      ),
+    ],
+  );
+
+  /// Builds the content section with metrics.
+  /// Adapts layout based on [isMobile] flag.
+  Widget _buildContent(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('13 hr 26 min', style: context.textTheme.headlineSmall),
+          Row(
+            spacing: 8,
+            children: [
+              Text(
+                'Daily Average',
+                style: context.textTheme.labelMedium!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+              AppBadge(
+                text: '8.1% VS Last Week',
+                color: SemanticColor.success,
+                prefixIcon: BetterIcons.arrowUp02Outline,
+                isRounded: true,
+                size: BadgeSize.medium,
+              ),
+            ],
+          ),
+          Text(
+            '256 hr 45 min Total Time',
+            style: context.textTheme.labelLarge!.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      );
+    }
+
+    // Desktop layout: horizontal arrangement
+    return Row(
+      spacing: 8,
+      children: [
+        Text('13 hr 26 min', style: context.textTheme.headlineSmall),
+        Text(
+          'Daily Average',
+          style: context.textTheme.labelMedium!.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
+        AppBadge(
+          text: '8.1% VS Last Week',
+          color: SemanticColor.success,
+          prefixIcon: BetterIcons.arrowUp02Outline,
+          isRounded: true,
+          size: BadgeSize.medium,
+        ),
+        const Spacer(),
+        Text(
+          '256 hr 45 min Total Time ',
+          style: context.textTheme.labelLarge!.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Builds the time worked chart.
+  Widget _buildChart(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(left: 12, right: 12),
+    child: SizedBox(
+      height: 200,
+      child: AppLinearSparkline(
+        data: [
+          ChartSeriesData(
+            points: _getChartPoints(),
+            name: 'Time Worked',
+            color: context.colors.insight,
+            isCurved: true,
+          ),
+        ],
+        hasLine: true,
+        hasArea: true,
+        gridEnabled: true,
+        showTooltip: true,
+        bottomTitleBuilder: (label) => label,
+        bottomTitleInterval: 1,
+      ),
+    ),
+  );
+
+  /// Returns the data points for the time worked chart.
+  List<ChartPoint> _getChartPoints() => [
+    ChartPoint(name: 'Jan', value: 120),
+    ChartPoint(name: 'Feb', value: 145),
+    ChartPoint(name: 'Mar', value: 168),
+    ChartPoint(name: 'Apr', value: 178),
+    ChartPoint(name: 'May', value: 195),
+    ChartPoint(name: 'Jun', value: 203),
+    ChartPoint(name: 'Jul', value: 188),
+    ChartPoint(name: 'Aug', value: 172),
+    ChartPoint(name: 'Sep', value: 165),
+    ChartPoint(name: 'Oct', value: 155),
+    ChartPoint(name: 'Nov', value: 140),
+    ChartPoint(name: 'Dec', value: 130),
+  ];
+}
+
+class HrPlatformTimeTrackerCard extends StatelessWidget {
+  const HrPlatformTimeTrackerCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return HrPlatformCardContainer(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Time Tracker', style: context.textTheme.titleSmall),
+              AppTextButton(
+                onPressed: () {},
+                text: 'View all',
+                size: ButtonSize.small,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: context.colors.outline),
+            ),
+            child: Column(
+              children: [
+                AppDropdownField.single(
+                  type: DropdownFieldType.compact,
+                  hint: 'Select project',
+                  items: [
+                    AppDropdownItem(value: 'Today', title: 'Today'),
+                    AppDropdownItem(value: 'Yesterday', title: 'Yesterday'),
+                    AppDropdownItem(value: 'Last 7 Days', title: 'Last 7 Days'),
+                  ],
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Awaiting',
+                          style: context.textTheme.labelMedium!.copyWith(
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                        ),
+                        Text(
+                          '00:00:00',
+                          style: context.textTheme.headlineMedium,
+                        ),
+                      ],
+                    ),
+                    AppFilledButton(
+                      onPressed: () {},
+                      prefixIcon: BetterIcons.playFilled,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            child: AppTextButton(
+              onPressed: () {},
+              text: 'View previous tasks',
+              suffixIcon: BetterIcons.arrowRight01Outline,
+              color: SemanticColor.primary,
+              size: ButtonSize.small,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HrPlatformNotesCard extends StatefulWidget {
+  const HrPlatformNotesCard({super.key});
+
+  @override
+  State<HrPlatformNotesCard> createState() => _HrPlatformNotesCardState();
+}
+
+class _HrPlatformNotesCardState extends State<HrPlatformNotesCard> {
+  int selectedNoteId = -1; // -1 means no selection
+
+  @override
+  Widget build(BuildContext context) {
+    return HrPlatformCardContainer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Notes', style: context.textTheme.titleSmall),
+              AppTextButton(
+                onPressed: () {},
+                text: 'View All',
+                size: ButtonSize.small,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 192,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: AppRadio<int>(
+                          value: 0,
+                          groupValue: selectedNoteId,
+                          onTap: (value) {
+                            setState(() {
+                              selectedNoteId = value;
+                            });
+                          },
+                          size: RadioSize.small,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Label', style: context.textTheme.labelLarge),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Description here',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                AppBadge(
+                                  text: 'Today',
+                                  size: BadgeSize.medium,
+                                  isRounded: true,
+                                ),
+                                const SizedBox(width: 8),
+                                AppBadge(
+                                  text: 'Meeting',
+                                  size: BadgeSize.medium,
+                                  isRounded: true,
+                                  color: SemanticColor.insight,
+                                ),
+                                const Spacer(),
+                                Icon(
+                                  BetterIcons.calendar03Outline,
+                                  color: context.colors.onSurfaceVariant,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Jun 01',
+                                  style: context.textTheme.bodySmall!.copyWith(
+                                    color: context.colors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 9.5),
+                    child: AppDivider(isDashed: true),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: AppRadio<int>(
+                          value: 1,
+                          groupValue: selectedNoteId,
+                          onTap: (value) {
+                            setState(() {
+                              selectedNoteId = value;
+                            });
+                          },
+                          size: RadioSize.small,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Label', style: context.textTheme.labelLarge),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Description here',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                AppBadge(
+                                  text: 'Tomorrow',
+                                  size: BadgeSize.medium,
+                                  isRounded: true,
+                                ),
+                                const SizedBox(width: 8),
+                                AppBadge(
+                                  text: 'Work',
+                                  size: BadgeSize.medium,
+                                  isRounded: true,
+                                  color: SemanticColor.success,
+                                ),
+                                const Spacer(),
+                                Icon(
+                                  BetterIcons.calendar03Outline,
+                                  color: context.colors.onSurfaceVariant,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Jun 01',
+                                  style: context.textTheme.bodySmall!.copyWith(
+                                    color: context.colors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 9.5),
+                    child: AppDivider(isDashed: true),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: AppRadio<int>(
+                          value: 2,
+                          groupValue: selectedNoteId,
+                          onTap: (value) {
+                            setState(() {
+                              selectedNoteId = value;
+                            });
+                          },
+                          size: RadioSize.small,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Label', style: context.textTheme.labelLarge),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Description here',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                AppBadge(
+                                  text: 'Tomorrow',
+                                  size: BadgeSize.medium,
+                                  isRounded: true,
+                                ),
+                                const SizedBox(width: 8),
+                                AppBadge(
+                                  text: 'Work',
+                                  size: BadgeSize.medium,
+                                  isRounded: true,
+                                  color: SemanticColor.success,
+                                ),
+                                const Spacer(),
+                                Icon(
+                                  BetterIcons.calendar03Outline,
+                                  color: context.colors.onSurfaceVariant,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Jun 01',
+                                  style: context.textTheme.bodySmall!.copyWith(
+                                    color: context.colors.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HrPlatformOnboardingCalendarCard extends StatelessWidget {
+  const HrPlatformOnboardingCalendarCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return HrPlatformCardContainer(
+        padding: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Onboarding Calendar',
+                  style: context.textTheme.titleSmall,
+                ),
+                const SizedBox(height: 12),
+                AppDatePicker(
+                  fullBleed: true,
+                  onChanged: (context) {},
+                  events: [
+                    DateTime.now().subtract(const Duration(days: 6)),
+                    DateTime.now().subtract(const Duration(days: 3)),
+                    DateTime.now().add(const Duration(days: 2)),
+                    DateTime.now().add(const Duration(days: 5)),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                AppDivider(isDashed: true),
+                const SizedBox(height: 16),
+                Text('Upcoming schedule', style: context.textTheme.labelLarge),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Text('10:00 AM', style: context.textTheme.labelLarge),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: SizedBox(
+                        height: 70,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: context.colors.insightContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.only(left: 18),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'MEETING',
+                                      style: context.textTheme.bodySmall!
+                                          .copyWith(
+                                            color: context.colors.insightBold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      'Product Team',
+                                      style: context.textTheme.bodyLarge!
+                                          .copyWith(
+                                            color: context.colors.insightBold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 5,
+                              top: 13,
+                              bottom: 13,
+                              child: Container(
+                                width: 3,
+                                decoration: BoxDecoration(
+                                  color: context.colors.insightBold,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text('12:00 PM', style: context.textTheme.labelLarge),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: SizedBox(
+                        height: 70,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: context.colors.secondaryContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.only(left: 18),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Event',
+                                      style: context.textTheme.bodySmall!
+                                          .copyWith(
+                                            color: context.colors.secondaryBold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      'Marketing Campaign',
+                                      style: context.textTheme.bodyLarge!
+                                          .copyWith(
+                                            color: context.colors.secondaryBold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 5,
+                              top: 13,
+                              bottom: 13,
+                              child: Container(
+                                width: 3,
+                                decoration: BoxDecoration(
+                                  color: context.colors.secondaryBold,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text('03:30 PM', style: context.textTheme.labelLarge),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: SizedBox(
+                        height: 70,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: context.colors.infoContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.only(left: 18),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Interview',
+                                      style: context.textTheme.bodySmall!
+                                          .copyWith(
+                                            color: context.colors.infoBold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      'Interview with Alex',
+                                      style: context.textTheme.bodyLarge!
+                                          .copyWith(
+                                            color: context.colors.infoBold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 5,
+                              top: 13,
+                              bottom: 13,
+                              child: Container(
+                                width: 3,
+                                decoration: BoxDecoration(
+                                  color: context.colors.infoBold,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text('04:00 AM', style: context.textTheme.labelLarge),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: SizedBox(
+                        height: 70,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: context.colors.insightContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.only(left: 18),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'MEETING',
+                                      style: context.textTheme.bodySmall!
+                                          .copyWith(
+                                            color: context.colors.insightBold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      'HR Team',
+                                      style: context.textTheme.bodyLarge!
+                                          .copyWith(
+                                            color: context.colors.insightBold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 5,
+                              top: 13,
+                              bottom: 13,
+                              child: Container(
+                                width: 3,
+                                decoration: BoxDecoration(
+                                  color: context.colors.insightBold,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text('07:00 PM', style: context.textTheme.labelLarge),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: SizedBox(
+                        height: 70,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: context.colors.secondaryContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.only(left: 18),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Event',
+                                      style: context.textTheme.bodySmall!
+                                          .copyWith(
+                                            color: context.colors.secondaryBold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      'Product Presentation',
+                                      style: context.textTheme.bodyLarge!
+                                          .copyWith(
+                                            color: context.colors.secondaryBold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 5,
+                              top: 13,
+                              bottom: 13,
+                              child: Container(
+                                width: 3,
+                                decoration: BoxDecoration(
+                                  color: context.colors.secondaryBold,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Text('09:00 PM', style: context.textTheme.labelLarge),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: SizedBox(
+                        height: 70,
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: context.colors.infoContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.only(left: 18),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'MEETING',
+                                      style: context.textTheme.bodySmall!
+                                          .copyWith(
+                                            color: context.colors.infoBold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 3),
+                                    Text(
+                                      'R&D Team',
+                                      style: context.textTheme.bodyLarge!
+                                          .copyWith(
+                                            color: context.colors.infoBold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              left: 5,
+                              top: 13,
+                              bottom: 13,
+                              child: Container(
+                                width: 3,
+                                decoration: BoxDecoration(
+                                  color: context.colors.infoBold,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(12),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    return HrPlatformCardContainer(
+      height: 860,
+      padding: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Onboarding Calendar', style: context.textTheme.titleSmall),
+              const SizedBox(height: 12),
+              AppDatePicker(
+                fullBleed: true,
+                onChanged: (context) {},
+                events: [
+                  DateTime.now().subtract(const Duration(days: 6)),
+                  DateTime.now().subtract(const Duration(days: 3)),
+                  DateTime.now().add(const Duration(days: 2)),
+                  DateTime.now().add(const Duration(days: 5)),
+                ],
+              ),
+              const SizedBox(height: 16),
+              AppDivider(isDashed: true),
+              const SizedBox(height: 16),
+              Text('Upcoming schedule', style: context.textTheme.labelLarge),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Text('10:00 AM', style: context.textTheme.labelLarge),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: SizedBox(
+                      height: 70,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: context.colors.insightContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'MEETING',
+                                    style: context.textTheme.bodySmall!
+                                        .copyWith(
+                                          color: context.colors.insightBold,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    'Product Team',
+                                    style: context.textTheme.bodyLarge!
+                                        .copyWith(
+                                          color: context.colors.insightBold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 5,
+                            top: 13,
+                            bottom: 13,
+                            child: Container(
+                              width: 3,
+                              decoration: BoxDecoration(
+                                color: context.colors.insightBold,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('12:00 PM', style: context.textTheme.labelLarge),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: SizedBox(
+                      height: 70,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: context.colors.secondaryContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Event',
+                                    style: context.textTheme.bodySmall!
+                                        .copyWith(
+                                          color: context.colors.secondaryBold,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    'Marketing Campaign',
+                                    style: context.textTheme.bodyLarge!
+                                        .copyWith(
+                                          color: context.colors.secondaryBold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 5,
+                            top: 13,
+                            bottom: 13,
+                            child: Container(
+                              width: 3,
+                              decoration: BoxDecoration(
+                                color: context.colors.secondaryBold,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('03:30 PM', style: context.textTheme.labelLarge),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: SizedBox(
+                      height: 70,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: context.colors.infoContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Interview',
+                                    style: context.textTheme.bodySmall!
+                                        .copyWith(
+                                          color: context.colors.infoBold,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    'Interview with Alex',
+                                    style: context.textTheme.bodyLarge!
+                                        .copyWith(
+                                          color: context.colors.infoBold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 5,
+                            top: 13,
+                            bottom: 13,
+                            child: Container(
+                              width: 3,
+                              decoration: BoxDecoration(
+                                color: context.colors.infoBold,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('04:00 AM', style: context.textTheme.labelLarge),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: SizedBox(
+                      height: 70,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: context.colors.insightContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'MEETING',
+                                    style: context.textTheme.bodySmall!
+                                        .copyWith(
+                                          color: context.colors.insightBold,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    'HR Team',
+                                    style: context.textTheme.bodyLarge!
+                                        .copyWith(
+                                          color: context.colors.insightBold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 5,
+                            top: 13,
+                            bottom: 13,
+                            child: Container(
+                              width: 3,
+                              decoration: BoxDecoration(
+                                color: context.colors.insightBold,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('07:00 PM', style: context.textTheme.labelLarge),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: SizedBox(
+                      height: 70,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: context.colors.secondaryContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Event',
+                                    style: context.textTheme.bodySmall!
+                                        .copyWith(
+                                          color: context.colors.secondaryBold,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    'Product Presentation',
+                                    style: context.textTheme.bodyLarge!
+                                        .copyWith(
+                                          color: context.colors.secondaryBold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 5,
+                            top: 13,
+                            bottom: 13,
+                            child: Container(
+                              width: 3,
+                              decoration: BoxDecoration(
+                                color: context.colors.secondaryBold,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text('09:00 PM', style: context.textTheme.labelLarge),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: SizedBox(
+                      height: 70,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: context.colors.infoContainer,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.only(left: 18),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'MEETING',
+                                    style: context.textTheme.bodySmall!
+                                        .copyWith(
+                                          color: context.colors.infoBold,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    'R&D Team',
+                                    style: context.textTheme.bodyLarge!
+                                        .copyWith(
+                                          color: context.colors.infoBold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 5,
+                            top: 13,
+                            bottom: 13,
+                            child: Container(
+                              width: 3,
+                              decoration: BoxDecoration(
+                                color: context.colors.infoBold,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

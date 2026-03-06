@@ -1,0 +1,1279 @@
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_system/atoms/buttons/top_bar_icon_button.dart';
+import 'package:better_design_system/atoms/navbar/navbar.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/molecules/charts/linear_sparkline/linear_sparkline.dart';
+import 'package:better_design_system/atoms/toggle_switch_button_group/toggle_switch_button_group.dart';
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:better_design_system/atoms/clickable_card/clickable_card.dart';
+import 'dart:math' as math;
+import 'package:api_response/api_response.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/organisms/data_table/data_table.dart';
+
+class EcommerceDashboardMobile extends StatelessWidget {
+  const EcommerceDashboardMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Column(
+              children: [
+                EcommerceMobileTopBar.dashboardPanel(
+                  prefixIcon: BetterIcons.menu01Outline,
+                  title: 'Dashboard',
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 16,
+                    bottom: 116,
+                  ),
+                  child: Column(
+                    children: [
+                      const EcommerceCustomersCard(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16, bottom: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 8,
+                          children: [
+                            _buildIndicatorDot(context, isActive: true),
+                            _buildIndicatorDot(context),
+                            _buildIndicatorDot(context),
+                          ],
+                        ),
+                      ),
+                      const EcommerceRevenueCard(isMobile: true),
+                      const SizedBox(height: 20),
+                      const EcommerceUserActivityCard(),
+                      const SizedBox(height: 20),
+                      const EcommerceNewCustomersCard(),
+                      const SizedBox(height: 20),
+                      EcommerceRecentOrdersCard(isMobile: true),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIndicatorDot(BuildContext context, {bool isActive = false}) {
+    return Container(
+      height: 8,
+      width: 8,
+      decoration: BoxDecoration(
+        border: isActive ? null : Border.all(color: context.colors.outline),
+        color:
+            isActive ? context.colors.primary : context.colors.surfaceVariant,
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+}
+
+/// A mobile-optimized top bar for e-commerce applications.
+///
+/// The [EcommerceMobileTopBar] provides a consistent navigation bar for mobile
+/// e-commerce screens with a prefix icon, title, and customizable suffix icons.
+///
+/// Example:
+/// ```dart
+/// EcommerceMobileTopBar.dashboardPanel(
+///   title: 'Dashboard',
+///   prefixIcon: BetterIcons.menu01Outline,
+/// )
+/// ```
+class EcommerceMobileTopBar extends StatelessWidget {
+  final IconData prefixIcon;
+  final String title;
+  final List<IconData> suffixIcons;
+  final TextStyle? Function(BuildContext) titleStyle;
+
+  const EcommerceMobileTopBar._({
+    required this.prefixIcon,
+    required this.title,
+    required this.suffixIcons,
+    required this.titleStyle,
+  });
+
+  /// Dashboard panel top bar with search, notifications, and store icons.
+  factory EcommerceMobileTopBar.dashboardPanel({
+    required String title,
+    required IconData prefixIcon,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: const [
+        BetterIcons.search01Filled,
+        BetterIcons.notification02Outline,
+        BetterIcons.store01Outline,
+      ],
+      titleStyle: (context) => context.textTheme.titleSmall,
+    );
+  }
+
+  /// Client side top bar with custom suffix icons.
+  factory EcommerceMobileTopBar.clientSide({
+    required String title,
+    required IconData prefixIcon,
+    required List<IconData> suffixIcons,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: suffixIcons,
+      titleStyle: (context) => context.textTheme.labelLarge,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbar(
+      showDivider: false,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      prefix: Row(
+        spacing: 8,
+        children: [
+          AppTopBarIconButton(
+            icon: prefixIcon,
+            iconColor: context.colors.onSurfaceVariant,
+          ),
+          Text(title, style: titleStyle(context)),
+        ],
+      ),
+      suffix: Row(
+        spacing: 8,
+        children: [
+          const SizedBox(width: 8),
+          ...suffixIcons.map(
+            (icon) => AppTopBarIconButton(
+              icon: icon,
+              iconColor: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceCustomersCard extends StatelessWidget {
+  const EcommerceCustomersCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return EcommerceMetricCard(
+      icon: BetterIcons.userGroup02Outline,
+      title: 'Customers',
+      value: '45,000',
+      badge: AppBadge(
+        text: '20%',
+        color: SemanticColor.success,
+        prefixIcon: BetterIcons.arrowUp02Outline,
+        size: BadgeSize.small,
+        isRounded: true,
+      ),
+      useResponsiveShadow: true,
+      sparklineData: [
+        ChartSeriesData(
+          name: 'Customers',
+          points: [
+            ChartPoint(name: '1', value: 0.2),
+            ChartPoint(name: '2', value: 0.5),
+            ChartPoint(name: '3', value: 0.3),
+            ChartPoint(name: '4', value: 0.4),
+            ChartPoint(name: '5', value: 0.35),
+            ChartPoint(name: '6', value: 0.8),
+            ChartPoint(name: '7', value: 0.6),
+            ChartPoint(name: '8', value: 0.7),
+            ChartPoint(name: '9', value: 0.65),
+            ChartPoint(name: '10', value: 0.9),
+          ],
+          color: context.colors.success,
+          isCurved: true,
+        ),
+      ],
+    );
+  }
+}
+
+/// A reusable metric card used across the ecommerce dashboard.
+///
+/// Encapsulates the common container decoration and layout used by the
+/// small metric cards (icon, sparkline, title, value and badge).
+class EcommerceMetricCard extends StatelessWidget {
+  const EcommerceMetricCard({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.value,
+    required this.badge,
+    required this.sparklineData,
+    this.useResponsiveShadow = false,
+  });
+
+  final IconData icon;
+  final String title;
+  final String value;
+  final Widget badge;
+  final List<ChartSeriesData> sparklineData;
+  final bool useResponsiveShadow;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: _cardDecoration(context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 24),
+              const Spacer(),
+              SizedBox(
+                height: 30,
+                width: 80,
+                child: AppLinearSparkline(
+                  showTooltip: false,
+                  hasArea: true,
+                  data: sparklineData,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            title,
+            style: context.textTheme.labelLarge?.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(value, style: context.textTheme.headlineSmall),
+              badge,
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _cardDecoration(BuildContext context) => BoxDecoration(
+    color: context.colors.surface,
+    border: Border.all(color: context.colors.outline),
+    boxShadow:
+        useResponsiveShadow
+            ? (context.isDesktop
+                ? [BetterShadow.shadow8.toBoxShadow(context)]
+                : [BetterShadow.shadow4.toBoxShadow(context)])
+            : [BetterShadow.shadow8.toBoxShadow(context)],
+    borderRadius: BorderRadius.circular(12),
+  );
+}
+
+enum TimePeriod { daily, weekly, monthly, yearly }
+
+/// Revenue card showing a bar chart for different time periods.
+class EcommerceRevenueCard extends StatefulWidget {
+  const EcommerceRevenueCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  State<EcommerceRevenueCard> createState() => _EcommerceRevenueCardState();
+}
+
+class _EcommerceRevenueCardState extends State<EcommerceRevenueCard> {
+  TimePeriod _timePeriod = TimePeriod.yearly;
+
+  Map<TimePeriod, List<ChartData>> _getChartData() {
+    return {
+      TimePeriod.daily: [
+        ChartData('Mon', 4200),
+        ChartData('Tue', 5100),
+        ChartData('Wed', 3800),
+        ChartData('Thu', 6200),
+        ChartData('Fri', 5800),
+        ChartData('Sat', 4500),
+        ChartData('Sun', 3200),
+      ],
+      TimePeriod.weekly: [
+        ChartData('W1', 28000),
+        ChartData('W2', 32000),
+        ChartData('W3', 29500),
+        ChartData('W4', 33000),
+      ],
+      TimePeriod.monthly: [
+        ChartData('Jan', 41000),
+        ChartData('Feb', 13000),
+        ChartData('Mar', 25000),
+        ChartData('Apr', 15000),
+        ChartData('May', 28000),
+        ChartData('Jun', 37000),
+        ChartData('Jul', 40000),
+        ChartData('Aug', 23000),
+        ChartData('Sep', 14000),
+        ChartData('Oct', 25000),
+        ChartData('Nov', 36000),
+        ChartData('Dec', 21000),
+      ],
+      TimePeriod.yearly: [
+        ChartData('2020', 850000),
+        ChartData('2021', 1020000),
+        ChartData('2022', 1180000),
+        ChartData('2023', 1350000),
+        ChartData('2024', 1500000),
+      ],
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final chartData = _getChartData()[_timePeriod]!;
+
+    // Mobile layout
+    if (widget.isMobile) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          shadows: [BetterShadow.shadow4.toBoxShadow(context)],
+          color: context.colors.surface,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: context.colors.outline),
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(BetterIcons.money03Outline, size: 24),
+                const SizedBox(width: 8),
+                Text('Revenue', style: context.textTheme.titleSmall),
+                const Spacer(),
+                SizedBox(
+                  width: 95,
+                  child: AppDropdownField.single(
+                    items: [
+                      AppDropdownItem(value: TimePeriod.daily, title: 'Daily'),
+                      AppDropdownItem(
+                        value: TimePeriod.weekly,
+                        title: 'Weekly',
+                      ),
+                      AppDropdownItem(
+                        value: TimePeriod.monthly,
+                        title: 'Monthly',
+                      ),
+                      AppDropdownItem(
+                        value: TimePeriod.yearly,
+                        title: 'Yearly',
+                      ),
+                    ],
+                    type: DropdownFieldType.compact,
+                    isFilled: false,
+                    initialValue: _timePeriod,
+                    onChanged:
+                        (value) =>
+                            setState(() => _timePeriod = value as TimePeriod),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            AppChartBar(data: chartData, timePeriod: _timePeriod),
+          ],
+        ),
+      );
+    }
+
+    // Desktop layout
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      clipBehavior: Clip.antiAlias,
+      decoration: ShapeDecoration(
+        shadows: [BetterShadow.shadow16.toBoxShadow(context)],
+        color: context.colors.surface,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: context.colors.outline),
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(BetterIcons.money03Outline, size: 24),
+              const SizedBox(width: 8),
+              Text('Revenue', style: context.textTheme.titleSmall),
+              const Spacer(),
+              const SizedBox(width: 8),
+              AppToggleSwitchButtonGroup<TimePeriod>(
+                options: [
+                  ToggleSwitchButtonGroupOption<TimePeriod>(
+                    value: TimePeriod.daily,
+                    label: 'Daily',
+                  ),
+                  ToggleSwitchButtonGroupOption<TimePeriod>(
+                    value: TimePeriod.weekly,
+                    label: 'Weekly',
+                  ),
+                  ToggleSwitchButtonGroupOption<TimePeriod>(
+                    value: TimePeriod.monthly,
+                    label: 'Monthly',
+                  ),
+                  ToggleSwitchButtonGroupOption<TimePeriod>(
+                    value: TimePeriod.yearly,
+                    label: 'Yearly',
+                  ),
+                ],
+                selectedValue: _timePeriod,
+                onChanged:
+                    (TimePeriod value) => setState(() => _timePeriod = value),
+              ),
+            ],
+          ),
+          const SizedBox(height: 26),
+          AppChartBar(data: chartData, timePeriod: _timePeriod),
+        ],
+      ),
+    );
+  }
+}
+
+class ChartData {
+  final String label;
+  final double value;
+
+  ChartData(this.label, this.value);
+}
+
+class AppChartBar extends StatelessWidget {
+  final List<ChartData> data;
+  final TimePeriod timePeriod;
+
+  const AppChartBar({super.key, required this.data, required this.timePeriod});
+
+  @override
+  Widget build(BuildContext context) {
+    final maxValue = data.map((e) => e.value).reduce((a, b) => a > b ? a : b);
+
+    return SizedBox(
+      height: 240,
+      child: BarChart(
+        _buildBarChartData(context, maxValue),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  BarChartData _buildBarChartData(BuildContext context, double maxValue) {
+    return BarChartData(
+      alignment: BarChartAlignment.spaceAround,
+      maxY: maxValue * 1.2,
+      minY: 0,
+      barTouchData: BarTouchData(enabled: false),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 32,
+            getTitlesWidget: (value, meta) {
+              if (value.toInt() >= 0 && value.toInt() < data.length) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    data[value.toInt()].label,
+                    style: context.textTheme.labelSmall!.copyWith(
+                      color: context.colors.onSurfaceVariantLow,
+                    ),
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 48,
+            interval: _calculateInterval(maxValue, timePeriod),
+            getTitlesWidget: (value, meta) {
+              return Text(
+                '\$${_formatValue(value)}',
+                style: context.textTheme.labelSmall!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              );
+            },
+          ),
+        ),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      ),
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: false,
+        horizontalInterval: _calculateInterval(maxValue, timePeriod),
+        getDrawingHorizontalLine:
+            (value) => FlLine(
+              color: context.colors.outlineVariant.withValues(alpha: 0.4),
+              strokeWidth: 1,
+            ),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border(
+          bottom: BorderSide(color: context.colors.outlineVariant, width: 1),
+        ),
+      ),
+      barGroups:
+          data.asMap().entries.map((entry) {
+            final index = entry.key;
+            final item = entry.value;
+
+            return BarChartGroupData(
+              x: index,
+              barRods: [
+                BarChartRodData(
+                  toY: item.value,
+                  color: context.colors.primary,
+                  width: _getBarWidth(data.length),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(4),
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
+    );
+  }
+
+  double _getBarWidth(int dataLength) => switch (dataLength) {
+    <= 5 => 24,
+    <= 7 => 20,
+    <= 12 => 16,
+    _ => 12,
+  };
+
+  double _calculateInterval(double maxValue, TimePeriod timePeriod) {
+    if (timePeriod == TimePeriod.monthly) return 10000;
+
+    final interval = maxValue / 4;
+    return switch (interval) {
+      < 1000 => 1000,
+      < 10000 => 10000,
+      < 50000 => 50000,
+      < 100000 => 100000,
+      _ => 200000,
+    };
+  }
+
+  String _formatValue(double value) {
+    if (value >= 1000000) return '${(value / 1000000).toStringAsFixed(1)}M';
+    if (value >= 1000) return '${(value / 1000).toStringAsFixed(0)}K';
+    return value.toStringAsFixed(0);
+  }
+}
+
+class EcommerceUserActivityCard extends StatelessWidget {
+  const EcommerceUserActivityCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppClickableCard(
+      padding: EdgeInsets.zero,
+      type: ClickableCardType.elevated,
+      elevation:
+          context.isDesktop ? BetterShadow.shadow16 : BetterShadow.shadow4,
+      child: Padding(
+        padding:
+            context.isDesktop
+                ? const EdgeInsets.all(20)
+                : const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Icon(BetterIcons.userMultipleOutline, size: 24),
+                const SizedBox(width: 10),
+                Text('User Activity', style: context.textTheme.titleSmall),
+                const Spacer(),
+                SizedBox(
+                  width: 95,
+                  child: AppDropdownField.single(
+                    items: [
+                      AppDropdownItem(value: 'Daily', title: 'Daily'),
+                      AppDropdownItem(value: 'Weekly', title: 'Weekly'),
+                      AppDropdownItem(value: 'Monthly', title: 'Monthly'),
+                    ],
+                    type: DropdownFieldType.compact,
+                    isFilled: false,
+                    initialValue: 'Monthly',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 193.8,
+              width: 193.8,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Background gray rings
+                  PieChart(
+                    PieChartData(
+                      startDegreeOffset: -90,
+                      pieTouchData: PieTouchData(enabled: false),
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 80, // Outer ring position
+                      sections: [
+                        PieChartSectionData(
+                          color: context.colors.surfaceVariant,
+                          value: 100,
+                          radius: 10.33, // Thickness
+                          showTitle: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                  PieChart(
+                    PieChartData(
+                      startDegreeOffset: -90,
+                      pieTouchData: PieTouchData(enabled: false),
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 60, // Inner ring position
+                      sections: [
+                        PieChartSectionData(
+                          color: context.colors.surfaceVariant,
+                          value: 100,
+                          radius: 10.33, // Thickness
+                          showTitle: false,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Outer data ring with rounded ends
+                  SizedBox(
+                    width: 170.66, // (75 + 10.33) * 2
+                    height: 170.66,
+                    child: CustomPaint(
+                      painter: EcommerceArcPainter(
+                        progress: 0.5, // 50%
+                        color: context.colors.primary,
+                        strokeWidth: 10.33,
+                      ),
+                    ),
+                  ),
+
+                  // Inner data ring with rounded ends
+                  SizedBox(
+                    width: 130.66, // (55 + 10.33) * 2
+                    height: 130.66,
+                    child: CustomPaint(
+                      painter: EcommerceArcPainter(
+                        progress: 0.5, // 50%
+                        color: context.colors.primaryVariant,
+                        strokeWidth: 10.33,
+                      ),
+                    ),
+                  ),
+
+                  // Center content
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Total',
+                        style: context.textTheme.labelMedium?.copyWith(
+                          color: context.colors.onSurfaceVariantLow,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text('24,151', style: context.textTheme.titleMedium),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Container(
+                  width: 10.2,
+                  height: 10.2,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.colors.primary,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Text('Product Viewed', style: context.textTheme.labelMedium),
+                const Spacer(),
+                Text('50%', style: context.textTheme.labelMedium),
+              ],
+            ),
+            const SizedBox(height: 10.2),
+            Row(
+              children: [
+                Container(
+                  width: 10.2,
+                  height: 10.2,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: context.colors.primaryVariant,
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Text('Checkout', style: context.textTheme.labelMedium),
+                const Spacer(),
+                Text('50%', style: context.textTheme.labelMedium),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EcommerceArcPainter extends CustomPainter {
+  final double progress; // The percentage of the circle to fill (0.0 to 1.0)
+  final Color color;
+  final double strokeWidth;
+
+  EcommerceArcPainter({
+    required this.progress,
+    required this.color,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Configure the Paint object for drawing the arc
+    final paint =
+        Paint()
+          ..color = color
+          ..strokeWidth = strokeWidth
+          ..style =
+              PaintingStyle
+                  .stroke // Draw a line, not a filled shape
+          ..strokeCap = StrokeCap.round; // Make the ends rounded
+
+    // Define the drawing area
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+
+    // Define the arc's angles
+    const startAngle = -math.pi / 2; // Start from the top (12 o'clock)
+    final sweepAngle = 2 * math.pi * progress; // The length of the arc
+
+    // Draw the arc on the canvas
+    canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true; // Repaint whenever properties change
+  }
+}
+
+class EcommerceNewCustomersCard extends StatelessWidget {
+  const EcommerceNewCustomersCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppClickableCard(
+      padding: EdgeInsets.zero,
+      type: ClickableCardType.elevated,
+      elevation:
+          context.isDesktop ? BetterShadow.shadow16 : BetterShadow.shadow4,
+      child: Padding(
+        padding:
+            context.isDesktop
+                ? const EdgeInsets.all(20)
+                : const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Icon(BetterIcons.userAdd01Outline, size: 24),
+                const SizedBox(width: 10),
+                Text('New Customers', style: context.textTheme.titleSmall),
+                const Spacer(),
+                const SizedBox(width: 10),
+                SizedBox(
+                  width: 95,
+                  child: AppDropdownField.single(
+                    type: DropdownFieldType.compact,
+                    items: [AppDropdownItem(value: 'Weekly', title: 'Weekly')],
+                    initialValue: 'Weekly',
+                    isFilled: false,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Row(
+                children: [
+                  Text('398', style: context.textTheme.headlineSmall),
+                  const SizedBox(width: 8),
+                  const Spacer(),
+                  AppBadge(
+                    prefixIcon: BetterIcons.arrowUpRight01Outline,
+                    text: '+10%',
+                    size: BadgeSize.small,
+                    isRounded: true,
+                    color: SemanticColor.success,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    'last week',
+                    style: context.textTheme.labelSmall?.variant(context),
+                  ),
+                ],
+              ),
+            ),
+            _buildLineChart(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLineChart(BuildContext context) {
+    return SizedBox(height: 275, child: LineChart(_lineChartData(context)));
+  }
+
+  LineChartData _lineChartData(BuildContext context) {
+    return LineChartData(
+      lineTouchData: LineTouchData(enabled: false),
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: false,
+        horizontalInterval: 100,
+        checkToShowHorizontalLine: (value) {
+          return value % 100 == 0;
+        },
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: context.colors.outlineVariant,
+            strokeWidth: 1,
+            dashArray: [5, 4],
+          );
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: AxisTitles(
+          sideTitleAlignment: SideTitleAlignment.outside,
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            interval: 1,
+            getTitlesWidget: (double value, TitleMeta meta) {
+              final text = switch (value.toInt()) {
+                0 => 'Mon',
+                1 => 'Tue',
+                2 => 'Wed',
+                3 => 'Thu',
+                4 => 'Fri',
+                5 => 'Sat',
+                6 => 'Sun',
+                _ => '',
+              };
+              return Container(
+                padding: const EdgeInsets.only(left: 10),
+                child: SideTitleWidget(
+                  meta: meta,
+                  child: Text(
+                    text,
+                    style: context.textTheme.bodySmall?.copyWith(
+                      color: context.colors.onSurfaceVariantLow,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            interval: 100,
+            getTitlesWidget: (double value, TitleMeta meta) {
+              return Container(
+                padding: const EdgeInsets.only(bottom: 5),
+                margin: const EdgeInsets.only(right: 18),
+                child: Text(
+                  value.toInt().toString(),
+                  style: context.textTheme.bodySmall?.copyWith(
+                    color: context.colors.onSurfaceVariantLow,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              );
+            },
+            reservedSize: 52,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(show: false),
+      minX: -0.1,
+      maxX: 6.5,
+      minY: -0.01,
+      maxY: 500.01,
+      lineBarsData: [
+        LineChartBarData(
+          spots: const [
+            FlSpot(0, 110), // Mon
+            FlSpot(1, 265), // Tue
+            FlSpot(2, 140), // Wed
+            FlSpot(3, 280), // Thu
+            FlSpot(4, 190), // Fri
+            FlSpot(5, 285), // Sat
+            FlSpot(6, 390), // Sun
+          ],
+          isCurved: true,
+          curveSmoothness: 0.1,
+          color: context.colors.primary,
+          barWidth: 2.5,
+          isStrokeCapRound: true,
+          isStrokeJoinRound: true,
+          dotData: FlDotData(
+            show: true,
+            getDotPainter:
+                (spot, percent, barData, index) =>
+                    index == barData.spots.length - 1
+                        ? FlDotCirclePainter(
+                          radius: 6,
+                          color: context.colors.primary,
+                        )
+                        : FlDotCirclePainter(
+                          radius: 0,
+                          color: context.colors.surface.withValues(alpha: 0),
+                          strokeWidth: 0,
+                          strokeColor: context.colors.surface.withValues(
+                            alpha: 0,
+                          ),
+                        ),
+          ),
+          belowBarData: BarAreaData(show: false),
+        ),
+        LineChartBarData(
+          spots: const [
+            FlSpot(0, 110), // Mon
+            FlSpot(1, 220), // Tue
+            FlSpot(2, 180), // Wed
+            FlSpot(3, 300), // Thu
+            FlSpot(4, 150), // Fri
+            FlSpot(5, 350), // Sat
+            FlSpot(6, 270), // Sun
+          ],
+          isCurved: true,
+          curveSmoothness: 0.1,
+          color: context.colors.primaryDisabled,
+          barWidth: 2.5,
+          isStrokeCapRound: true,
+          isStrokeJoinRound: true,
+          dotData: FlDotData(show: false),
+          belowBarData: BarAreaData(show: false),
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceRecentOrdersCard extends StatelessWidget {
+  const EcommerceRecentOrdersCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Icon(BetterIcons.shoppingBag02Outline, size: 24),
+              const SizedBox(width: 8),
+              Text('Recent Orders', style: context.textTheme.titleSmall),
+              const Spacer(),
+              AppTextButton(
+                onPressed: () {},
+                text: 'View more',
+                size: ButtonSize.small,
+                suffixIcon: BetterIcons.arrowRight02Outline,
+                color: SemanticColor.primary,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          AppClickableCard(
+            padding: EdgeInsets.zero,
+            type: ClickableCardType.elevated,
+            elevation: BetterShadow.shadow4,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _OrderItem(
+                    id: '#SD009',
+                    date: '23 May, 2025',
+                    customer: 'Jakob Kenter',
+                    price: '\$211.24',
+                    currency: 'USD',
+                    product1: 'Nike Air Force',
+                    product2: 'Winter Hoodie',
+                    showMore: true,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 17.5),
+                    child: AppDivider(),
+                  ),
+                  _OrderItem(
+                    id: '#SD009',
+                    date: '23 May, 2025',
+                    customer: 'Terry Septimus',
+                    price: '\$125.16',
+                    currency: 'USD',
+                    product1: 'Nike Air Force',
+                    product2: 'Winter Hoodie',
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 17.5),
+                    child: AppDivider(),
+                  ),
+                  _OrderItem(
+                    id: '#SD009',
+                    date: '23 May, 2025',
+                    customer: 'Craig Torff',
+                    price: '\$250.00',
+                    currency: 'USD',
+                    product1: 'Nike Air Force',
+                    product2: 'Winter Hoodie',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return AppClickableCard(
+      padding: EdgeInsets.zero,
+      type: ClickableCardType.elevated,
+      elevation: BetterShadow.shadow16,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Icon(BetterIcons.shoppingBag02Outline, size: 24),
+                const SizedBox(width: 8),
+                Text('Recent Orders', style: context.textTheme.titleSmall),
+                const Spacer(),
+                AppTextButton(
+                  onPressed: () {},
+                  text: 'View more',
+                  size: ButtonSize.small,
+                  suffixIcon: BetterIcons.arrowRight02Outline,
+                  color: SemanticColor.primary,
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              height: 255,
+              child: AppDataTable(
+                data: ApiResponse.loaded([]),
+                getPageInfo:
+                    (_) => OffsetPageInfo(
+                      hasNextPage: false,
+                      hasPreviousPage: false,
+                    ),
+                getRowCount: (_) => 3,
+                onPageChanged: (_) {},
+                paging: OffsetPaging(limit: 10, offset: 0),
+                columns: [
+                  DataColumn(label: Text("ID")),
+                  DataColumn(label: Text("Date")),
+                  DataColumn(label: Text("Product Name")),
+                  DataColumn(label: Text("Customer")),
+                  DataColumn(label: Text("Price")),
+                ],
+                rowBuilder: (p0, p1) {
+                  return DataRow(
+                    onSelectChanged: (_) {},
+                    cells: [
+                      DataCell(Text("#SD009")),
+                      DataCell(Text("23 May, 2025")),
+                      DataCell(Text("Nike Air Force..")),
+                      DataCell(Text("Jakob Kenter")),
+                      DataCell(
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text("\$120.00"),
+                            Text(
+                              "USD",
+                              style: TextStyle(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OrderItem extends StatelessWidget {
+  const _OrderItem({
+    required this.id,
+    required this.date,
+    required this.customer,
+    required this.price,
+    required this.currency,
+    required this.product1,
+    required this.product2,
+    this.showMore = false,
+  });
+
+  final String id;
+  final String date;
+  final String customer;
+  final String price;
+  final String currency;
+  final String product1;
+  final String product2;
+  final bool showMore;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              id,
+              style: context.textTheme.labelMedium!.copyWith(
+                color: context.colors.onSurfaceVariantLow,
+              ),
+            ),
+            Text(
+              date,
+              style: context.textTheme.labelMedium!.copyWith(
+                color: context.colors.onSurfaceVariantLow,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Text(customer, style: context.textTheme.labelLarge),
+            const Spacer(),
+            Text(price, style: context.textTheme.labelLarge),
+            const SizedBox(width: 4),
+            Text(
+              currency,
+              style: context.textTheme.labelLarge!.copyWith(
+                color: context.colors.onSurfaceVariantLow,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Assets.images.products.image16.image(
+                width: 32,
+                height: 32,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(product1, style: context.textTheme.labelMedium),
+            const SizedBox(width: 12),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Assets.images.products.hoodie.image(width: 32, height: 32),
+            ),
+            const SizedBox(width: 8),
+            Text(product2, style: context.textTheme.labelMedium),
+          ],
+        ),
+        if (showMore) const SizedBox(height: 12),
+        if (showMore)
+          Text(
+            '+1 more item',
+            style: context.textTheme.labelMedium!.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
+          ),
+      ],
+    );
+  }
+}

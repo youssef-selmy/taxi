@@ -1,0 +1,488 @@
+import 'dart:ui';
+
+import 'package:better_design_system/atoms/avatar/avatar.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/dot_badge/dot_badge.dart';
+import 'package:better_design_system/atoms/toggle_switch_button_group/toggle_switch_button_group.dart';
+import 'package:better_icons/better_icons.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_system/better_design_system.dart';
+import 'package:image_faker/image_faker.dart';
+
+enum NotificationRightSheetStyle { styleA, styleB }
+
+class NotificationRightSheet extends StatefulWidget {
+  final NotificationRightSheetStyle style;
+  const NotificationRightSheet({
+    super.key,
+    this.style = NotificationRightSheetStyle.styleA,
+  });
+
+  @override
+  State<NotificationRightSheet> createState() => _NotificationRightSheetState();
+}
+
+class _NotificationRightSheetState extends State<NotificationRightSheet> {
+  final List<String> notificationFilter = [
+    'View All',
+    'Mention',
+    'Inbox',
+    'Archive',
+  ];
+
+  String selectedNotificationFilter = 'View All';
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(12),
+          bottomRight: Radius.circular(12),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            spacing: 8,
+            children: [
+              AppIconButton(
+                icon: BetterIcons.arrowRight03Outline,
+                size: ButtonSize.medium,
+              ),
+              Text('Notifications', style: context.textTheme.titleSmall),
+            ],
+          ),
+          SizedBox(height: 16),
+          AppToggleSwitchButtonGroup<String>(
+            isExpanded: true,
+            options:
+                notificationFilter
+                    .map(
+                      (e) => ToggleSwitchButtonGroupOption(value: e, label: e),
+                    )
+                    .toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedNotificationFilter = value;
+              });
+            },
+            selectedValue: selectedNotificationFilter,
+          ),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('Today', style: context.textTheme.labelLarge),
+              AppBadge(
+                text: '4 Notifications',
+                color: SemanticColor.primary,
+                size: BadgeSize.large,
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+
+          _buildNotificationItem(
+            avatar: _buildAvatar(),
+            title: 'Davis Herwitz Uploaded New File',
+            hasDote: true,
+
+            child: _buildFileCard(),
+          ),
+          _buildSeperator(),
+          _buildNotificationItem(
+            avatar: _buildIconContainer(),
+            title: 'New Support Request',
+            hasDote: true,
+            child: AppTextButton(
+              onPressed: () {},
+              text: 'View Request',
+              color: SemanticColor.primary,
+            ),
+          ),
+          _buildSeperator(),
+          _buildNotificationItem(
+            avatar: _buildAvatar(),
+            title: 'Davis Herwitz Sent a New Message',
+            hasDote: true,
+            child: _buildNewMassageCard(),
+          ),
+
+          SizedBox(height: 24),
+          Text('Last 7 days', style: context.textTheme.labelLarge),
+          SizedBox(height: 16),
+          _buildNotificationItem(
+            avatar: _buildIconContainer(),
+            title: 'Notification Title',
+            hasDote: false,
+            child: Text(
+              'Massage here',
+              style: context.textTheme.bodySmall?.variant(context),
+            ),
+          ),
+          _buildSeperator(),
+          _buildNotificationItem(
+            avatar: _buildIconContainer(),
+            title: 'Notification Title',
+            hasDote: false,
+            child: Text(
+              'Massage here',
+              style: context.textTheme.bodySmall?.variant(context),
+            ),
+          ),
+          _buildSeperator(),
+          _buildNotificationItem(
+            avatar: _buildIconContainer(),
+            title: 'Notification Title',
+            hasDote: false,
+            child: Text(
+              'Massage here',
+              style: context.textTheme.bodySmall?.variant(context),
+            ),
+          ),
+          _buildSeperator(),
+          _buildNotificationItem(
+            avatar: _buildIconContainer(),
+            title: 'Notification Title',
+            hasDote: false,
+            child: Text(
+              'Massage here',
+              style: context.textTheme.bodySmall?.variant(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSeperator() {
+    return widget.style == NotificationRightSheetStyle.styleA
+        ? SizedBox(height: 8)
+        : AppDivider(height: 36);
+  }
+
+  Widget _buildIconContainer() {
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(
+          widget.style == NotificationRightSheetStyle.styleA ? 8 : 100,
+        ),
+        border: Border.all(color: context.colors.outline),
+      ),
+      child: Icon(
+        BetterIcons.headphonesFilled,
+        size: 24,
+        color: context.colors.primary,
+      ),
+    );
+  }
+
+  Widget _buildFileCard() {
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: context.colors.surfaceVariant,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            spacing: 10,
+            children: <Widget>[
+              Icon(
+                BetterIcons.file02Filled,
+                color: context.colors.onSurfaceVariant,
+                size: 32,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 4,
+                children: [
+                  Text('Filename', style: context.textTheme.labelMedium),
+                  Text(
+                    '14MB',
+                    style: context.textTheme.labelSmall?.variant(context),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Icon(
+            BetterIcons.arrowDown03Outline,
+            color: context.colors.onSurfaceVariant,
+            size: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNewMassageCard() {
+    return Container(
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: context.colors.surfaceVariant,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 2,
+            height: 37,
+            decoration: BoxDecoration(color: context.colors.primary),
+          ),
+
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth:
+                  widget.style == NotificationRightSheetStyle.styleA
+                      ? 265
+                      : 290,
+            ),
+            child: Text(
+              'Insert message here, this message could be two lines and it would be like this',
+              maxLines: 2,
+              style: context.textTheme.bodySmall,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNotificationItem({
+    required Widget avatar,
+    required String title,
+    required bool hasDote,
+    required Widget child,
+  }) => Row(
+    children: [
+      Expanded(
+        child: Container(
+          padding: EdgeInsets.all(
+            widget.style == NotificationRightSheetStyle.styleA ? 12 : 0,
+          ),
+          decoration: BoxDecoration(
+            border:
+                widget.style == NotificationRightSheetStyle.styleA
+                    ? Border.all(color: context.colors.outline)
+                    : null,
+            borderRadius:
+                widget.style == NotificationRightSheetStyle.styleA
+                    ? BorderRadius.circular(8)
+                    : null,
+            color: context.colors.surface,
+          ),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 8,
+                children: [
+                  avatar,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 8,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              spacing: 8,
+                              children: [
+                                Text(
+                                  title,
+                                  style: context.textTheme.labelLarge,
+                                ),
+                                if (widget.style !=
+                                    NotificationRightSheetStyle.styleA)
+                                  AppBadge(
+                                    text: 'Badge',
+                                    color: SemanticColor.warning,
+                                  ),
+                              ],
+                            ),
+                            if (hasDote)
+                              BetterDotBadge(
+                                color: SemanticColor.info,
+                                dotBadgeSize: DotBadgeSize.small,
+                              ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Monday, 4:34 PM',
+                              style: context.textTheme.labelSmall?.variant(
+                                context,
+                              ),
+                            ),
+                            Text(
+                              '2h ago',
+                              style: context.textTheme.labelSmall?.variant(
+                                context,
+                              ),
+                            ),
+                          ],
+                        ),
+                        child,
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+
+  AppAvatar _buildAvatar() {
+    return AppAvatar(
+      imageUrl: ImageFaker().person.six,
+      size: AvatarSize.size40px,
+    );
+  }
+}
+
+class NotificationPreview extends StatelessWidget {
+  final Widget notification;
+  const NotificationPreview({super.key, required this.notification});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 1440,
+      child: Stack(
+        alignment: AlignmentGeometry.centerRight,
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 88, vertical: 84),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 289,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: context.colors.surfaceVariant,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: context.colors.surfaceVariant,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 40),
+                Row(
+                  spacing: 65,
+                  children: [
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                  ],
+                ),
+                SizedBox(height: 48),
+                Row(
+                  spacing: 65,
+                  children: [
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                  ],
+                ),
+                SizedBox(height: 48),
+                Row(
+                  spacing: 65,
+                  children: [
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: context.colors.surfaceMuted.withValues(alpha: 0.08),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 414,
+            child: Positioned.fill(top: 0, right: 0, child: notification),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Expanded _buildContainerItem(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
+        children: [
+          Container(
+            height: 165,
+            decoration: BoxDecoration(
+              color: context.colors.surfaceVariant,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          Container(
+            width: 128,
+            height: 16,
+            decoration: BoxDecoration(
+              color: context.colors.surfaceVariant,
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+          Container(
+            height: 22,
+            decoration: BoxDecoration(
+              color: context.colors.surfaceVariant,
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

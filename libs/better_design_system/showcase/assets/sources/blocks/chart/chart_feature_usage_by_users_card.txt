@@ -1,0 +1,186 @@
+import 'package:better_design_system/atoms/dot_badge/dot_badge.dart';
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:better_design_system/better_design_system.dart';
+import 'package:better_design_system/molecules/charts/bar_sparkline/bar_sparkline.dart';
+import 'package:better_design_system/molecules/charts/chart_series_data.dart';
+import 'package:flutter/widgets.dart';
+
+class ChartFeatureUsageByUsersCard extends StatelessWidget {
+  const ChartFeatureUsageByUsersCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 800,
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    Text(
+                      'Feature usage by users',
+                      style: context.textTheme.titleSmall,
+                    ),
+                    Text(
+                      'Weekly usage of app features by users',
+                      style: context.textTheme.bodySmall?.variant(context),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  width: 112,
+                  child: AppDropdownField.single(
+                    type: DropdownFieldType.compact,
+                    isFilled: false,
+                    items: [
+                      AppDropdownItem(value: 'This Week', title: 'This Week'),
+                      AppDropdownItem(value: 'Last Week', title: 'Last Week'),
+                      AppDropdownItem(value: 'Next Week', title: 'Next Week'),
+                    ],
+                    initialValue: 'This Week',
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 24),
+            Text('5.320 users', style: context.textTheme.headlineLarge),
+            SizedBox(height: 16),
+            Row(
+              spacing: 16,
+              children: [
+                _buildChartLegend(
+                  context,
+                  legendColor: SemanticColor.primary,
+                  title: 'Profile Customization',
+                  subtitle: '2.300',
+                ),
+                _buildChartLegend(
+                  context,
+                  legendColor: SemanticColor.secondary,
+                  title: 'In-app Messaging',
+                  subtitle: '1.800',
+                ),
+                _buildChartLegend(
+                  context,
+                  legendColor: SemanticColor.insight,
+                  title: 'Media Upload',
+                  subtitle: '1.220',
+                ),
+              ],
+            ),
+            SizedBox(height: 24),
+            SizedBox(
+              height: 240,
+              child: AppBarSparkline(
+                minY: 0,
+                maxY: 100,
+                gridEnabled: true,
+                type: BarChartThinColoredType.grouped,
+                barWidth: 8,
+                bottomTitleBuilder: (String value) {
+                  const labels = {
+                    'Mon': 'Mon',
+                    'Tue': 'Tue',
+                    'Wed': 'Wed',
+                    'Thu': 'Thu',
+                    'Fri': 'Fri',
+                    'Sat': 'Sat',
+                    'Sun': 'Sun',
+                  };
+
+                  return labels[value] ?? '';
+                },
+                leftTitleBuilder: (double value) {
+                  if (value % 20 == 0) {
+                    return value.toInt().toString();
+                  }
+                  return '';
+                },
+                data: [
+                  ChartSeriesData(
+                    name: 'Profile Customization',
+                    points: [
+                      ChartPoint(name: 'Mon', value: 68),
+                      ChartPoint(name: 'Tue', value: 45),
+                      ChartPoint(name: 'Wed', value: 68),
+                      ChartPoint(name: 'Thu', value: 25),
+                      ChartPoint(name: 'Fri', value: 45),
+                      ChartPoint(name: 'Sat', value: 40),
+                      ChartPoint(name: 'Sun', value: 68),
+                    ],
+                    color: context.colors.primary,
+                  ),
+                  ChartSeriesData(
+                    name: 'In-app Messaging',
+                    points: [
+                      ChartPoint(name: 'Mon', value: 55),
+                      ChartPoint(name: 'Tue', value: 38),
+                      ChartPoint(name: 'Wed', value: 55),
+                      ChartPoint(name: 'Thu', value: 21),
+                      ChartPoint(name: 'Fri', value: 38),
+                      ChartPoint(name: 'Sat', value: 35),
+                      ChartPoint(name: 'Sun', value: 55),
+                    ],
+                    color: context.colors.secondary,
+                  ),
+                  ChartSeriesData(
+                    name: 'Media Upload',
+                    points: [
+                      ChartPoint(name: 'Mon', value: 23),
+                      ChartPoint(name: 'Tue', value: 16),
+                      ChartPoint(name: 'Wed', value: 23),
+                      ChartPoint(name: 'Thu', value: 12),
+                      ChartPoint(name: 'Fri', value: 16),
+                      ChartPoint(name: 'Sat', value: 16),
+                      ChartPoint(name: 'Sun', value: 23),
+                    ],
+                    color: context.colors.insight,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChartLegend(
+    BuildContext context, {
+    required SemanticColor legendColor,
+    required String title,
+    required String subtitle,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 6,
+      children: [
+        Column(
+          children: [
+            SizedBox(height: 2),
+            BetterDotBadge(color: legendColor, dotBadgeSize: DotBadgeSize.large),
+          ],
+        ),
+        Column(
+          spacing: 4,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: context.textTheme.bodySmall),
+            Text(
+              subtitle,
+              style: context.textTheme.titleSmall?.variant(context),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

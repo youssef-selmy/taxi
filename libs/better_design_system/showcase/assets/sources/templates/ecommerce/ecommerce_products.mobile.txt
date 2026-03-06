@@ -1,0 +1,441 @@
+import 'package:better_design_system/atoms/breadcrumb/breadcrumb.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_system/atoms/buttons/top_bar_icon_button.dart';
+import 'package:better_design_system/atoms/navbar/navbar.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_showcase/features/ecommerce/presentation/components/ecommerce_item.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+
+class EcommerceProductsMobile extends StatelessWidget {
+  const EcommerceProductsMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            EcommerceMobileTopBar.clientSide(
+              prefixIcon: BetterIcons.location01Outline,
+              title: 'Cordova',
+              suffixIcons: [
+                BetterIcons.search01Filled,
+                BetterIcons.menu01Outline,
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 12,
+                bottom: 8,
+              ),
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: AppBreadcrumb(
+                  separator: BreadcrumbSeparator.arrow,
+                  items: [
+                    BreadcrumbOption(title: 'Men', value: 'Men', icon: null),
+                    BreadcrumbOption(
+                      title: 'Shoes',
+                      value: 'Shoes',
+                      icon: null,
+                    ),
+                  ],
+                  onPressed: (_) {},
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 8,
+                bottom: 17,
+              ),
+              child: Column(
+                children: [const EcommerceShoesCard(isMobile: true)],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A mobile-optimized top bar for e-commerce applications.
+///
+/// The [EcommerceMobileTopBar] provides a consistent navigation bar for mobile
+/// e-commerce screens with a prefix icon, title, and customizable suffix icons.
+///
+/// Example:
+/// ```dart
+/// EcommerceMobileTopBar.dashboardPanel(
+///   title: 'Dashboard',
+///   prefixIcon: BetterIcons.menu01Outline,
+/// )
+/// ```
+class EcommerceMobileTopBar extends StatelessWidget {
+  final IconData prefixIcon;
+  final String title;
+  final List<IconData> suffixIcons;
+  final TextStyle? Function(BuildContext) titleStyle;
+
+  const EcommerceMobileTopBar._({
+    required this.prefixIcon,
+    required this.title,
+    required this.suffixIcons,
+    required this.titleStyle,
+  });
+
+  /// Dashboard panel top bar with search, notifications, and store icons.
+  factory EcommerceMobileTopBar.dashboardPanel({
+    required String title,
+    required IconData prefixIcon,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: const [
+        BetterIcons.search01Filled,
+        BetterIcons.notification02Outline,
+        BetterIcons.store01Outline,
+      ],
+      titleStyle: (context) => context.textTheme.titleSmall,
+    );
+  }
+
+  /// Client side top bar with custom suffix icons.
+  factory EcommerceMobileTopBar.clientSide({
+    required String title,
+    required IconData prefixIcon,
+    required List<IconData> suffixIcons,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: suffixIcons,
+      titleStyle: (context) => context.textTheme.labelLarge,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbar(
+      showDivider: false,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      prefix: Row(
+        spacing: 8,
+        children: [
+          AppTopBarIconButton(
+            icon: prefixIcon,
+            iconColor: context.colors.onSurfaceVariant,
+          ),
+          Text(title, style: titleStyle(context)),
+        ],
+      ),
+      suffix: Row(
+        spacing: 8,
+        children: [
+          const SizedBox(width: 8),
+          ...suffixIcons.map(
+            (icon) => AppTopBarIconButton(
+              icon: icon,
+              iconColor: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceShoesCard extends StatelessWidget {
+  const EcommerceShoesCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Shoes', style: context.textTheme.titleMedium),
+              AppIconButton(
+                icon: BetterIcons.filterVerticalOutline,
+                style: IconButtonStyle.outline,
+                iconColor: context.colors.onSurfaceVariant,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Column(
+            spacing: 8,
+            children: [
+              Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: EcommerceItem.simple(
+                      image: Assets.images.products.image11.image(),
+                      category: 'Shoes',
+                      description: 'Air Jordan 1 Low SE',
+                      currentPrice: '\$110.99',
+                    ),
+                  ),
+                  Expanded(
+                    child: EcommerceItem.discount(
+                      image: Assets.images.products.image12.image(),
+                      category: 'Shoes',
+                      description: 'New Balance 740 skor...',
+                      currentPrice: '\$99.00',
+                      originalPrice: '\$110.99',
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: EcommerceItem.discount(
+                      image: Assets.images.products.image13.image(),
+                      category: 'Shoes',
+                      description: 'Vans',
+                      currentPrice: '\$99.00',
+                      originalPrice: '\$110.99',
+                    ),
+                  ),
+                  Expanded(
+                    child: EcommerceItem.simple(
+                      image: Assets.images.products.image14.image(),
+                      category: 'Shoes',
+                      description: 'SPEED HIKER high trekking boots - black',
+                      currentPrice: '\$110.99',
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: EcommerceItem.simple(
+                      image: Assets.images.products.image15.image(),
+                      category: 'Shoes',
+                      description: 'Air Jordan 1 Low SE',
+                      currentPrice: '\$110.99',
+                    ),
+                  ),
+                  Expanded(
+                    child: EcommerceItem.simple(
+                      image: Assets.images.products.image16.image(),
+                      category: 'Shoes',
+                      description: 'Nike Air Force 1 \'07',
+                      currentPrice: '\$110.99',
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: EcommerceItem.simple(
+                      image: Assets.images.products.image17.image(),
+                      category: 'Shoes',
+                      description: 'Samba OG Skor...',
+                      currentPrice: '\$110.99',
+                    ),
+                  ),
+                  Expanded(
+                    child: EcommerceItem.simple(
+                      image: Assets.images.products.image18.image(),
+                      category: 'Shoes',
+                      description: 'New Balance 2002R skor...',
+                      currentPrice: '\$110.99',
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: EcommerceItem.simple(
+                      image: Assets.images.products.image19.image(),
+                      category: 'Shoes',
+                      description: 'Nike Streakfly 2',
+                      currentPrice: '\$110.99',
+                    ),
+                  ),
+                  Expanded(
+                    child: EcommerceItem.simple(
+                      image: Assets.images.products.image20.image(),
+                      category: 'Shoes',
+                      description: 'Nike Pegasus 41',
+                      currentPrice: '\$110.99',
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      );
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: Row(
+            children: [
+              Text('Shoes', style: context.textTheme.headlineLarge),
+              const Spacer(),
+              AppOutlinedButton(
+                onPressed: () {},
+                text: 'Sort',
+                color: SemanticColor.neutral,
+                size: ButtonSize.medium,
+                prefix: Icon(
+                  BetterIcons.arrowUpDownOutline,
+                  size: 20,
+                  color: context.colors.onSurfaceVariant,
+                ),
+                suffix: Icon(
+                  BetterIcons.arrowDown01Outline,
+                  size: 20,
+                  color: context.colors.onSurfaceVariantLow,
+                ),
+                foregroundColor: context.colors.onSurfaceVariant,
+              ),
+              const SizedBox(width: 8),
+              AppOutlinedButton(
+                onPressed: () {},
+                text: 'Filter',
+                color: SemanticColor.neutral,
+                size: ButtonSize.medium,
+                prefix: Icon(
+                  BetterIcons.filterHorizontalOutline,
+                  size: 20,
+                  color: context.colors.onSurfaceVariant,
+                ),
+                suffix: Icon(
+                  BetterIcons.arrowDown01Outline,
+                  size: 20,
+                  color: context.colors.onSurfaceVariantLow,
+                ),
+                foregroundColor: context.colors.onSurfaceVariant,
+              ),
+            ],
+          ),
+        ),
+        Row(
+          spacing: 24,
+          children: [
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image11.image(),
+                category: 'Shoes',
+                description: 'Air Jordan 1 Low SE',
+                currentPrice: '\$110.99',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.discount(
+                image: Assets.images.products.image12.image(),
+                category: 'Shoes',
+                description: 'New Balance 740 skor...',
+                currentPrice: '\$99.00',
+                originalPrice: '\$110.99',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.discount(
+                image: Assets.images.products.image13.image(),
+                category: 'Shoes',
+                description: 'Vans',
+                currentPrice: '\$99.00',
+                originalPrice: '\$110.99',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image14.image(),
+                category: 'Shoes',
+                description: 'SPEED HIKER high trekking boots - black',
+                currentPrice: '\$110.99',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image15.image(),
+                category: 'Shoes',
+                description: 'Air Jordan 1 Low SE',
+                currentPrice: '\$110.99',
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Row(
+          spacing: 24,
+          children: [
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image16.image(),
+                category: 'Shoes',
+                description: 'Nike Air Force 1 \'07',
+                currentPrice: '\$110.99',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image17.image(),
+                category: 'Shoes',
+                description: 'Samba OG Skor...',
+                currentPrice: '\$110.99',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image18.image(),
+                category: 'Shoes',
+                description: 'New Balance 2002R skor...',
+                currentPrice: '\$110.99',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image19.image(),
+                category: 'Shoes',
+                description: 'Nike Streakfly 2',
+                currentPrice: '\$110.99',
+              ),
+            ),
+            Expanded(
+              child: EcommerceItem.simple(
+                image: Assets.images.products.image20.image(),
+                category: 'Shoes',
+                description: 'Nike Pegasus 41',
+                currentPrice: '\$110.99',
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

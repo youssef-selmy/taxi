@@ -1,0 +1,805 @@
+import 'package:better_design_system/atoms/buttons/filled_button.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_showcase/features/ecommerce/entities/ecommerce_sidebar_page.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_logo.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_user_profile.dart';
+import 'package:image_faker/image_faker.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/atoms/navbar/navbar_icon.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_system/theme/shadows.dart';
+import 'package:better_design_system/organisms/step_indicator/step_indicator_item_style.dart';
+import 'package:better_design_system/organisms/step_indicator/vertical_step_indicator.dart';
+
+class EcommerceOrderDetailsDesktop extends StatelessWidget {
+  const EcommerceOrderDetailsDesktop({super.key, this.header});
+
+  final Widget? header;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (header != null) header!,
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              EcommerceSidebar(selectedItem: EcommerceSidebarPage.orders),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      EcommerceNavbar.dashboardPanelRounded(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 24,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AppTextButton(
+                                  onPressed: () {},
+                                  text: 'Back',
+                                  color: SemanticColor.neutral,
+                                  prefix: Icon(BetterIcons.arrowLeft02Outline),
+                                  size: ButtonSize.medium,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 10,
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Order #SD009',
+                                        style: context.textTheme.titleSmall,
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        '30 May, 2025',
+                                        style: context.textTheme.bodyMedium!
+                                            .copyWith(
+                                              color:
+                                                  context
+                                                      .colors
+                                                      .onSurfaceVariant,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Spacer(),
+                                  Row(
+                                    children: [
+                                      AppIconButton(
+                                        icon: BetterIcons.pencilEdit02Outline,
+                                        style: IconButtonStyle.outline,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      AppOutlinedButton(
+                                        onPressed: () {},
+                                        prefixIcon: BetterIcons.file01Outline,
+                                        text: 'Print',
+                                        color: SemanticColor.neutral,
+                                      ),
+                                      const SizedBox(width: 12),
+                                      AppFilledButton(
+                                        onPressed: () {},
+                                        text: 'Order Packed',
+                                        suffixIcon:
+                                            BetterIcons.arrowDown01Outline,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              spacing: 24,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Column(
+                                    spacing: 24,
+                                    children: [
+                                      const EcommerceDetailsCard(),
+                                      const EcommerceCustomerInfoCard(),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    spacing: 24,
+                                    children: [const EcommerceHistoryCard()],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceSidebar extends StatelessWidget {
+  const EcommerceSidebar({
+    super.key,
+    this.selectedItem = EcommerceSidebarPage.dashboard,
+    this.showDivider = true,
+  });
+
+  final EcommerceSidebarPage selectedItem;
+  final bool showDivider;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: AppSidebarNavigation<EcommerceSidebarPage>(
+        expandedWidth: 272,
+        showDivider: showDivider,
+        header: AppSidebarNavigationLogo(
+          logoUrl: ImageFaker().appLogo.taxi,
+          title: 'E-Commerce',
+        ),
+        style: SidebarNavigationItemStyle.primary,
+        data: [
+          NavigationItem(
+            title: 'Dashboard',
+            value: EcommerceSidebarPage.dashboard,
+            icon: (BetterIcons.home01Outline, BetterIcons.home01Filled),
+          ),
+          NavigationItem(
+            title: 'Orders',
+            value: EcommerceSidebarPage.orders,
+            icon: (
+              BetterIcons.shoppingCart01Outline,
+              BetterIcons.shoppingCart01Filled,
+            ),
+          ),
+          NavigationItem(
+            title: 'Products',
+            value: EcommerceSidebarPage.products,
+            icon: (
+              BetterIcons.dashboardSquare01Outline,
+              BetterIcons.dashboardSquare01Filled,
+            ),
+            subItems: [
+              NavigationSubItem(
+                title: 'List',
+                value: EcommerceSidebarPage.productsList,
+              ),
+              NavigationSubItem(
+                title: 'Categories',
+                value: EcommerceSidebarPage.productCategories,
+              ),
+            ],
+          ),
+          NavigationItem(
+            title: 'Inventory',
+            value: EcommerceSidebarPage.inventory,
+            icon: (
+              BetterIcons.deliveryBox01Outline,
+              BetterIcons.deliveryBox01Filled,
+            ),
+          ),
+          NavigationItem(
+            title: 'Customers',
+            value: EcommerceSidebarPage.customers,
+            icon: (
+              BetterIcons.userMultipleOutline,
+              BetterIcons.userMultipleFilled,
+            ),
+          ),
+          NavigationItem(
+            title: 'Promotions',
+            value: EcommerceSidebarPage.promotions,
+            icon: (
+              BetterIcons.discountTag02Outline,
+              BetterIcons.discountTag02Filled,
+            ),
+          ),
+          NavigationItem(
+            title: 'Payment',
+            value: EcommerceSidebarPage.payment,
+            icon: (BetterIcons.money03Outline, BetterIcons.money03Filled),
+          ),
+          NavigationItem(
+            title: 'Message',
+            value: EcommerceSidebarPage.message,
+            icon: (BetterIcons.mail02Outline, BetterIcons.mail02Filled),
+            badgeTitle: '124',
+          ),
+          NavigationItem(
+            title: 'More',
+            value: EcommerceSidebarPage.more,
+            icon: (
+              BetterIcons.moreHorizontalCircle01Outline,
+              BetterIcons.moreHorizontalCircle01Filled,
+            ),
+            subItems: [
+              NavigationSubItem(
+                title: 'Settings',
+                value: EcommerceSidebarPage.more,
+              ),
+            ],
+          ),
+        ],
+        selectedItem: selectedItem,
+        onItemSelected: (value) {},
+        footer: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const AppDivider(),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                child: AppSidebarNavigationUserProfile(
+                  avatarUrl: ImageFaker().person.seven,
+                  style: SidebarNavigationUserProfileStyle.soft,
+                  title: 'Gustavo Kenter',
+                  subtitle: 'Gustavo@better.com',
+                  onPressed: () {},
+                  icon: BetterIcons.moreVerticalCircle01Outline,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EcommerceNavbar extends StatelessWidget {
+  final List<Widget> leftItems;
+  final List<Widget> rightItems;
+  final EdgeInsets padding;
+
+  const EcommerceNavbar({
+    super.key,
+    required this.leftItems,
+    required this.rightItems,
+    this.padding = const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+  });
+
+  /// Style 1: Dashboard Panel Rounded
+  factory EcommerceNavbar.dashboardPanelRounded() {
+    return EcommerceNavbar(
+      leftItems: [
+        Builder(
+          builder: (context) {
+            return SizedBox(
+              width: 358,
+              child: AppTextField(
+                density: TextFieldDensity.noDense,
+                hint: 'Search anything',
+                prefixIcon: Icon(
+                  BetterIcons.search01Filled,
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+            );
+          },
+        ),
+      ],
+      rightItems: [
+        AppNavbarIcon(
+          icon: BetterIcons.notification02Outline,
+          badgeNumber: 2,
+          size: ButtonSize.medium,
+          iconSize: 24,
+        ),
+        const SizedBox(width: 16),
+        AppOutlinedButton(
+          onPressed: () {},
+          text: 'View Shop',
+          prefixIcon: BetterIcons.store01Outline,
+          color: SemanticColor.neutral,
+        ),
+      ],
+    );
+  }
+
+  /// Style 2: Dashboard Panel Circular
+  factory EcommerceNavbar.dashboardPanelCircular() {
+    return EcommerceNavbar(leftItems: [], rightItems: []);
+  }
+
+  // /// Style 3: Client Side
+  // factory EcommerceNavbar.clientSide() {
+  //   return EcommerceNavbar(leftItems: [], rightItems: []);
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding,
+      child: Row(children: [...leftItems, const Spacer(), ...rightItems]),
+    );
+  }
+}
+
+class EcommerceDetailsCard extends StatelessWidget {
+  const EcommerceDetailsCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = isMobile ? 16.0 : 20.0;
+    final hasTitle = !isMobile;
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: _cardDecoration(context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (hasTitle) ...[
+            Text('Details', style: context.textTheme.titleSmall),
+            const SizedBox(height: 16),
+          ],
+          isMobile
+              ? _buildMobileProductRow(context)
+              : _buildDesktopProductRow(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 11.5),
+            child: AppDivider(),
+          ),
+          isMobile
+              ? _buildMobileProductRow(context)
+              : _buildDesktopProductRow(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 17.5),
+            child: AppDivider(),
+          ),
+          // Price rows
+          _buildPriceRow(context, label: 'Subtotal', value: '\$199.99'),
+          _buildPriceRow(context, label: 'Shipping', value: '\$10.00'),
+          _buildPriceRow(context, label: 'Discount', value: '\$0.00'),
+          _buildPriceRow(context, label: 'Taxes', value: '\$10.99'),
+          _buildPriceRow(
+            context,
+            label: 'Total',
+            value: '\$10.99',
+            isTotal: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _cardDecoration(BuildContext context) => BoxDecoration(
+    color: context.colors.surface,
+    border: Border.all(color: context.colors.outline),
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+  );
+
+  Widget _buildPriceRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+    bool isTotal = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style:
+                  isTotal
+                      ? context.textTheme.titleSmall
+                      : context.textTheme.bodyMedium!.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
+            ),
+          ),
+          SizedBox(
+            width: 87,
+            child: Text(
+              value,
+              style:
+                  isTotal
+                      ? context.textTheme.titleSmall
+                      : context.textTheme.labelLarge,
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMobileProductRow(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: Assets.images.products.shoe01.image(
+            width: 40,
+            height: 40,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Nike Airforce 1', style: context.textTheme.bodyMedium),
+              const SizedBox(height: 2),
+              Text(
+                'SKU: AABBCCDD',
+                style: context.textTheme.bodySmall!.copyWith(
+                  color: context.colors.onSurfaceVariantLow,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Quantity
+        Text('x1', style: context.textTheme.labelLarge),
+        const SizedBox(width: 16),
+        // Price: fixed width so numbers align to the right
+        SizedBox(
+          width: 95,
+          child: Text(
+            '\$199.99',
+            style: context.textTheme.labelLarge,
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopProductRow(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Assets.images.products.shoe01.image(
+          width: 40,
+          height: 40,
+          fit: BoxFit.cover,
+        ),
+        const SizedBox(width: 8),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Nike Airforce 1', style: context.textTheme.bodyMedium),
+            const SizedBox(height: 2),
+            Text(
+              'SKU: AABBCCDD',
+              style: context.textTheme.bodySmall!.copyWith(
+                color: context.colors.onSurfaceVariantLow,
+              ),
+            ),
+          ],
+        ),
+        const Spacer(),
+        Text('x1', style: context.textTheme.labelLarge),
+        const SizedBox(width: 104),
+        SizedBox(
+          width: 95,
+          child: Text(
+            '\$199.99',
+            style: context.textTheme.labelLarge,
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceCustomerInfoCard extends StatelessWidget {
+  const EcommerceCustomerInfoCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = isMobile ? 16.0 : 20.0;
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: _cardDecoration(context),
+      child: Column(
+        spacing: 16,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCustomerHeader(context),
+          AppDivider(),
+          isMobile
+              ? _buildShippingSection(context)
+              : _buildDesktopShippingSection(context),
+          AppDivider(),
+          _buildPaymentSection(context),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _cardDecoration(BuildContext context) => BoxDecoration(
+    color: context.colors.surface,
+    border: Border.all(color: context.colors.outline),
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+  );
+
+  Widget _buildCustomerHeader(BuildContext context) {
+    return Column(
+      spacing: 16,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          spacing: 8,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Assets.images.avatars.illustration01.image(
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Expanded(
+              child: Column(
+                spacing: 2,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Corey George', style: context.textTheme.bodyMedium),
+                  Text(
+                    'corey@better.com',
+                    style: context.textTheme.bodySmall!.copyWith(
+                      color: context.colors.onSurfaceVariantLow,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        _buildInfoRow(context, label: 'IP Address:', value: '192.168.1.1'),
+      ],
+    );
+  }
+
+  Widget _buildShippingSection(BuildContext context) {
+    return Column(
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Shipping', style: context.textTheme.labelLarge),
+        Column(
+          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildLabeledContent(
+              context,
+              label: 'Address',
+              icon: BetterIcons.location01Outline,
+              content: 'Cordova, 3785 Blackwell Street',
+            ),
+            _buildLabeledContent(
+              context,
+              label: 'Phone number',
+              icon: BetterIcons.call02Outline,
+              content: '+1 (888)888-888',
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopShippingSection(BuildContext context) {
+    return Column(
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Shipping', style: context.textTheme.labelLarge),
+        Row(
+          spacing: 16,
+          children: [
+            Expanded(
+              child: _buildLabeledContent(
+                context,
+                label: 'Address',
+                icon: BetterIcons.location01Outline,
+                content: 'Cordova, 3785 Blackwell Street',
+              ),
+            ),
+            Expanded(
+              child: _buildLabeledContent(
+                context,
+                label: 'Phone number',
+                icon: BetterIcons.call02Outline,
+                content: '+1 (888)888-888',
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPaymentSection(BuildContext context) {
+    return Column(
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Payment Method', style: context.textTheme.labelLarge),
+        Row(
+          spacing: 8,
+          children: [
+            ClipRRect(
+              child: Assets.images.paymentMethods.mastercardPng.image(
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Column(
+              spacing: 4,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('MasterCard', style: context.textTheme.labelLarge),
+                Text(
+                  '**** **** **** 7238',
+                  style: context.textTheme.bodySmall!.copyWith(
+                    color: context.colors.onSurfaceVariantLow,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+  }) {
+    return Row(
+      spacing: 4,
+      children: [
+        Text(
+          label,
+          style: context.textTheme.bodySmall!.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
+        Text(value, style: context.textTheme.bodySmall),
+      ],
+    );
+  }
+
+  Widget _buildLabeledContent(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    required String content,
+  }) {
+    return Column(
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: context.textTheme.bodySmall),
+        Row(
+          spacing: 4,
+          children: [
+            Icon(icon, color: context.colors.onSurfaceVariant, size: 16),
+            Flexible(
+              child: Text(
+                content,
+                style: context.textTheme.bodySmall!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceHistoryCard extends StatelessWidget {
+  const EcommerceHistoryCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = isMobile ? 16.0 : 20.0;
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: _cardDecoration(context),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('History', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          AppVerticalStepIndicator(
+            style: StepIndicatorItemStyle.circular,
+            items: [
+              StepIndicatorItem(
+                label: 'Order Placed',
+                description: '30 May, 2023',
+                value: 1,
+              ),
+              StepIndicatorItem(label: 'Order Submitted', value: 2),
+              StepIndicatorItem(
+                label: 'Order Packed',
+                value: 3,
+                icon: BetterIcons.packageFilled,
+              ),
+              StepIndicatorItem(
+                label: 'Order Shipped',
+                value: 4,
+                icon: BetterIcons.truckFilled,
+              ),
+              StepIndicatorItem(
+                label: 'Delivered',
+                value: 5,
+                icon: BetterIcons.packageDeliveredFilled,
+              ),
+            ],
+            selectedStep: 3,
+          ),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _cardDecoration(BuildContext context) => BoxDecoration(
+    color: context.colors.surface,
+    border: Border.all(color: context.colors.outline),
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+  );
+}

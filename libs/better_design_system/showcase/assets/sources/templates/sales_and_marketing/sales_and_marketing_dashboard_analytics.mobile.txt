@@ -1,0 +1,858 @@
+import 'package:better_design_showcase/core/components/page_indicator.dart';
+import 'package:better_design_system/atoms/avatar/avatar.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/atoms/navbar/navbar_icon.dart';
+import 'package:better_design_system/atoms/tag/tag.dart';
+import 'package:better_design_system/molecules/charts/linear_sparkline/linear_sparkline.dart';
+import 'package:better_design_system/organisms/profile_button/profile_button.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:image_faker/image_faker.dart';
+
+class SalesAndMarketingDashboardAnalyticsMobile extends StatefulWidget {
+  const SalesAndMarketingDashboardAnalyticsMobile({super.key});
+
+  @override
+  State<SalesAndMarketingDashboardAnalyticsMobile> createState() =>
+      _SalesAndMarketingDashboardAnalyticsMobileState();
+}
+
+class _SalesAndMarketingDashboardAnalyticsMobileState
+    extends State<SalesAndMarketingDashboardAnalyticsMobile> {
+  final _cards = _SalesAndMarketingDashboardKpiCard.kpiCards;
+  final PageController _pageController = PageController(viewportFraction: 1);
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      final page = _pageController.page?.round() ?? 0;
+      if (page != _currentPage) {
+        setState(() => _currentPage = page);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: SalesAndMarketingDashboardNavbarSecondary(
+                  title: Text(
+                    'Analytics',
+                    style: context.textTheme.titleMedium,
+                  ),
+                  isMobile: true,
+                ),
+              ),
+              SizedBox(height: 8),
+              Column(
+                spacing: 24,
+                children: [
+                  Column(
+                    spacing: 16,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 138,
+                        child: PageView.builder(
+                          padEnds: true,
+                          pageSnapping: true,
+                          controller: _pageController,
+                          itemCount: _cards.length,
+                          itemBuilder: (context, index) {
+                            return AnimatedPadding(
+                              duration: const Duration(milliseconds: 250),
+                              padding: EdgeInsets.zero,
+                              child: Row(
+                                children: [Expanded(child: _cards[index])],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      AppPageIndicator(
+                        pageCount: _cards.length,
+                        currentPage: _currentPage,
+                      ),
+                    ],
+                  ),
+                  _SalesAndMarketingAnalyticsSalesOrderSummaryCard(
+                    isMobile: true,
+                  ),
+                  _SalesAndMarketingAnalyticsLastTransactionCard(
+                    isMobile: true,
+                  ),
+                  _SalesAndMarketingAnalyticsTopSpendingItemCard(
+                    isMobile: true,
+                  ),
+                  _SalesAndMarketingAnalyticsRecentSalesOrderCard(
+                    isMobile: true,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Common search field widget used in Sales & Marketing dashboards
+class SalesAndMarketingNavbarSearchField extends StatelessWidget {
+  const SalesAndMarketingNavbarSearchField({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 270,
+      child: AppTextField(
+        density: TextFieldDensity.noDense,
+        hint: 'Search',
+        prefixIcon: Icon(
+          BetterIcons.search01Filled,
+          color: context.colors.onSurfaceVariant,
+          size: 20,
+        ),
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingSearchButton extends StatelessWidget {
+  const SalesAndMarketingSearchButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppIconButton(
+      icon: BetterIcons.search01Filled,
+      size: ButtonSize.medium,
+    );
+  }
+}
+
+/// Common filter icon button used in navbars
+class SalesAndMarketingNavbarFilterButton extends StatelessWidget {
+  const SalesAndMarketingNavbarFilterButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbarIcon(icon: BetterIcons.filterHorizontalFilled);
+  }
+}
+
+/// Common notification icon button used in navbars
+class SalesAndMarketingNavbarNotificationButton extends StatelessWidget {
+  const SalesAndMarketingNavbarNotificationButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbarIcon(icon: BetterIcons.notification02Outline);
+  }
+}
+
+/// Common profile button used in navbars
+class SalesAndMarketingNavbarProfileButton extends StatelessWidget {
+  const SalesAndMarketingNavbarProfileButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppProfileButton(
+      avatarUrl: ImageFaker().person.one,
+      statusBadge: StatusBadgeType.online,
+    );
+  }
+}
+
+/// Common menu icon for mobile view
+class SalesAndMarketingNavbarMenuButton extends StatelessWidget {
+  const SalesAndMarketingNavbarMenuButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbarIcon(icon: BetterIcons.menu01Outline);
+  }
+}
+
+/// Calendar dropdown for selecting month in Sales & Marketing dashboards
+class SalesAndMarketingCalendarDropdown extends StatelessWidget {
+  const SalesAndMarketingCalendarDropdown({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      child: AppDropdownField.single(
+        items: [
+          AppDropdownItem(value: 'Sep', title: 'Sep'),
+          AppDropdownItem(value: 'Oct', title: 'Oct'),
+          AppDropdownItem(value: 'Nov', title: 'Nov'),
+        ],
+        isFilled: false,
+        initialValue: 'Sep',
+        type: DropdownFieldType.compact,
+        prefixIcon: BetterIcons.calendar03Outline,
+      ),
+    );
+  }
+}
+
+/// Sales category dropdown for filtering sales data in dashboards
+class SalesAndMarketingSalesDropdown extends StatelessWidget {
+  const SalesAndMarketingSalesDropdown({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      child: AppDropdownField.single(
+        items: [
+          AppDropdownItem(value: 'Sales', title: 'Sales'),
+          AppDropdownItem(value: 'Sales1', title: 'Sales1'),
+          AppDropdownItem(value: 'Sales2', title: 'Sales2'),
+        ],
+        isFilled: false,
+        initialValue: 'Sales',
+        type: DropdownFieldType.compact,
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingDashboardNavbarSecondary extends StatelessWidget {
+  /// The title widget displayed in the navbar.
+  final Widget title;
+
+  /// Whether the navbar is displayed in mobile mode.
+  /// In mobile mode, action buttons are displayed below the navbar.
+  final bool isMobile;
+
+  /// Creates a [SalesAndMarketingDashboardNavbarSecondary].
+  const SalesAndMarketingDashboardNavbarSecondary({
+    super.key,
+    required this.title,
+    this.isMobile = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: isMobile ? 16 : 0,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          spacing: !isMobile ? 12 : 8,
+          children: [
+            if (isMobile) const SalesAndMarketingNavbarMenuButton(),
+            title,
+            const Spacer(),
+            if (!isMobile) const SalesAndMarketingNavbarSearchField(),
+
+            if (!isMobile) ...[
+              SalesAndMarketingCalendarDropdown(),
+              SalesAndMarketingSalesDropdown(),
+            ],
+
+            if (isMobile) SalesAndMarketingSearchButton(),
+
+            const SalesAndMarketingNavbarNotificationButton(),
+            const SalesAndMarketingNavbarProfileButton(),
+          ],
+        ),
+
+        if (isMobile)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            spacing: 12,
+            children: [
+              SalesAndMarketingCalendarDropdown(),
+              SalesAndMarketingSalesDropdown(),
+            ],
+          ),
+      ],
+    );
+  }
+}
+
+class _SalesAndMarketingDashboardKpiCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final double percent;
+  final IconData icon;
+
+  const _SalesAndMarketingDashboardKpiCard({
+    required this.title,
+    required this.value,
+    required this.percent,
+    required this.icon,
+  });
+
+  static const kpiCards = [
+    _SalesAndMarketingDashboardKpiCard(
+      title: 'Total Revenue',
+      value: '\$124,500',
+      percent: 8.2,
+      icon: BetterIcons.dollarCircleFilled,
+    ),
+    _SalesAndMarketingDashboardKpiCard(
+      title: 'Total Orders',
+      value: '2,456',
+      percent: 5.4,
+      icon: BetterIcons.shoppingBag02Filled,
+    ),
+    _SalesAndMarketingDashboardKpiCard(
+      title: 'Avg Order Value',
+      value: '\$50.65',
+      percent: 2.1,
+      icon: BetterIcons.chartBarLineFilled,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: context.colors.outline),
+        color: context.colors.surface,
+      ),
+      child: Column(
+        spacing: 16,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(icon, size: 24, color: context.colors.primary),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Filled,
+                size: ButtonSize.medium,
+              ),
+            ],
+          ),
+          Column(
+            spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: context.textTheme.labelMedium?.variant(context),
+              ),
+              Text(value, style: context.textTheme.headlineSmall),
+              Row(
+                spacing: 4,
+                children: [
+                  AppBadge(
+                    prefixIcon: BetterIcons.arrowUpRight01Outline,
+                    text: percent > 0 ? '+$percent%' : '$percent%',
+                    size: BadgeSize.small,
+                    isRounded: true,
+                    color:
+                        percent > 0
+                            ? SemanticColor.success
+                            : SemanticColor.error,
+                  ),
+                  Text(
+                    'vs last month',
+                    style: context.textTheme.labelSmall?.variant(context),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SalesAndMarketingAnalyticsSalesOrderSummaryCard extends StatelessWidget {
+  final bool isMobile;
+  const _SalesAndMarketingAnalyticsSalesOrderSummaryCard({
+    this.isMobile = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final chartPoints = <ChartPoint>[
+      ChartPoint(name: 'Mon', value: 120),
+      ChartPoint(name: 'Tue', value: 135),
+      ChartPoint(name: 'Wed', value: 145),
+      ChartPoint(name: 'Thu', value: 150),
+      ChartPoint(name: 'Fri', value: 165),
+      ChartPoint(name: 'Sat', value: 160),
+      ChartPoint(name: 'Sun', value: 130),
+    ];
+
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Sales Order Summary', style: context.textTheme.titleSmall),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Filled,
+                size: ButtonSize.medium,
+                style: IconButtonStyle.outline,
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 240,
+            child: AppLinearSparkline(
+              data: [
+                ChartSeriesData(
+                  points: chartPoints,
+                  name: 'Orders',
+                  color: context.colors.primary,
+                  isCurved: true,
+                ),
+              ],
+              hasLine: true,
+              hasArea: true,
+              gridEnabled: true,
+              showTooltip: true,
+              bottomTitleBuilder: (label) => label,
+              leftTitleBuilder: (value) => '${value.toInt()}',
+              bottomTitleInterval: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SalesAndMarketingAnalyticsLastTransactionCard extends StatelessWidget {
+  final bool isMobile;
+  const _SalesAndMarketingAnalyticsLastTransactionCard({this.isMobile = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final transactions = [
+      _Transaction(
+        id: '#TXN001',
+        customer: 'Sarah Anderson',
+        amount: '\$1,250.00',
+        status: _TransactionStatus.completed,
+        avatar: ImageFaker().person.images[0],
+      ),
+      _Transaction(
+        id: '#TXN002',
+        customer: 'Michael Chen',
+        amount: '\$890.50',
+        status: _TransactionStatus.pending,
+        avatar: ImageFaker().person.images[1],
+      ),
+      _Transaction(
+        id: '#TXN003',
+        customer: 'Emily Watson',
+        amount: '\$2,100.00',
+        status: _TransactionStatus.completed,
+        avatar: ImageFaker().person.images[2],
+      ),
+    ];
+
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Last Transactions', style: context.textTheme.titleSmall),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Filled,
+                size: ButtonSize.medium,
+                style: IconButtonStyle.outline,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          AppDivider(),
+          const SizedBox(height: 12),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: transactions.length,
+            separatorBuilder: (context, index) => AppDivider(),
+            itemBuilder: (context, index) {
+              final txn = transactions[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  spacing: 12,
+                  children: [
+                    AppAvatar(imageUrl: txn.avatar, size: AvatarSize.size32px),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 4,
+                        children: [
+                          Text(
+                            txn.customer,
+                            style: context.textTheme.labelLarge,
+                          ),
+                          Text(
+                            txn.id,
+                            style: context.textTheme.labelSmall?.variant(
+                              context,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      spacing: 4,
+                      children: [
+                        Text(txn.amount, style: context.textTheme.labelLarge),
+                        AppTag(
+                          text: switch (txn.status) {
+                            _TransactionStatus.completed => 'Done',
+                            _TransactionStatus.pending => 'Pending',
+                            _TransactionStatus.failed => 'Failed',
+                          },
+                          size: TagSize.small,
+                          color: switch (txn.status) {
+                            _TransactionStatus.completed =>
+                              SemanticColor.success,
+                            _TransactionStatus.pending => SemanticColor.warning,
+                            _TransactionStatus.failed => SemanticColor.error,
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SalesAndMarketingAnalyticsRecentSalesOrderCard extends StatelessWidget {
+  final bool isMobile;
+  const _SalesAndMarketingAnalyticsRecentSalesOrderCard({
+    this.isMobile = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final orders = [
+      _Order(
+        id: '#ORD001',
+        customer: 'Olivia Thompson',
+        date: '18 Nov 2025',
+        amount: '\$3,450.00',
+        status: _OrderStatus.delivered,
+        avatar: ImageFaker().person.images[0],
+      ),
+      _Order(
+        id: '#ORD002',
+        customer: 'James Wilson',
+        date: '17 Nov 2025',
+        amount: '\$1,890.50',
+        status: _OrderStatus.shipped,
+        avatar: ImageFaker().person.images[1],
+      ),
+      _Order(
+        id: '#ORD003',
+        customer: 'Amanda Blake',
+        date: '16 Nov 2025',
+        amount: '\$2,750.25',
+        status: _OrderStatus.processing,
+        avatar: ImageFaker().person.images[2],
+      ),
+    ];
+
+    return Column(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Recent Sales Orders', style: context.textTheme.titleSmall),
+            AppTextButton(
+              size: ButtonSize.medium,
+              onPressed: () {},
+              text: 'See all',
+              suffixIcon: BetterIcons.arrowRight02Outline,
+              color: SemanticColor.primary,
+            ),
+          ],
+        ),
+        SizedBox(height: 16),
+        Column(
+          spacing: 8,
+          children: List.generate(orders.length, (index) {
+            final order = orders[index];
+            return Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: context.colors.surface,
+                border: Border.all(color: context.colors.outline),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                spacing: 12,
+                children: [
+                  Row(
+                    spacing: 8,
+                    children: <Widget>[
+                      Text(order.id, style: context.textTheme.labelMedium),
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(
+                          color: context.colors.outlineVariant,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      Text(order.date, style: context.textTheme.labelMedium),
+                      Spacer(),
+                      _buildStatus(order.status),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      _buildAvatar(
+                        context,
+                        avatarUrl: order.avatar,
+                        name: order.customer,
+                      ),
+                      Row(
+                        spacing: 4,
+                        children: <Widget>[
+                          Text(
+                            order.amount,
+                            style: context.textTheme.labelLarge,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAvatar(
+    BuildContext context, {
+    required String avatarUrl,
+    required String name,
+  }) {
+    return Row(
+      spacing: 8,
+      children: [
+        AppAvatar(imageUrl: avatarUrl, size: AvatarSize.size40px),
+        Text(name, style: context.textTheme.labelLarge),
+      ],
+    );
+  }
+
+  Widget _buildStatus(_OrderStatus status) {
+    return AppTag(
+      prefixIcon: switch (status) {
+        _OrderStatus.delivered => BetterIcons.checkmarkCircle02Filled,
+        _OrderStatus.shipped => BetterIcons.arrowRight01Filled,
+        _OrderStatus.processing => BetterIcons.clock01Filled,
+      },
+      text: switch (status) {
+        _OrderStatus.delivered => 'Delivered',
+        _OrderStatus.shipped => 'Shipped',
+        _OrderStatus.processing => 'Processing',
+      },
+      color: switch (status) {
+        _OrderStatus.delivered => SemanticColor.success,
+        _OrderStatus.shipped => SemanticColor.info,
+        _OrderStatus.processing => SemanticColor.warning,
+      },
+    );
+  }
+}
+
+class _SalesAndMarketingAnalyticsTopSpendingItemCard extends StatelessWidget {
+  final bool isMobile;
+  const _SalesAndMarketingAnalyticsTopSpendingItemCard({this.isMobile = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final items = [
+      _TopItem(name: 'Premium Package', sales: 542, percent: 28.5),
+      _TopItem(name: 'Standard Bundle', sales: 438, percent: 23.1),
+      _TopItem(name: 'Essential Plan', sales: 356, percent: 18.8),
+      _TopItem(name: 'Pro Edition', sales: 289, percent: 15.3),
+      _TopItem(name: 'Starter Kit', sales: 186, percent: 9.8),
+    ];
+
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        spacing: 16,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Top Spending Items', style: context.textTheme.titleSmall),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Filled,
+                size: ButtonSize.medium,
+                style: IconButtonStyle.outline,
+              ),
+            ],
+          ),
+          AppDivider(),
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: items.length,
+            separatorBuilder: (context, index) => SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return Column(
+                spacing: 8,
+                children: [
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.name,
+                          style: context.textTheme.labelLarge,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Text(
+                        '${item.percent}%',
+                        style: context.textTheme.labelMedium?.variant(context),
+                      ),
+                    ],
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: item.percent / 100,
+                      minHeight: 6,
+                      backgroundColor: context.colors.surfaceVariant,
+                      valueColor: AlwaysStoppedAnimation(
+                        context.colors.primary,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${item.sales} sales',
+                        style: context.textTheme.labelSmall?.variant(context),
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+enum _TransactionStatus { completed, pending, failed }
+
+class _Transaction {
+  final String id;
+  final String customer;
+  final String amount;
+  final _TransactionStatus status;
+  final String avatar;
+
+  _Transaction({
+    required this.id,
+    required this.customer,
+    required this.amount,
+    required this.status,
+    required this.avatar,
+  });
+}
+
+enum _OrderStatus { delivered, shipped, processing }
+
+class _Order {
+  final String id;
+  final String customer;
+  final String date;
+  final String amount;
+  final _OrderStatus status;
+  final String avatar;
+
+  _Order({
+    required this.id,
+    required this.customer,
+    required this.date,
+    required this.amount,
+    required this.status,
+    required this.avatar,
+  });
+}
+
+class _TopItem {
+  final String name;
+  final int sales;
+  final double percent;
+
+  _TopItem({required this.name, required this.sales, required this.percent});
+}

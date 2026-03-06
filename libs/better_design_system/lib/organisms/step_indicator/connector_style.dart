@@ -1,0 +1,1 @@
+enum ConnectorStyle { arrow, line }

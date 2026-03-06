@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp:*)",
+      "WebFetch(domain:www.figma.com)",
+      "mcp__figma-remote-mcp__get_screenshot",
+      "mcp__figma-remote-mcp__get_design_context",
+      "mcp__design_system_mcp__search_components",
+      "mcp__design_system_mcp__get_component",
+      "Bash(mkdir:*)",
+      "mcp__design_system_mcp__get_stats",
+      "Bash(chmod:*)",
+      "Bash(/tmp/replace_tr.sh)",
+      "Bash(flutter pub get:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(bash:*)",
+      "Bash(cat:*)",
+      "Bash(mv:*)",
+      "Bash(dart run build_runner:*)",
+      "Bash(rm:*)",
+      "WebSearch",
+      "WebFetch(domain:pub.dev)",
+      "Bash(grep:*)",
+      "Bash(xargs dirname:*)",
+      "Bash(find:*)",
+      "Bash(file:*)",
+      "WebFetch(domain:codecanyon.net)",
+      "WebFetch(domain:prokit.iqonic.design)",
+      "WebFetch(domain:github.com)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "figma"
+  ]
+}

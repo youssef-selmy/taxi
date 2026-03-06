@@ -1,0 +1,1060 @@
+import 'package:api_response/api_response.dart';
+import 'package:better_design_system/atoms/avatar/avatar.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/checkbox/checkbox.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/dot_badge/dot_badge.dart';
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/atoms/navbar/navbar_icon.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_logo.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_section.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_user_profile.dart';
+import 'package:better_design_system/atoms/tag/tag.dart';
+import 'package:better_design_system/atoms/toggle_switch_button_group/toggle_switch_button_group.dart';
+import 'package:better_design_system/molecules/charts/linear_sparkline/linear_sparkline.dart';
+import 'package:better_design_system/organisms/data_table/data_table.dart';
+import 'package:better_design_system/organisms/profile_button/profile_button.dart';
+import 'package:better_design_system/theme/shadows.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_design_showcase/core/blocs/settings.cubit.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:image_faker/image_faker.dart';
+
+class SalesAndMarketingDashboardSalesOverviewDesktop extends StatelessWidget {
+  final Widget? header;
+  const SalesAndMarketingDashboardSalesOverviewDesktop({
+    super.key,
+    this.header,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (header != null) header!,
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _SalesAndMarketingSidebar(
+                selectedPage: _SalesAndMarketingDashboardPage.salesOverview,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
+                        child: _SalesAndMarketingDashboardNavbarPrimary(
+                          title: Text(
+                            'Sales Overview',
+                            style: context.textTheme.headlineSmall,
+                          ),
+                        ),
+                      ),
+                      AppDivider(),
+                      Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          spacing: 24,
+                          children: [
+                            Row(
+                              spacing: 24,
+                              children: [
+                                ..._SalesAndMarketingDashboardSalesOverviewTinyStatCard
+                                    .tinyStatCards
+                                    .map((card) => Expanded(child: card)),
+                              ],
+                            ),
+                            _SalesAndMarketingSalesCard(),
+                            _SalesAndMarketingOrdersCard(),
+                            _SalesAndMarketingAverageOrderCard(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SalesAndMarketingNavbarSearchField extends StatelessWidget {
+  const _SalesAndMarketingNavbarSearchField();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 270,
+      child: AppTextField(
+        density: TextFieldDensity.noDense,
+        hint: 'Search',
+        prefixIcon: Icon(
+          BetterIcons.search01Filled,
+          color: context.colors.onSurfaceVariant,
+          size: 20,
+        ),
+      ),
+    );
+  }
+}
+
+class _SalesAndMarketingNavbarFilterButton extends StatelessWidget {
+  const _SalesAndMarketingNavbarFilterButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbarIcon(icon: BetterIcons.filterHorizontalFilled);
+  }
+}
+
+class _SalesAndMarketingNavbarNotificationButton extends StatelessWidget {
+  const _SalesAndMarketingNavbarNotificationButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbarIcon(icon: BetterIcons.notification02Outline);
+  }
+}
+
+class _SalesAndMarketingNavbarProfileButton extends StatelessWidget {
+  const _SalesAndMarketingNavbarProfileButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppProfileButton(
+      avatarUrl: ImageFaker().person.one,
+      statusBadge: StatusBadgeType.online,
+    );
+  }
+}
+
+class _SalesAndMarketingDashboardNavbarPrimary extends StatelessWidget {
+  final Widget title;
+  final bool isMobile;
+
+  const _SalesAndMarketingDashboardNavbarPrimary({
+    required this.title,
+    this.isMobile = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: !isMobile ? 12 : 8,
+      children: [
+        title,
+        const Spacer(),
+        if (!isMobile) const _SalesAndMarketingNavbarSearchField(),
+        const _SalesAndMarketingNavbarFilterButton(),
+        const _SalesAndMarketingNavbarNotificationButton(),
+        Row(
+          children: [
+            if (!isMobile) SizedBox(width: 4),
+            const _SalesAndMarketingNavbarProfileButton(),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+enum _SalesAndMarketingDashboardGroup { groupA, groupB }
+
+enum _SalesAndMarketingDashboardPage {
+  dashboard,
+  salesOverview,
+  crmOverview,
+  waitingList,
+  reports,
+  products,
+  calendar,
+  overview,
+  analytics,
+  product,
+  sales,
+  payment,
+  refunds,
+  invoices,
+  support,
+  setting,
+}
+
+class _SalesAndMarketingDashboardPageConfig {
+  final _SalesAndMarketingDashboardPage page;
+  final _SalesAndMarketingDashboardGroup group;
+  final String title;
+  final (IconData outline, IconData filled) icon;
+
+  const _SalesAndMarketingDashboardPageConfig({
+    required this.page,
+    required this.group,
+    required this.title,
+    required this.icon,
+  });
+}
+
+final _groupAPages = <_SalesAndMarketingDashboardPageConfig>[
+  _SalesAndMarketingDashboardPageConfig(
+    page: _SalesAndMarketingDashboardPage.dashboard,
+    group: _SalesAndMarketingDashboardGroup.groupA,
+    title: 'Dashboard',
+    icon: (
+      BetterIcons.dashboardSquare01Outline,
+      BetterIcons.dashboardSquare01Filled,
+    ),
+  ),
+  _SalesAndMarketingDashboardPageConfig(
+    page: _SalesAndMarketingDashboardPage.salesOverview,
+    group: _SalesAndMarketingDashboardGroup.groupA,
+    title: 'Sales Overview',
+    icon: (BetterIcons.arrowUpDownOutline, BetterIcons.arrowUpDownFilled),
+  ),
+  _SalesAndMarketingDashboardPageConfig(
+    page: _SalesAndMarketingDashboardPage.crmOverview,
+    group: _SalesAndMarketingDashboardGroup.groupA,
+    title: 'CRM Overview',
+    icon: (BetterIcons.userCircle02Outline, BetterIcons.userCircle02Filled),
+  ),
+  _SalesAndMarketingDashboardPageConfig(
+    page: _SalesAndMarketingDashboardPage.waitingList,
+    group: _SalesAndMarketingDashboardGroup.groupA,
+    title: 'Waiting List',
+    icon: (BetterIcons.userGroup02Outline, BetterIcons.userGroup03Filled),
+  ),
+  _SalesAndMarketingDashboardPageConfig(
+    page: _SalesAndMarketingDashboardPage.reports,
+    group: _SalesAndMarketingDashboardGroup.groupA,
+    title: 'Reports',
+    icon: (BetterIcons.noteOutline, BetterIcons.noteFilled),
+  ),
+  _SalesAndMarketingDashboardPageConfig(
+    page: _SalesAndMarketingDashboardPage.products,
+    group: _SalesAndMarketingDashboardGroup.groupA,
+    title: 'Products',
+    icon: (BetterIcons.packageOutline, BetterIcons.packageFilled),
+  ),
+  _SalesAndMarketingDashboardPageConfig(
+    page: _SalesAndMarketingDashboardPage.calendar,
+    group: _SalesAndMarketingDashboardGroup.groupA,
+    title: 'Calendar',
+    icon: (BetterIcons.calendar03Outline, BetterIcons.calendar03Filled),
+  ),
+];
+
+final _allDashboardPages = [..._groupAPages];
+
+List<_SalesAndMarketingDashboardPageConfig> _pagesByGroup(
+  _SalesAndMarketingDashboardGroup group,
+) => _allDashboardPages.where((p) => p.group == group).toList();
+
+class _SalesAndMarketingSidebar extends StatefulWidget {
+  final _SalesAndMarketingDashboardGroup dashboardGroup;
+  final _SalesAndMarketingDashboardPage selectedPage;
+  final ThemeMode? initialTheme;
+  const _SalesAndMarketingSidebar({
+    this.initialTheme,
+    this.dashboardGroup = _SalesAndMarketingDashboardGroup.groupA,
+    this.selectedPage = _SalesAndMarketingDashboardPage.dashboard,
+  });
+
+  @override
+  State<_SalesAndMarketingSidebar> createState() =>
+      _SalesAndMarketingSidebarState();
+}
+
+class _SalesAndMarketingSidebarState extends State<_SalesAndMarketingSidebar> {
+  late ThemeMode selectedThemeMode;
+
+  @override
+  void initState() {
+    selectedThemeMode =
+        widget.initialTheme ?? context.read<SettingsCubit>().state.themeMode;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: AppSidebarNavigation<_SalesAndMarketingDashboardPage>(
+        collapsable: false,
+        header: AppSidebarNavigationLogo(
+          logoUrl: ImageFaker().appLogo.taxi,
+          title: 'Sales & Marketing',
+        ),
+        showDivider: true,
+        style:
+            widget.dashboardGroup == _SalesAndMarketingDashboardGroup.groupA
+                ? SidebarNavigationItemStyle.fill
+                : SidebarNavigationItemStyle.primary,
+        data: [
+          ..._pagesByGroup(widget.dashboardGroup).map(
+            (config) => NavigationItem(
+              title: config.title,
+              value: config.page,
+              icon: config.icon,
+              section: SidebarNavigationSection(
+                title: 'Menu',
+                value: config.page,
+              ),
+            ),
+          ),
+          NavigationItem(
+            title: 'Support',
+            value: _SalesAndMarketingDashboardPage.support,
+            icon: (BetterIcons.headphonesOutline, BetterIcons.headphonesFilled),
+            section: SidebarNavigationSection(title: 'Help', value: 'Support'),
+          ),
+          NavigationItem(
+            title: 'Setting',
+            value: _SalesAndMarketingDashboardPage.setting,
+            icon: (BetterIcons.settings01Outline, BetterIcons.settings01Filled),
+            section: SidebarNavigationSection(title: 'Help', value: 'Setting'),
+          ),
+        ],
+        selectedItem: widget.selectedPage,
+        onItemSelected: (value) {},
+        footer: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: AppToggleSwitchButtonGroup(
+                isExpanded: true,
+                isRounded: true,
+                options: [
+                  ToggleSwitchButtonGroupOption(
+                    value: ThemeMode.light,
+                    label: 'Light',
+                    icon: BetterIcons.sun02Outline,
+                    selectedIcon: BetterIcons.sun01Filled,
+                  ),
+                  ToggleSwitchButtonGroupOption(
+                    value: ThemeMode.dark,
+                    label: 'Dark',
+                    icon: BetterIcons.moon02Outline,
+                    selectedIcon: BetterIcons.moon02Filled,
+                  ),
+                ],
+                selectedValue: selectedThemeMode,
+                onChanged: (value) {
+                  setState(() {
+                    selectedThemeMode = value;
+                  });
+                },
+              ),
+            ),
+            const AppDivider(),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                child: AppSidebarNavigationUserProfile(
+                  avatarUrl: ImageFaker().person.seven,
+                  style: SidebarNavigationUserProfileStyle.soft,
+                  title: 'Gustavo Kenter',
+                  subtitle: 'Gustavo@better.com',
+                  onPressed: () {},
+                  icon: BetterIcons.moreVerticalCircle01Outline,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SalesAndMarketingDashboardSalesOverviewTinyStatCard
+    extends StatelessWidget {
+  final String title;
+  final String value;
+  final double percent;
+  const _SalesAndMarketingDashboardSalesOverviewTinyStatCard({
+    required this.title,
+    required this.value,
+    required this.percent,
+  });
+
+  static const tinyStatCards = [
+    _SalesAndMarketingDashboardSalesOverviewTinyStatCard(
+      title: 'Sales',
+      value: '\$56,000,000',
+      percent: 3.1,
+    ),
+    _SalesAndMarketingDashboardSalesOverviewTinyStatCard(
+      title: 'Orders',
+      value: '581',
+      percent: 2,
+    ),
+    _SalesAndMarketingDashboardSalesOverviewTinyStatCard(
+      title: 'Average Order Value (AOV)',
+      value: '\$89.3',
+      percent: 2.2,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final List<ChartSeriesData> data = [
+      ChartSeriesData(
+        name: 'statistics',
+        points: [
+          ChartPoint(name: 'Jan', value: 3000),
+          ChartPoint(name: 'Feb', value: 3100),
+          ChartPoint(name: 'Mar', value: 3050),
+          ChartPoint(name: 'Apr', value: 3150),
+          ChartPoint(name: 'May', value: 3100),
+          ChartPoint(name: 'Jun', value: 3200),
+        ],
+        color: context.colors.success,
+        isCurved: true,
+      ),
+    ];
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: context.colors.outline),
+        color: context.colors.surface,
+      ),
+      child: Column(
+        spacing: 20,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: context.textTheme.labelLarge?.variant(context),
+              ),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Filled,
+                size: ButtonSize.medium,
+              ),
+            ],
+          ),
+          Row(
+            spacing: 12,
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(value, style: context.textTheme.headlineSmall),
+                    Row(
+                      spacing: 4,
+                      children: [
+                        Text(
+                          'From last month',
+                          style: context.textTheme.labelSmall?.variant(context),
+                        ),
+                        AppBadge(
+                          prefixIcon: BetterIcons.arrowUpRight01Outline,
+                          text: percent > 0 ? '+$percent%' : '$percent%',
+                          size: BadgeSize.small,
+                          isRounded: true,
+                          color:
+                              percent > 0
+                                  ? SemanticColor.success
+                                  : SemanticColor.error,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 110,
+                height: 56,
+                child: AppLinearSparkline(
+                  data: data,
+                  hasLine: true,
+                  hasArea: true,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SalesAndMarketingSalesCard extends StatelessWidget {
+  final bool isMobile;
+  const _SalesAndMarketingSalesCard({this.isMobile = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final chartPoints =
+        isMobile
+            ? <ChartPoint>[
+              ChartPoint(name: 'Mon', value: 45),
+              ChartPoint(name: 'Tue', value: 48),
+              ChartPoint(name: 'Wed', value: 52),
+              ChartPoint(name: 'Thu', value: 60),
+              ChartPoint(name: 'Fri', value: 68),
+              ChartPoint(name: 'Sat', value: 60),
+              ChartPoint(name: 'Sun', value: 37),
+            ]
+            : List.generate(31, (i) {
+              final base = 40;
+              final trend = i * 1.5;
+              final noise = (i % 6 == 0 ? -5 : (i % 3 == 0 ? 3 : 0));
+              final value = base + trend + noise;
+              return ChartPoint(
+                name: '${i + 1}'.padLeft(2, '0'),
+                value: value.toDouble(),
+              );
+            });
+
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Sales', style: context.textTheme.titleSmall),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Filled,
+                size: ButtonSize.medium,
+                style: IconButtonStyle.outline,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            spacing: 4,
+            children: [
+              Text('\$56,000,000', style: context.textTheme.headlineSmall),
+              AppBadge(
+                prefixIcon: BetterIcons.arrowUpRight01Outline,
+                text: '+4%',
+                size: BadgeSize.small,
+                isRounded: true,
+                color: SemanticColor.success,
+              ),
+              Text(
+                'From last month',
+                style: context.textTheme.labelSmall?.variant(context),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 240,
+            child: AppLinearSparkline(
+              data: [
+                ChartSeriesData(
+                  points: chartPoints,
+                  name: 'Sales',
+                  color: context.colors.primary,
+                  isCurved: true,
+                ),
+              ],
+              hasLine: true,
+              hasArea: true,
+              gridEnabled: true,
+              showTooltip: true,
+              bottomTitleBuilder: (label) => label,
+              leftTitleBuilder: (value) => '\$${value.toInt()}',
+              bottomTitleInterval: 1,
+              maxY: 100,
+              minY: 0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SalesAndMarketingAverageOrderCard extends StatelessWidget {
+  final bool isMobile;
+  const _SalesAndMarketingAverageOrderCard({this.isMobile = false});
+
+  List<ChartPoint> _getChartPoints(
+    BuildContext context,
+    bool isMobile,
+    bool isCurrentMonth,
+  ) {
+    final values =
+        isCurrentMonth
+            ? [110, 140, 165, 150, 115, 110, 110, 110, 150, 160, 100, 60]
+            : [60, 65, 75, 85, 90, 90, 90, 90, 85, 75, 60, 40];
+
+    if (isMobile) {
+      const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      return List.generate(
+        weekDays.length,
+        (i) => ChartPoint(
+          name: weekDays[i],
+          value: values[i % values.length].toDouble(),
+        ),
+      );
+    }
+
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+
+    return List.generate(
+      months.length,
+      (i) => ChartPoint(name: months[i], value: values[i].toDouble()),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+        boxShadow: [BetterShadow.shadow16.toBoxShadow(context)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Average Order Value (AOV)',
+                style: context.textTheme.labelLarge,
+              ),
+              Row(
+                spacing: 8,
+                children: [
+                  isMobile
+                      ? AppIconButton(
+                        icon: BetterIcons.calendar03Outline,
+                        size: ButtonSize.medium,
+                        style: IconButtonStyle.outline,
+                      )
+                      : SizedBox(
+                        width: 165,
+                        child: AppDropdownField.single(
+                          items: [
+                            AppDropdownItem(
+                              value: 'September 2025',
+                              title: 'September 2025',
+                            ),
+                            AppDropdownItem(
+                              value: 'October 2025',
+                              title: 'October 2025',
+                            ),
+                            AppDropdownItem(
+                              value: 'November 2025',
+                              title: 'November 2025',
+                            ),
+                          ],
+                          isFilled: false,
+                          initialValue: 'September 2025',
+                          type: DropdownFieldType.compact,
+                          prefixIcon: BetterIcons.calendar03Outline,
+                        ),
+                      ),
+                  AppIconButton(
+                    icon: BetterIcons.moreVerticalCircle01Outline,
+                    size: ButtonSize.medium,
+                    style: IconButtonStyle.outline,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                spacing: 4,
+                children: [
+                  Text('\$89.3', style: context.textTheme.headlineSmall),
+                  AppBadge(
+                    prefixIcon: BetterIcons.arrowUpRight01Outline,
+                    text: '+2.2%',
+                    size: BadgeSize.small,
+                    isRounded: true,
+                    color: SemanticColor.success,
+                  ),
+                  Text(
+                    'From last month',
+                    style: context.textTheme.labelSmall?.variant(context),
+                  ),
+                ],
+              ),
+              if (!isMobile) _buildChartLegend(context),
+            ],
+          ),
+          if (isMobile) ...[SizedBox(height: 8), _buildChartLegend(context)],
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 240,
+            child: AppLinearSparkline(
+              minY: 0,
+              maxY: 250,
+              data: [
+                ChartSeriesData(
+                  points: _getChartPoints(context, isMobile, true),
+                  name: 'This month',
+                  color: context.colors.primary,
+                  isCurved: true,
+                ),
+                ChartSeriesData(
+                  points: _getChartPoints(context, isMobile, false),
+                  name: 'Last month',
+                  color: context.colors.error,
+                  isCurved: true,
+                ),
+              ],
+              hasLine: true,
+              hasArea: true,
+              gridEnabled: true,
+              showTooltip: true,
+              bottomTitleBuilder: (label) => label,
+              leftTitleBuilder: (value) => '\$${value.toInt()}',
+              bottomTitleInterval: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChartLegend(BuildContext context) {
+    return Row(
+      spacing: 16,
+      children: <Widget>[
+        Row(
+          children: [
+            BetterDotBadge(
+              dotBadgeSize: DotBadgeSize.large,
+              color: SemanticColor.primary,
+            ),
+            SizedBox(width: 6),
+            Text(
+              'This month',
+              style: context.textTheme.labelMedium?.variant(context),
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            BetterDotBadge(
+              dotBadgeSize: DotBadgeSize.large,
+              color: SemanticColor.error,
+            ),
+            SizedBox(width: 6),
+            Text(
+              'Last month',
+              style: context.textTheme.labelMedium?.variant(context),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+enum _OrderStatus { complete, reject }
+
+class _Order {
+  final String orderId;
+  final String customerName;
+  final String date;
+  final String orderamount;
+  final String currency;
+  final _OrderStatus status;
+
+  _Order({
+    required this.orderId,
+    required this.customerName,
+    required this.date,
+    required this.orderamount,
+    required this.currency,
+    required this.status,
+  });
+}
+
+class _SalesAndMarketingOrdersCard extends StatelessWidget {
+  final bool isMobile;
+  const _SalesAndMarketingOrdersCard({this.isMobile = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final orders = [
+      _Order(
+        orderId: '#123456',
+        customerName: 'Angel Gouse',
+        date: '21 Oct 2025',
+        orderamount: '\$100.01',
+        currency: 'USD',
+        status: _OrderStatus.complete,
+      ),
+      _Order(
+        orderId: '#123456',
+        customerName: 'Martin Calzoni',
+        date: '25 Jan 2025',
+        orderamount: '\$201.98',
+        currency: 'USD',
+        status: _OrderStatus.reject,
+      ),
+      _Order(
+        orderId: '#123456',
+        customerName: 'Marcus Bergson',
+        date: '05 Oct 2025',
+        orderamount: '\$98.65',
+        currency: 'USD',
+        status: _OrderStatus.complete,
+      ),
+      _Order(
+        orderId: '#123456',
+        customerName: 'Abram Bator',
+        date: '08 Oct 2025',
+        orderamount: '\$59.51',
+        currency: 'USD',
+        status: _OrderStatus.reject,
+      ),
+      _Order(
+        orderId: '#123456',
+        customerName: 'Alfonso Lipshutz',
+        date: '11 Sep 2025',
+        orderamount: '\$78.41',
+        currency: 'USD',
+        status: _OrderStatus.complete,
+      ),
+    ];
+
+    final data = ApiResponse<List<_Order>>.loaded(orders);
+
+    return _buildTable(context, data);
+  }
+
+  Widget _buildTable(BuildContext context, ApiResponse<List<_Order>> data) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border.all(color: context.colors.outline),
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('Orders', style: context.textTheme.titleSmall),
+                AppIconButton(
+                  onPressed: () {},
+                  style: IconButtonStyle.outline,
+                  size: ButtonSize.medium,
+                  icon: BetterIcons.moreVerticalCircle01Filled,
+                ),
+              ],
+            ),
+          ),
+          AppDivider(height: 20),
+          SizedBox(height: 16),
+          SizedBox(
+            height: 400,
+            child: AppDataTable<List<_Order>, dynamic>(
+              data: data,
+              getPageInfo:
+                  (_) => OffsetPageInfo(
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                  ),
+              getRowCount: (list) => list.length,
+              onPageChanged: (_) {},
+              paging: OffsetPaging(limit: 10, offset: 0),
+              columns: [
+                DataColumn2(fixedWidth: 60, label: AppCheckbox(value: false)),
+                DataColumn2(
+                  fixedWidth: 140,
+                  label: Row(
+                    children: [
+                      Text('Order ID', style: context.textTheme.bodyMedium),
+                      SizedBox(width: 4),
+                      _buildSortIcon(context),
+                    ],
+                  ),
+                ),
+                DataColumn2(
+                  fixedWidth: 215,
+                  label: Row(
+                    children: [
+                      Text('Customer', style: context.textTheme.bodyMedium),
+                      SizedBox(width: 4),
+                      _buildSortIcon(context),
+                    ],
+                  ),
+                ),
+                DataColumn2(
+                  fixedWidth: 140,
+                  label: Row(
+                    children: [
+                      Text('Date', style: context.textTheme.bodyMedium),
+                      SizedBox(width: 4),
+                      _buildSortIcon(context),
+                    ],
+                  ),
+                ),
+                DataColumn2(
+                  fixedWidth: 180,
+                  label: Row(
+                    children: [
+                      Text('Order amount', style: context.textTheme.bodyMedium),
+                      SizedBox(width: 4),
+                      _buildSortIcon(context),
+                    ],
+                  ),
+                ),
+                DataColumn2(
+                  fixedWidth: 150,
+                  label: Row(
+                    children: [
+                      Text('Status', style: context.textTheme.bodyMedium),
+                      SizedBox(width: 4),
+                      _buildSortIcon(context),
+                    ],
+                  ),
+                ),
+                DataColumn2(fixedWidth: 90, label: Text('')),
+              ],
+              rowBuilder: (list, index) {
+                final order = list[index];
+                return DataRow(
+                  onSelectChanged: (_) {},
+                  cells: [
+                    DataCell(AppCheckbox(value: false)),
+                    DataCell(
+                      Text(
+                        order.orderId,
+                        style: context.textTheme.labelLarge?.variant(context),
+                      ),
+                    ),
+                    DataCell(
+                      _buildAvatar(
+                        context,
+                        avatarUrl: ImageFaker().person.images[index],
+                        name: order.customerName,
+                      ),
+                    ),
+                    DataCell(
+                      Text(order.date, style: context.textTheme.labelLarge),
+                    ),
+                    DataCell(
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 4,
+                        children: [
+                          Text(
+                            order.orderamount,
+                            style: context.textTheme.labelLarge,
+                          ),
+                          Text(
+                            order.currency,
+                            style: context.textTheme.bodySmall?.variant(
+                              context,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    DataCell(_buildStatus(order.status)),
+                    DataCell(
+                      AppIconButton(
+                        icon: BetterIcons.moreVerticalCircle01Outline,
+                        isCircular: true,
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSortIcon(BuildContext context) {
+    return Icon(
+      BetterIcons.unfoldMoreFilled,
+      color: context.colors.onSurfaceVariantLow,
+      size: 20,
+    );
+  }
+
+  Widget _buildAvatar(
+    BuildContext context, {
+    required String avatarUrl,
+    required String name,
+  }) {
+    return Row(
+      spacing: 8,
+      children: [
+        AppAvatar(imageUrl: avatarUrl, size: AvatarSize.size40px),
+        Text(name, style: context.textTheme.labelLarge),
+      ],
+    );
+  }
+
+  Widget _buildStatus(_OrderStatus status) {
+    return AppTag(
+      prefixIcon: switch (status) {
+        _OrderStatus.complete => BetterIcons.checkmarkCircle02Filled,
+        _OrderStatus.reject => BetterIcons.cancelCircleFilled,
+      },
+      text: switch (status) {
+        _OrderStatus.complete => 'Complete',
+        _OrderStatus.reject => 'Reject',
+      },
+      color: switch (status) {
+        _OrderStatus.complete => SemanticColor.success,
+        _OrderStatus.reject => SemanticColor.error,
+      },
+    );
+  }
+}

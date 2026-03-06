@@ -1,0 +1,360 @@
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/tag/tag.dart';
+import 'package:better_design_system/better_design_system.dart';
+import 'package:better_design_system/better_icons.dart';
+import 'package:flutter/material.dart';
+import 'package:image_faker/image_faker.dart';
+
+/// Displays an activity log timeline with various event types.
+///
+/// Shows a vertical timeline of user activities including date markers,
+/// mentions, file uploads, and user registrations.
+class ActivityLogCard extends StatelessWidget {
+  const ActivityLogCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 500,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context),
+            const AppDivider(height: 20),
+            const SizedBox(height: 16),
+            _buildDateMarker(context),
+            _buildMentionActivity(context),
+            _buildFileUploadActivity(context),
+            _buildRegistrationActivity(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Header Section
+
+  Widget _buildHeader(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        child: Text('Activity Log', style: context.textTheme.titleSmall),
+      );
+
+  // Date Marker Activity
+
+  Widget _buildDateMarker(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 12,
+          children: [
+            _buildTimelineIcon(
+              context,
+              iconColor: context.colors.onSurfaceVariant,
+              iconBackgroundColor: context.colors.surfaceVariant,
+              icon: BetterIcons.calendar01Filled,
+              connectorHeight: 8,
+            ),
+            const Column(
+              children: [
+                SizedBox(height: 4),
+                AppTag(
+                  text: 'Today',
+                  isRounded: true,
+                  color: SemanticColor.neutral,
+                  style: TagStyle.outline,
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  // Mention Activity
+
+  Widget _buildMentionActivity(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTimelineIcon(
+              context,
+              iconColor: context.colors.insight,
+              iconBackgroundColor: context.colors.insightContainer,
+              icon: BetterIcons.message01Filled,
+              connectorHeight: 110,
+            ),
+            Column(
+              children: [
+                const SizedBox(height: 4),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    _buildMentionText(context),
+                    _buildActionRowWithTime(context, '03:55 PM'),
+                    const SizedBox(height: 4),
+                    _buildQuotedMessage(context),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildMentionText(BuildContext context) => Row(
+        spacing: 8,
+        children: [
+          AppTag(
+            text: 'Max Brown',
+            prefixImage: ImageFaker().person.five,
+            color: SemanticColor.neutral,
+            style: TagStyle.outline,
+          ),
+          Text(
+            'mentioned',
+            style: context.textTheme.bodySmall?.variant(context),
+          ),
+          AppTag(
+            text: 'Jason Carter',
+            prefixImage: ImageFaker().person.eight,
+            color: SemanticColor.neutral,
+            style: TagStyle.outline,
+          ),
+          Text(
+            'in support.',
+            style: context.textTheme.bodySmall?.variant(context),
+          ),
+        ],
+      );
+
+  Widget _buildQuotedMessage(BuildContext context) => Container(
+        padding: const EdgeInsets.all(8),
+        height: 53,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: context.colors.surfaceVariant,
+        ),
+        child: Row(
+          spacing: 6,
+          children: [
+            Container(
+              width: 2,
+              height: 37,
+              color: context.colors.primary,
+            ),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 384),
+              child: Text(
+                'Insert message here, this message could be two lines and it would be like this',
+                style: context.textTheme.bodySmall,
+                maxLines: 2,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  // File Upload Activity
+
+  Widget _buildFileUploadActivity(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildTimelineIcon(
+              context,
+              iconColor: context.colors.success,
+              iconBackgroundColor: context.colors.successContainer,
+              icon: BetterIcons.file02Filled,
+              connectorHeight: 60,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  const SizedBox(height: 4),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 8,
+                    children: [
+                      _buildFileUploadHeader(context),
+                      _buildFilePreview(context),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+
+  Widget _buildFileUploadHeader(BuildContext context) => Row(
+        spacing: 8,
+        children: [
+          Text(
+            'New file uploaded by:',
+            style: context.textTheme.bodySmall?.variant(context),
+          ),
+          AppTag(
+            text: 'Max Brown',
+            prefixImage: ImageFaker().person.five,
+            color: SemanticColor.neutral,
+            style: TagStyle.outline,
+          ),
+          _buildTimestamp(context, '03:55 PM'),
+        ],
+      );
+
+  Widget _buildFilePreview(BuildContext context) => Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: context.colors.surfaceVariant,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              spacing: 10,
+              children: [
+                Icon(
+                  BetterIcons.file02Filled,
+                  color: context.colors.onSurfaceVariant,
+                  size: 32,
+                ),
+                Column(
+                  spacing: 4,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Filename',
+                      style: context.textTheme.labelMedium,
+                    ),
+                    Text(
+                      '14MB',
+                      style: context.textTheme.labelSmall?.variant(context),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Icon(
+              BetterIcons.arrowDown03Outline,
+              color: context.colors.onSurfaceVariant,
+              size: 20,
+            ),
+          ],
+        ),
+      );
+
+  // Registration Activity
+
+  Widget _buildRegistrationActivity(BuildContext context) => Padding(
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          spacing: 12,
+          children: [
+            _buildTimelineIcon(
+              context,
+              iconColor: context.colors.primary,
+              iconBackgroundColor: context.colors.primaryContainer,
+              icon: BetterIcons.userCircle02Filled,
+              hasConnector: false,
+            ),
+            Row(
+              spacing: 8,
+              children: [
+                AppTag(
+                  text: 'Max Brown',
+                  prefixImage: ImageFaker().person.five,
+                  color: SemanticColor.neutral,
+                  style: TagStyle.outline,
+                ),
+                Text(
+                  'registered to the app',
+                  style: context.textTheme.bodySmall?.variant(context),
+                ),
+                AppOutlinedButton(
+                  onPressed: () {},
+                  size: ButtonSize.small,
+                  color: SemanticColor.neutral,
+                  text: 'View thread',
+                  suffixIcon: BetterIcons.arrowUpRight01Outline,
+                ),
+                _buildTimestamp(context, '04:55 PM'),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  // Reusable Components
+
+  Widget _buildActionRowWithTime(BuildContext context, String time) => Row(
+        spacing: 8,
+        children: <Widget>[
+          AppOutlinedButton(
+            onPressed: () {},
+            size: ButtonSize.small,
+            color: SemanticColor.neutral,
+            text: 'View thread',
+            suffixIcon: BetterIcons.arrowUpRight01Outline,
+          ),
+          _buildTimestamp(context, time),
+        ],
+      );
+
+  Widget _buildTimestamp(BuildContext context, String time) => Row(
+        spacing: 4,
+        children: [
+          Container(
+            width: 3,
+            height: 3,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: context.colors.onSurfaceVariantLow,
+            ),
+          ),
+          Text(
+            time,
+            style: context.textTheme.bodySmall?.variant(context),
+          ),
+        ],
+      );
+
+  Widget _buildTimelineIcon(
+    BuildContext context, {
+    required Color iconColor,
+    required Color iconBackgroundColor,
+    required IconData icon,
+    bool hasConnector = true,
+    double connectorHeight = 8,
+  }) =>
+      Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: iconBackgroundColor,
+            ),
+            child: Icon(icon, size: 20, color: iconColor),
+          ),
+          if (hasConnector)
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Container(
+                color: context.colors.outline,
+                width: 1,
+                height: connectorHeight,
+              ),
+            ),
+        ],
+      );
+}

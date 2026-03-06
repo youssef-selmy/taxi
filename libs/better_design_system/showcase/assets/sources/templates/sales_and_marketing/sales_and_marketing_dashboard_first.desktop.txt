@@ -1,0 +1,1192 @@
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_showcase/core/blocs/settings.cubit.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_logo.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_section.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_user_profile.dart';
+import 'package:better_design_system/atoms/toggle_switch_button_group/toggle_switch_button_group.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:image_faker/image_faker.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/atoms/navbar/navbar_icon.dart';
+import 'package:better_design_system/organisms/profile_button/profile_button.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/atoms/dot_badge/dot_badge.dart';
+import 'package:better_design_system/molecules/charts/linear_sparkline/linear_sparkline.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_system/atoms/linear_progress_bar/linear_progress_bar.dart';
+import 'package:better_design_system/better_icons.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:better_design_showcase/core/components/pie_chart.dart';
+import 'package:better_design_showcase/core/components/half_donut_chart.dart';
+
+class SalesAndMarketingDashboardFirstDesktop extends StatelessWidget {
+  final Widget? header;
+  const SalesAndMarketingDashboardFirstDesktop({super.key, this.header});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (header != null) header!,
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SalesAndMarketingSidebar(),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 16,
+                        ),
+                        child: SalesAndMarketingDashboardNavbarPrimary(
+                          title: Text(
+                            'Dashboard',
+                            style: context.textTheme.headlineSmall,
+                          ),
+                        ),
+                      ),
+                      AppDivider(),
+                      Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          spacing: 24,
+                          children: [
+                            Row(
+                              spacing: 24,
+                              children: [
+                                ...SalesAndMarketingDashboardFirstTinyStatCard
+                                    .tinyStatCards
+                                    .map((card) => Expanded(child: card)),
+                              ],
+                            ),
+                            Row(
+                              spacing: 24,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 73,
+                                  child: SizedBox(
+                                    height: 395,
+                                    child:
+                                        SalesAndMarketingRevenueOverTimeCard(),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 36,
+                                  child: SizedBox(
+                                    height: 395,
+                                    child:
+                                        SalesAndMarketingSessionsByCountryCard(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              spacing: 24,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 380,
+                                    child: SalesAndMarketingRegionCard(),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 380,
+                                    child: SalesAndMarketingPlatformCard(),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 380,
+                                    child:
+                                        SalesAndMarketingRegisteredUsersCard(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Common search field widget used in Sales & Marketing dashboards
+class SalesAndMarketingNavbarSearchField extends StatelessWidget {
+  const SalesAndMarketingNavbarSearchField({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 270,
+      child: AppTextField(
+        density: TextFieldDensity.noDense,
+        hint: 'Search',
+        prefixIcon: Icon(
+          BetterIcons.search01Filled,
+          color: context.colors.onSurfaceVariant,
+          size: 20,
+        ),
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingSearchButton extends StatelessWidget {
+  const SalesAndMarketingSearchButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppIconButton(
+      icon: BetterIcons.search01Filled,
+      size: ButtonSize.medium,
+    );
+  }
+}
+
+/// Common filter icon button used in navbars
+class SalesAndMarketingNavbarFilterButton extends StatelessWidget {
+  const SalesAndMarketingNavbarFilterButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbarIcon(icon: BetterIcons.filterHorizontalFilled);
+  }
+}
+
+/// Common notification icon button used in navbars
+class SalesAndMarketingNavbarNotificationButton extends StatelessWidget {
+  const SalesAndMarketingNavbarNotificationButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbarIcon(icon: BetterIcons.notification02Outline);
+  }
+}
+
+/// Common profile button used in navbars
+class SalesAndMarketingNavbarProfileButton extends StatelessWidget {
+  const SalesAndMarketingNavbarProfileButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppProfileButton(
+      avatarUrl: ImageFaker().person.one,
+      statusBadge: StatusBadgeType.online,
+    );
+  }
+}
+
+/// Common menu icon for mobile view
+class SalesAndMarketingNavbarMenuButton extends StatelessWidget {
+  const SalesAndMarketingNavbarMenuButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbarIcon(icon: BetterIcons.menu01Outline);
+  }
+}
+
+/// Calendar dropdown for selecting month in Sales & Marketing dashboards
+class SalesAndMarketingCalendarDropdown extends StatelessWidget {
+  const SalesAndMarketingCalendarDropdown({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      child: AppDropdownField.single(
+        items: [
+          AppDropdownItem(value: 'Sep', title: 'Sep'),
+          AppDropdownItem(value: 'Oct', title: 'Oct'),
+          AppDropdownItem(value: 'Nov', title: 'Nov'),
+        ],
+        isFilled: false,
+        initialValue: 'Sep',
+        type: DropdownFieldType.compact,
+        prefixIcon: BetterIcons.calendar03Outline,
+      ),
+    );
+  }
+}
+
+/// Sales category dropdown for filtering sales data in dashboards
+class SalesAndMarketingSalesDropdown extends StatelessWidget {
+  const SalesAndMarketingSalesDropdown({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      child: AppDropdownField.single(
+        items: [
+          AppDropdownItem(value: 'Sales', title: 'Sales'),
+          AppDropdownItem(value: 'Sales1', title: 'Sales1'),
+          AppDropdownItem(value: 'Sales2', title: 'Sales2'),
+        ],
+        isFilled: false,
+        initialValue: 'Sales',
+        type: DropdownFieldType.compact,
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingDashboardNavbarPrimary extends StatelessWidget {
+  /// The title widget displayed in the navbar.
+  final Widget title;
+
+  /// Whether the navbar is displayed in mobile mode.
+  /// In mobile mode, the menu icon is shown and search field is hidden.
+  final bool isMobile;
+
+  /// Creates a [SalesAndMarketingDashboardNavbarPrimary].
+  const SalesAndMarketingDashboardNavbarPrimary({
+    super.key,
+    required this.title,
+    this.isMobile = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: !isMobile ? 12 : 8,
+      children: [
+        if (isMobile) SalesAndMarketingNavbarMenuButton(),
+        title,
+        const Spacer(),
+        if (!isMobile) const SalesAndMarketingNavbarSearchField(),
+        const SalesAndMarketingNavbarFilterButton(),
+        const SalesAndMarketingNavbarNotificationButton(),
+
+        Row(
+          children: [
+            if (!isMobile) SizedBox(width: 4),
+            const SalesAndMarketingNavbarProfileButton(),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+enum SalesAndMarketingDashboardGroup { groupA, groupB }
+
+enum SalesAndMarketingDashboardPage {
+  dashboard,
+  salesOverview,
+  crmOverview,
+  waitingList,
+  reports,
+  products,
+  calendar,
+  overview,
+  analytics,
+  product,
+  sales,
+  payment,
+  refunds,
+  invoices,
+  support,
+  setting,
+}
+
+class SalesAndMarketingDashboardPageConfig {
+  final SalesAndMarketingDashboardPage page;
+  final SalesAndMarketingDashboardGroup group;
+  final String title;
+  final (IconData outline, IconData filled) icon;
+
+  const SalesAndMarketingDashboardPageConfig({
+    required this.page,
+    required this.group,
+    required this.title,
+    required this.icon,
+  });
+}
+
+final groupAPages = <SalesAndMarketingDashboardPageConfig>[
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.dashboard,
+    group: SalesAndMarketingDashboardGroup.groupA,
+    title: 'Dashboard',
+    icon: (
+      BetterIcons.dashboardSquare01Outline,
+      BetterIcons.dashboardSquare01Filled,
+    ),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.salesOverview,
+    group: SalesAndMarketingDashboardGroup.groupA,
+    title: 'Sales Overview',
+    icon: (BetterIcons.arrowUpDownOutline, BetterIcons.arrowUpDownFilled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.crmOverview,
+    group: SalesAndMarketingDashboardGroup.groupA,
+    title: 'CRM Overview',
+    icon: (BetterIcons.userCircle02Outline, BetterIcons.userCircle02Filled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.waitingList,
+    group: SalesAndMarketingDashboardGroup.groupA,
+    title: 'Waiting List',
+    icon: (BetterIcons.userGroup02Outline, BetterIcons.userGroup03Filled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.reports,
+    group: SalesAndMarketingDashboardGroup.groupA,
+    title: 'Reports',
+    icon: (BetterIcons.noteOutline, BetterIcons.noteFilled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.products,
+    group: SalesAndMarketingDashboardGroup.groupA,
+    title: 'Products',
+    icon: (BetterIcons.packageOutline, BetterIcons.packageFilled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.calendar,
+    group: SalesAndMarketingDashboardGroup.groupA,
+    title: 'Calendar',
+    icon: (BetterIcons.calendar03Outline, BetterIcons.calendar03Filled),
+  ),
+];
+
+final groupBPages = <SalesAndMarketingDashboardPageConfig>[
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.overview,
+    group: SalesAndMarketingDashboardGroup.groupB,
+    title: 'Overview',
+    icon: (
+      BetterIcons.dashboardSquare01Outline,
+      BetterIcons.dashboardSquare01Filled,
+    ),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.analytics,
+    group: SalesAndMarketingDashboardGroup.groupB,
+    title: 'Analytics',
+    icon: (BetterIcons.analytics01Outline, BetterIcons.analytics01Filled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.product,
+    group: SalesAndMarketingDashboardGroup.groupB,
+    title: 'Product',
+    icon: (BetterIcons.store01Outline, BetterIcons.store01Filled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.sales,
+    group: SalesAndMarketingDashboardGroup.groupB,
+    title: 'Sales',
+    icon: (
+      BetterIcons.shoppingBasket03Outline,
+      BetterIcons.shoppingBasket03Filled,
+    ),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.payment,
+    group: SalesAndMarketingDashboardGroup.groupB,
+    title: 'Payment',
+    icon: (BetterIcons.wallet01Outline, BetterIcons.wallet01Filled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.refunds,
+    group: SalesAndMarketingDashboardGroup.groupB,
+    title: 'Refunds',
+    icon: (BetterIcons.chart03Outline, BetterIcons.chart03Filled),
+  ),
+  SalesAndMarketingDashboardPageConfig(
+    page: SalesAndMarketingDashboardPage.invoices,
+    group: SalesAndMarketingDashboardGroup.groupB,
+    title: 'Invoices',
+
+    icon: (BetterIcons.file01Outline, BetterIcons.file01Filled),
+  ),
+];
+
+final allDashboardPages = [...groupAPages, ...groupBPages];
+
+List<SalesAndMarketingDashboardPageConfig> pagesByGroup(
+  SalesAndMarketingDashboardGroup group,
+) => allDashboardPages.where((p) => p.group == group).toList();
+
+class SalesAndMarketingSidebar extends StatefulWidget {
+  final SalesAndMarketingDashboardGroup dashboardGroup;
+  final SalesAndMarketingDashboardPage selectedPage;
+  final ThemeMode? initialTheme;
+  const SalesAndMarketingSidebar({
+    super.key,
+    this.initialTheme,
+    this.dashboardGroup = SalesAndMarketingDashboardGroup.groupA,
+    this.selectedPage = SalesAndMarketingDashboardPage.dashboard,
+  });
+
+  @override
+  State<SalesAndMarketingSidebar> createState() =>
+      _SalesAndMarketingSidebarState();
+}
+
+class _SalesAndMarketingSidebarState extends State<SalesAndMarketingSidebar> {
+  late ThemeMode selectedThemeMode;
+
+  @override
+  void initState() {
+    selectedThemeMode =
+        widget.initialTheme ?? context.read<SettingsCubit>().state.themeMode;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: AppSidebarNavigation<SalesAndMarketingDashboardPage>(
+        collapsable: false,
+        header: AppSidebarNavigationLogo(
+          logoUrl: ImageFaker().appLogo.taxi,
+          title: 'Sales & Marketing',
+        ),
+        showDivider: true,
+        style:
+            widget.dashboardGroup == SalesAndMarketingDashboardGroup.groupA
+                ? SidebarNavigationItemStyle.fill
+                : SidebarNavigationItemStyle.primary,
+        data: [
+          ...pagesByGroup(widget.dashboardGroup).map(
+            (config) => NavigationItem(
+              title: config.title,
+              value: config.page,
+              icon: config.icon,
+              section: SidebarNavigationSection(
+                title: 'Menu',
+                value: config.page,
+              ),
+            ),
+          ),
+
+          NavigationItem(
+            title: 'Support',
+            value: SalesAndMarketingDashboardPage.support,
+            icon: (BetterIcons.headphonesOutline, BetterIcons.headphonesFilled),
+            section: SidebarNavigationSection(title: 'Help', value: 'Support'),
+          ),
+          NavigationItem(
+            title: 'Setting',
+            value: SalesAndMarketingDashboardPage.setting,
+            icon: (BetterIcons.settings01Outline, BetterIcons.settings01Filled),
+            section: SidebarNavigationSection(title: 'Help', value: 'Setting'),
+          ),
+        ],
+        selectedItem: widget.selectedPage,
+        onItemSelected: (value) {},
+        footer: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: AppToggleSwitchButtonGroup(
+                isExpanded: true,
+                isRounded: true,
+                options: [
+                  ToggleSwitchButtonGroupOption(
+                    value: ThemeMode.light,
+                    label: 'Light',
+                    icon: BetterIcons.sun02Outline,
+                    selectedIcon: BetterIcons.sun01Filled,
+                  ),
+                  ToggleSwitchButtonGroupOption(
+                    value: ThemeMode.dark,
+                    label: 'Dark',
+                    icon: BetterIcons.moon02Outline,
+                    selectedIcon: BetterIcons.moon02Filled,
+                  ),
+                ],
+                selectedValue: selectedThemeMode,
+                onChanged: (value) {
+                  setState(() {
+                    selectedThemeMode = value;
+                  });
+                },
+              ),
+            ),
+            const AppDivider(),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                child: AppSidebarNavigationUserProfile(
+                  avatarUrl: ImageFaker().person.seven,
+                  style: SidebarNavigationUserProfileStyle.soft,
+                  title: 'Gustavo Kenter',
+                  subtitle: 'Gustavo@better.com',
+                  onPressed: () {},
+                  icon: BetterIcons.moreVerticalCircle01Outline,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingDashboardFirstTinyStatCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final double percent;
+  const SalesAndMarketingDashboardFirstTinyStatCard({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.percent,
+  });
+
+  static const tinyStatCards = [
+    SalesAndMarketingDashboardFirstTinyStatCard(
+      title: 'Total Income',
+      value: '\$40,000.21',
+      percent: 20,
+    ),
+    SalesAndMarketingDashboardFirstTinyStatCard(
+      title: 'Profit',
+      value: '\$13,000.29',
+      percent: 20,
+    ),
+    SalesAndMarketingDashboardFirstTinyStatCard(
+      title: 'Conversion Rate',
+      value: '6.98%',
+      percent: 20,
+    ),
+    SalesAndMarketingDashboardFirstTinyStatCard(
+      title: 'Total Views',
+      value: '4.225.357',
+      percent: 20,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: context.colors.outline),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(title, style: context.textTheme.labelLarge?.variant(context)),
+          SizedBox(height: 12),
+          Row(
+            spacing: 4,
+            children: <Widget>[
+              Text(value, style: context.textTheme.headlineSmall),
+              AppBadge(
+                prefixIcon:
+                    percent > 0
+                        ? BetterIcons.arrowUpRight01Outline
+                        : BetterIcons.arrowDownRight01Outline,
+                text: percent > 0 ? '+$percent%' : '$percent%',
+                size: BadgeSize.small,
+                isRounded: true,
+                color:
+                    percent > 0 ? SemanticColor.success : SemanticColor.error,
+              ),
+            ],
+          ),
+          SizedBox(height: 4),
+          Text(
+            'From last month',
+            style: context.textTheme.labelSmall?.variant(context),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingRevenueOverTimeCard extends StatelessWidget {
+  const SalesAndMarketingRevenueOverTimeCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Revenue Over Time', style: context.textTheme.labelLarge),
+
+              Row(
+                children: [
+                  AppIconButton(
+                    icon: BetterIcons.arrowDown03Outline,
+                    size: ButtonSize.medium,
+                  ),
+                  AppIconButton(
+                    icon: BetterIcons.moreVerticalCircle01Outline,
+                    size: ButtonSize.medium,
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          Row(
+            spacing: 16,
+            children: [
+              Column(
+                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      BetterDotBadge(
+                        dotBadgeSize: DotBadgeSize.large,
+                        color: SemanticColor.primary,
+                      ),
+                      SizedBox(width: 6),
+                      Text(
+                        'Total Revenue',
+                        style: context.textTheme.labelMedium?.variant(context),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('\$25,500', style: context.textTheme.labelMedium),
+                      SizedBox(width: 6),
+                      AppBadge(
+                        prefixIcon: BetterIcons.arrowUpRight01Outline,
+                        text: '+20%',
+                        size: BadgeSize.small,
+                        isRounded: true,
+                        color: SemanticColor.success,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      BetterDotBadge(
+                        dotBadgeSize: DotBadgeSize.large,
+                        color: SemanticColor.warning,
+                      ),
+                      SizedBox(width: 6),
+                      Text(
+                        'Total Target',
+                        style: context.textTheme.labelMedium?.variant(context),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('\$27,500', style: context.textTheme.labelMedium),
+                      SizedBox(width: 6),
+                      AppBadge(
+                        prefixIcon: BetterIcons.arrowUpRight01Outline,
+                        text: '+28%',
+                        size: BadgeSize.small,
+                        isRounded: true,
+                        color: SemanticColor.success,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 240,
+            child: AppLinearSparkline(
+              minY: 0,
+              maxY: 100,
+              data: [
+                ChartSeriesData(
+                  points: [
+                    ChartPoint(name: 'Mon', value: 40),
+                    ChartPoint(name: 'Tue', value: 70),
+                    ChartPoint(name: 'Wed', value: 45),
+                    ChartPoint(name: 'Thu', value: 45),
+                    ChartPoint(name: 'Fri', value: 55),
+                    ChartPoint(name: 'Sat', value: 70),
+                    ChartPoint(name: 'Sun', value: 45),
+                  ],
+                  name: 'Total Revenue',
+                  color: context.colors.primary,
+                ),
+                ChartSeriesData(
+                  points: [
+                    ChartPoint(name: 'Mon', value: 25),
+                    ChartPoint(name: 'Tue', value: 28),
+                    ChartPoint(name: 'Wed', value: 34),
+                    ChartPoint(name: 'Thu', value: 40),
+                    ChartPoint(name: 'Fri', value: 35),
+                    ChartPoint(name: 'Sat', value: 28),
+                    ChartPoint(name: 'Sun', value: 25),
+                  ],
+                  name: 'Total Target',
+                  color: context.colors.warning,
+                  isCurved: true,
+                ),
+              ],
+
+              hasLine: true,
+              hasArea: true,
+              gridEnabled: true,
+              showTooltip: true,
+              bottomTitleBuilder: (label) => label,
+              leftTitleBuilder: (value) => '\$${value.toInt()}',
+              bottomTitleInterval: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingSessionsByCountryCard extends StatelessWidget {
+  const SalesAndMarketingSessionsByCountryCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+        color: context.colors.surface,
+      ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                spacing: 8,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Sessions by Country',
+                    style: context.textTheme.labelLarge,
+                  ),
+                  Text(
+                    'Showing data for top sessions',
+                    style: context.textTheme.bodySmall?.variant(context),
+                  ),
+                ],
+              ),
+
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Outline,
+                size: ButtonSize.medium,
+              ),
+            ],
+          ),
+
+          SizedBox(height: 4),
+          AppDivider(height: 20),
+          SizedBox(height: 16),
+
+          Column(
+            spacing: 32,
+            children: [
+              _getSessionsItem(
+                context,
+                image: Assets.images.countries.germany.image(
+                  height: 32,
+                  width: 32,
+                ),
+                title: 'Germany',
+                count: 1157,
+                percent: 80,
+              ),
+              _getSessionsItem(
+                context,
+                image: Assets.images.countries.china.image(
+                  height: 32,
+                  width: 32,
+                ),
+                title: 'China',
+                count: 902,
+                percent: 60,
+              ),
+              _getSessionsItem(
+                context,
+                image: Assets.images.countries.unitedStates.image(
+                  height: 32,
+                  width: 32,
+                ),
+                title: 'United States',
+                count: 706,
+                percent: 40,
+              ),
+              _getSessionsItem(
+                context,
+                image: Assets.images.countries.netherlands.image(
+                  height: 32,
+                  width: 32,
+                ),
+                title: 'Netherlands',
+                count: 459,
+                percent: 20,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _getSessionsItem(
+    BuildContext context, {
+    required Widget image,
+    required String title,
+    required num count,
+    required double percent,
+  }) {
+    return Row(
+      children: <Widget>[
+        image,
+        SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            spacing: 8,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(title, style: context.textTheme.labelMedium),
+                  Row(
+                    spacing: 8,
+                    children: [
+                      Text(
+                        '$count',
+                        style: context.textTheme.labelMedium?.variant(context),
+                      ),
+                      Container(
+                        height: 12,
+                        width: 1,
+                        decoration: BoxDecoration(
+                          color: context.colors.outline,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      Text(
+                        '$percent%',
+                        style: context.textTheme.labelMedium?.variant(context),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              AppLinearProgressBar(
+                linearProgressBarStatus: LinearProgressBarStatus.uploading,
+                progress: percent / 100,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SalesAndMarketingRegionCard extends StatelessWidget {
+  const SalesAndMarketingRegionCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+        color: context.colors.surface,
+      ),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('Sales by Region', style: context.textTheme.labelLarge),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Outline,
+                size: ButtonSize.medium,
+              ),
+            ],
+          ),
+
+          SizedBox(height: 24),
+
+          SizedBox(
+            height: 275,
+            width: 272,
+            child: RadarChart(
+              RadarChartData(
+                dataSets: [
+                  RadarDataSet(
+                    dataEntries: [
+                      RadarEntry(value: 28.158),
+                      RadarEntry(value: 27.752),
+                      RadarEntry(value: 28.121),
+                      RadarEntry(value: 27.245),
+                      RadarEntry(value: 26.239),
+                      RadarEntry(value: 26.242),
+                    ],
+                    fillColor: context.colors.primary.withValues(alpha: 0.4),
+                    borderColor: Colors.transparent,
+                  ),
+                ],
+                radarBackgroundColor: Colors.transparent,
+                radarBorderData: BorderSide(color: context.colors.outline),
+                titlePositionPercentageOffset: 0.1,
+                getTitle: (index, angle) {
+                  final values = [
+                    29.158,
+                    28.752,
+                    28.121,
+                    28.245,
+                    28.239,
+                    29.239,
+                  ];
+
+                  const labels = [
+                    'Asia',
+                    'Americas',
+                    'Africa',
+                    'Middle East',
+                    'Pacific',
+                    'Europe',
+                  ];
+                  return RadarChartTitle(
+                    text: labels[index],
+                    children: <InlineSpan>[
+                      TextSpan(
+                        text: '\n${values[index]}',
+                        style: context.textTheme.labelMedium,
+                      ),
+                    ],
+                  );
+                },
+                ticksTextStyle: context.textTheme.labelSmall?.copyWith(
+                  color: Colors.transparent,
+                ),
+                titleTextStyle: context.textTheme.labelMedium?.variant(context),
+                tickCount: 3,
+                tickBorderData: BorderSide(color: context.colors.outline),
+                gridBorderData: BorderSide(color: context.colors.outline),
+                radarShape: RadarShape.polygon,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingPlatformCard extends StatelessWidget {
+  const SalesAndMarketingPlatformCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+        color: context.colors.surface,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Sales by E-commerce Platform',
+                style: context.textTheme.labelLarge,
+              ),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Outline,
+                size: ButtonSize.medium,
+              ),
+            ],
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 34),
+            child: AppPieChart(),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                spacing: 6,
+                children: [
+                  BetterDotBadge(
+                    color: SemanticColor.primary,
+                    dotBadgeSize: DotBadgeSize.large,
+                  ),
+                  Text(
+                    'Amazon',
+                    style: context.textTheme.labelMedium?.variant(context),
+                  ),
+                ],
+              ),
+              Text('50%', style: context.textTheme.labelMedium),
+            ],
+          ),
+          SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                spacing: 6,
+                children: [
+                  BetterDotBadge(
+                    color: SemanticColor.warning,
+                    dotBadgeSize: DotBadgeSize.large,
+                  ),
+                  Text(
+                    'Alibaba',
+                    style: context.textTheme.labelMedium?.variant(context),
+                  ),
+                ],
+              ),
+              Text('25%', style: context.textTheme.labelMedium),
+            ],
+          ),
+          SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                spacing: 6,
+                children: [
+                  BetterDotBadge(
+                    color: SemanticColor.tertiary,
+                    dotBadgeSize: DotBadgeSize.large,
+                  ),
+                  Text(
+                    'Tokopedia',
+                    style: context.textTheme.labelMedium?.variant(context),
+                  ),
+                ],
+              ),
+              Text('15%', style: context.textTheme.labelMedium),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SalesAndMarketingRegisteredUsersCard extends StatelessWidget {
+  const SalesAndMarketingRegisteredUsersCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colors.outline),
+        color: context.colors.surface,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('Registered Users', style: context.textTheme.labelLarge),
+              AppIconButton(
+                icon: BetterIcons.moreVerticalCircle01Outline,
+                size: ButtonSize.medium,
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 72),
+            child: AppHalfArcChart(mainText: '5.125', subText: 'Total Users'),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                spacing: 6,
+                children: [
+                  BetterDotBadge(
+                    color: SemanticColor.primary,
+                    dotBadgeSize: DotBadgeSize.large,
+                  ),
+                  Text('Premium Plan', style: context.textTheme.labelMedium),
+                ],
+              ),
+              Text('4.125', style: context.textTheme.labelMedium),
+            ],
+          ),
+          SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                spacing: 6,
+                children: [
+                  BetterDotBadge(
+                    color: SemanticColor.warning,
+                    dotBadgeSize: DotBadgeSize.large,
+                  ),
+                  Text('Basic Plan', style: context.textTheme.labelMedium),
+                ],
+              ),
+              Text('1000', style: context.textTheme.labelMedium),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,0 +1,677 @@
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_system/atoms/buttons/filled_button.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/organisms/step_indicator/vertical_step_indicator.dart';
+import 'package:better_design_system/theme/shadows.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_system/atoms/buttons/top_bar_icon_button.dart';
+import 'package:better_design_system/atoms/navbar/navbar.dart';
+
+class EcommerceOrderDetailsMobile extends StatelessWidget {
+  const EcommerceOrderDetailsMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            EcommerceMobileTopBar.dashboardPanel(
+              prefixIcon: BetterIcons.menu01Outline,
+              title: 'Orders',
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 12,
+                bottom: 20,
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: context.colors.surfaceVariantLow,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          spacing: 8,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Order #SD009',
+                              style: context.textTheme.titleSmall,
+                            ),
+                            Text(
+                              '30 May, 2025',
+                              style: context.textTheme.bodyMedium!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                        AppIconButton(
+                          icon: BetterIcons.pencilEdit02Outline,
+                          style: IconButtonStyle.outline,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Details', style: context.textTheme.titleSmall),
+                  const SizedBox(height: 16),
+                  const EcommerceDetailsCard(isMobile: true),
+                  const SizedBox(height: 20),
+                  Text('History', style: context.textTheme.titleSmall),
+                  const SizedBox(height: 16),
+                  const EcommerceHistoryCard(isMobile: true),
+                  const SizedBox(height: 20),
+                  Text('Customer Info', style: context.textTheme.titleSmall),
+                  const SizedBox(height: 16),
+                  const EcommerceCustomerInfoCard(isMobile: true),
+                ],
+              ),
+            ),
+            AppDivider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 32,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: context.colors.outlineVariant,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+              child: Column(
+                spacing: 12,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppFilledButton(
+                    onPressed: () {},
+                    text: 'Order Packed',
+                    size: ButtonSize.extraLarge,
+                  ),
+                  AppOutlinedButton(
+                    onPressed: () {},
+                    text: 'Print',
+                    color: SemanticColor.neutral,
+                    size: ButtonSize.extraLarge,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A mobile-optimized top bar for e-commerce applications.
+///
+/// The [EcommerceMobileTopBar] provides a consistent navigation bar for mobile
+/// e-commerce screens with a prefix icon, title, and customizable suffix icons.
+///
+/// Example:
+/// ```dart
+/// EcommerceMobileTopBar.dashboardPanel(
+///   title: 'Dashboard',
+///   prefixIcon: BetterIcons.menu01Outline,
+/// )
+/// ```
+class EcommerceMobileTopBar extends StatelessWidget {
+  final IconData prefixIcon;
+  final String title;
+  final List<IconData> suffixIcons;
+  final TextStyle? Function(BuildContext) titleStyle;
+
+  const EcommerceMobileTopBar._({
+    required this.prefixIcon,
+    required this.title,
+    required this.suffixIcons,
+    required this.titleStyle,
+  });
+
+  /// Dashboard panel top bar with search, notifications, and store icons.
+  factory EcommerceMobileTopBar.dashboardPanel({
+    required String title,
+    required IconData prefixIcon,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: const [
+        BetterIcons.search01Filled,
+        BetterIcons.notification02Outline,
+        BetterIcons.store01Outline,
+      ],
+      titleStyle: (context) => context.textTheme.titleSmall,
+    );
+  }
+
+  /// Client side top bar with custom suffix icons.
+  factory EcommerceMobileTopBar.clientSide({
+    required String title,
+    required IconData prefixIcon,
+    required List<IconData> suffixIcons,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: suffixIcons,
+      titleStyle: (context) => context.textTheme.labelLarge,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbar(
+      showDivider: false,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      prefix: Row(
+        spacing: 8,
+        children: [
+          AppTopBarIconButton(
+            icon: prefixIcon,
+            iconColor: context.colors.onSurfaceVariant,
+          ),
+          Text(title, style: titleStyle(context)),
+        ],
+      ),
+      suffix: Row(
+        spacing: 8,
+        children: [
+          const SizedBox(width: 8),
+          ...suffixIcons.map(
+            (icon) => AppTopBarIconButton(
+              icon: icon,
+              iconColor: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceDetailsCard extends StatelessWidget {
+  const EcommerceDetailsCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = isMobile ? 16.0 : 20.0;
+    final hasTitle = !isMobile;
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: _cardDecoration(context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (hasTitle) ...[
+            Text('Details', style: context.textTheme.titleSmall),
+            const SizedBox(height: 16),
+          ],
+          isMobile
+              ? _buildMobileProductRow(context)
+              : _buildDesktopProductRow(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 11.5),
+            child: AppDivider(),
+          ),
+          isMobile
+              ? _buildMobileProductRow(context)
+              : _buildDesktopProductRow(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 17.5),
+            child: AppDivider(),
+          ),
+          // Price rows
+          _buildPriceRow(context, label: 'Subtotal', value: '\$199.99'),
+          _buildPriceRow(context, label: 'Shipping', value: '\$10.00'),
+          _buildPriceRow(context, label: 'Discount', value: '\$0.00'),
+          _buildPriceRow(context, label: 'Taxes', value: '\$10.99'),
+          _buildPriceRow(
+            context,
+            label: 'Total',
+            value: '\$10.99',
+            isTotal: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _cardDecoration(BuildContext context) => BoxDecoration(
+    color: context.colors.surface,
+    border: Border.all(color: context.colors.outline),
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+  );
+
+  Widget _buildPriceRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+    bool isTotal = false,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              style:
+                  isTotal
+                      ? context.textTheme.titleSmall
+                      : context.textTheme.bodyMedium!.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
+            ),
+          ),
+          SizedBox(
+            width: 87,
+            child: Text(
+              value,
+              style:
+                  isTotal
+                      ? context.textTheme.titleSmall
+                      : context.textTheme.labelLarge,
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMobileProductRow(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: Assets.images.products.shoe01.image(
+            width: 40,
+            height: 40,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Nike Airforce 1', style: context.textTheme.bodyMedium),
+              const SizedBox(height: 2),
+              Text(
+                'SKU: AABBCCDD',
+                style: context.textTheme.bodySmall!.copyWith(
+                  color: context.colors.onSurfaceVariantLow,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Quantity
+        Text('x1', style: context.textTheme.labelLarge),
+        const SizedBox(width: 16),
+        // Price: fixed width so numbers align to the right
+        SizedBox(
+          width: 95,
+          child: Text(
+            '\$199.99',
+            style: context.textTheme.labelLarge,
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopProductRow(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Assets.images.products.shoe01.image(
+          width: 40,
+          height: 40,
+          fit: BoxFit.cover,
+        ),
+        const SizedBox(width: 8),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Nike Airforce 1', style: context.textTheme.bodyMedium),
+            const SizedBox(height: 2),
+            Text(
+              'SKU: AABBCCDD',
+              style: context.textTheme.bodySmall!.copyWith(
+                color: context.colors.onSurfaceVariantLow,
+              ),
+            ),
+          ],
+        ),
+        const Spacer(),
+        Text('x1', style: context.textTheme.labelLarge),
+        const SizedBox(width: 104),
+        SizedBox(
+          width: 95,
+          child: Text(
+            '\$199.99',
+            style: context.textTheme.labelLarge,
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceCustomerInfoCard extends StatelessWidget {
+  const EcommerceCustomerInfoCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = isMobile ? 16.0 : 20.0;
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: _cardDecoration(context),
+      child: Column(
+        spacing: 16,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCustomerHeader(context),
+          AppDivider(),
+          isMobile
+              ? _buildShippingSection(context)
+              : _buildDesktopShippingSection(context),
+          AppDivider(),
+          _buildPaymentSection(context),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _cardDecoration(BuildContext context) => BoxDecoration(
+    color: context.colors.surface,
+    border: Border.all(color: context.colors.outline),
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+  );
+
+  Widget _buildCustomerHeader(BuildContext context) {
+    return Column(
+      spacing: 16,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          spacing: 8,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Assets.images.avatars.illustration01.image(
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Expanded(
+              child: Column(
+                spacing: 2,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Corey George', style: context.textTheme.bodyMedium),
+                  Text(
+                    'corey@better.com',
+                    style: context.textTheme.bodySmall!.copyWith(
+                      color: context.colors.onSurfaceVariantLow,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        _buildInfoRow(context, label: 'IP Address:', value: '192.168.1.1'),
+      ],
+    );
+  }
+
+  Widget _buildShippingSection(BuildContext context) {
+    return Column(
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Shipping', style: context.textTheme.labelLarge),
+        Column(
+          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildLabeledContent(
+              context,
+              label: 'Address',
+              icon: BetterIcons.location01Outline,
+              content: 'Cordova, 3785 Blackwell Street',
+            ),
+            _buildLabeledContent(
+              context,
+              label: 'Phone number',
+              icon: BetterIcons.call02Outline,
+              content: '+1 (888)888-888',
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopShippingSection(BuildContext context) {
+    return Column(
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Shipping', style: context.textTheme.labelLarge),
+        Row(
+          spacing: 16,
+          children: [
+            Expanded(
+              child: _buildLabeledContent(
+                context,
+                label: 'Address',
+                icon: BetterIcons.location01Outline,
+                content: 'Cordova, 3785 Blackwell Street',
+              ),
+            ),
+            Expanded(
+              child: _buildLabeledContent(
+                context,
+                label: 'Phone number',
+                icon: BetterIcons.call02Outline,
+                content: '+1 (888)888-888',
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPaymentSection(BuildContext context) {
+    return Column(
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Payment Method', style: context.textTheme.labelLarge),
+        Row(
+          spacing: 8,
+          children: [
+            ClipRRect(
+              child: Assets.images.paymentMethods.mastercardPng.image(
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Column(
+              spacing: 4,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('MasterCard', style: context.textTheme.labelLarge),
+                Text(
+                  '**** **** **** 7238',
+                  style: context.textTheme.bodySmall!.copyWith(
+                    color: context.colors.onSurfaceVariantLow,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+  }) {
+    return Row(
+      spacing: 4,
+      children: [
+        Text(
+          label,
+          style: context.textTheme.bodySmall!.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
+        Text(value, style: context.textTheme.bodySmall),
+      ],
+    );
+  }
+
+  Widget _buildLabeledContent(
+    BuildContext context, {
+    required String label,
+    required IconData icon,
+    required String content,
+  }) {
+    return Column(
+      spacing: 8,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: context.textTheme.bodySmall),
+        Row(
+          spacing: 4,
+          children: [
+            Icon(icon, color: context.colors.onSurfaceVariant, size: 16),
+            Flexible(
+              child: Text(
+                content,
+                style: context.textTheme.bodySmall!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceHistoryCard extends StatelessWidget {
+  const EcommerceHistoryCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = isMobile ? 16.0 : 20.0;
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: _cardDecoration(context),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('History', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          AppVerticalStepIndicator(
+            style: StepIndicatorItemStyle.circular,
+            items: [
+              StepIndicatorItem(
+                label: 'Order Placed',
+                description: '30 May, 2023',
+                value: 1,
+              ),
+              StepIndicatorItem(label: 'Order Submitted', value: 2),
+              StepIndicatorItem(
+                label: 'Order Packed',
+                value: 3,
+                icon: BetterIcons.packageFilled,
+              ),
+              StepIndicatorItem(
+                label: 'Order Shipped',
+                value: 4,
+                icon: BetterIcons.truckFilled,
+              ),
+              StepIndicatorItem(
+                label: 'Delivered',
+                value: 5,
+                icon: BetterIcons.packageDeliveredFilled,
+              ),
+            ],
+            selectedStep: 3,
+          ),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _cardDecoration(BuildContext context) => BoxDecoration(
+    color: context.colors.surface,
+    border: Border.all(color: context.colors.outline),
+    borderRadius: BorderRadius.circular(16),
+    boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+  );
+}

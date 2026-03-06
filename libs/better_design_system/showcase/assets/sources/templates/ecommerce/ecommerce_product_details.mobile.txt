@@ -1,0 +1,904 @@
+import 'package:better_design_system/atoms/buttons/filled_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_system/atoms/buttons/top_bar_icon_button.dart';
+import 'package:better_design_system/atoms/navbar/navbar.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/theme/shadows.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_system/molecules/file_upload/file_upload_card.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:better_design_system/atoms/input_fields/number_field/number_field.dart';
+import 'package:better_design_system/atoms/checkbox/checkbox.dart';
+
+class EcommerceProductsDetailsMobile extends StatelessWidget {
+  const EcommerceProductsDetailsMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            EcommerceMobileTopBar.dashboardPanel(
+              prefixIcon: BetterIcons.arrowLeft01Outline,
+              title: 'List',
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 16,
+                bottom: 76,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 20,
+                children: [
+                  const EcommerceDescriptionCard(isMobile: true),
+                  const EcommerceProductImagesCard(isMobile: true),
+                  const EcommerceCategoryCard(isMobile: true),
+                  const EcommercePricingCard(isMobile: true),
+                ],
+              ),
+            ),
+            AppDivider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 32,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: context.colors.outlineVariant,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+              child: Column(
+                spacing: 12,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppFilledButton(
+                    onPressed: () {},
+                    text: 'Publish',
+                    size: ButtonSize.extraLarge,
+                  ),
+                  AppOutlinedButton(
+                    onPressed: () {},
+                    text: 'Schedule',
+                    color: SemanticColor.neutral,
+                    size: ButtonSize.extraLarge,
+                  ),
+
+                  AppTextButton(
+                    onPressed: () {},
+                    text: 'Save as Draft',
+                    color: SemanticColor.neutral,
+                    size: ButtonSize.extraLarge,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A mobile-optimized top bar for e-commerce applications.
+///
+/// The [EcommerceMobileTopBar] provides a consistent navigation bar for mobile
+/// e-commerce screens with a prefix icon, title, and customizable suffix icons.
+///
+/// Example:
+/// ```dart
+/// EcommerceMobileTopBar.dashboardPanel(
+///   title: 'Dashboard',
+///   prefixIcon: BetterIcons.menu01Outline,
+/// )
+/// ```
+class EcommerceMobileTopBar extends StatelessWidget {
+  final IconData prefixIcon;
+  final String title;
+  final List<IconData> suffixIcons;
+  final TextStyle? Function(BuildContext) titleStyle;
+
+  const EcommerceMobileTopBar._({
+    required this.prefixIcon,
+    required this.title,
+    required this.suffixIcons,
+    required this.titleStyle,
+  });
+
+  /// Dashboard panel top bar with search, notifications, and store icons.
+  factory EcommerceMobileTopBar.dashboardPanel({
+    required String title,
+    required IconData prefixIcon,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: const [
+        BetterIcons.search01Filled,
+        BetterIcons.notification02Outline,
+        BetterIcons.store01Outline,
+      ],
+      titleStyle: (context) => context.textTheme.titleSmall,
+    );
+  }
+
+  /// Client side top bar with custom suffix icons.
+  factory EcommerceMobileTopBar.clientSide({
+    required String title,
+    required IconData prefixIcon,
+    required List<IconData> suffixIcons,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: suffixIcons,
+      titleStyle: (context) => context.textTheme.labelLarge,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbar(
+      showDivider: false,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      prefix: Row(
+        spacing: 8,
+        children: [
+          AppTopBarIconButton(
+            icon: prefixIcon,
+            iconColor: context.colors.onSurfaceVariant,
+          ),
+          Text(title, style: titleStyle(context)),
+        ],
+      ),
+      suffix: Row(
+        spacing: 8,
+        children: [
+          const SizedBox(width: 8),
+          ...suffixIcons.map(
+            (icon) => AppTopBarIconButton(
+              icon: icon,
+              iconColor: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceDescriptionCard extends StatelessWidget {
+  const EcommerceDescriptionCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Description', style: context.textTheme.titleSmall),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              border: Border.all(color: context.colors.outline),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppTextField(
+                  label: 'Name',
+                  isFilled: false,
+                  initialValue: 'Nike Air Force 1',
+                ),
+                const SizedBox(height: 18),
+                AppTextField(
+                  label: 'Description',
+                  isFilled: false,
+                  hint: 'Placeholder',
+                  maxLines: 5,
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border.all(color: context.colors.outline),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Description', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          AppTextField(
+            label: 'Name',
+            isFilled: false,
+            initialValue: 'Nike Air Force 1',
+          ),
+          const SizedBox(height: 18),
+          AppTextField(
+            label: 'Description',
+            isFilled: false,
+            hint: 'Placeholder',
+            maxLines: 5,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceProductImagesCard extends StatelessWidget {
+  const EcommerceProductImagesCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        spacing: 16,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Product Images', style: context.textTheme.titleSmall),
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              border: Border.all(color: context.colors.outline),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppFileUploadCard(
+                  primaryMessage: 'Drag & drop files to upload',
+                  secondaryMessage:
+                      'JPEG, PNG, PDF, and MP4 formats, up to 50 MB.',
+                  buttonText: 'Upload file',
+                  onFilesSelected: (List<PlatformFile> files) async {
+                    // Simulate upload delay
+                    await Future.delayed(const Duration(seconds: 1));
+                  },
+                  style: UploadCardStyle.filled,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  spacing: 8,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Assets.images.products.shoe01.image(
+                        height: 64,
+                        width: 64,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Assets.images.products.shoe02.image(
+                        height: 64,
+                        width: 64,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Assets.images.products.shoe03.image(
+                        height: 64,
+                        width: 64,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border.all(color: context.colors.outline),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Product Images', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              SizedBox(
+                height: 240,
+                width: 230,
+                child: AppFileUploadCard(
+                  primaryMessage: 'Drag & drop files to upload',
+                  secondaryMessage:
+                      'JPEG, PNG, PDF, and MP4 formats, up to 50 MB.',
+                  buttonText: 'Upload file',
+                  onFilesSelected: (List<PlatformFile> files) async {
+                    // Simulate upload delay
+                    await Future.delayed(const Duration(seconds: 1));
+                  },
+                  style: UploadCardStyle.filled,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Assets.images.products.shoe01.image(fit: BoxFit.cover),
+                    Assets.images.products.shoe02.image(fit: BoxFit.cover),
+                    Assets.images.products.shoe03.image(fit: BoxFit.cover),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceCategoryCard extends StatelessWidget {
+  const EcommerceCategoryCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Description', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              border: Border.all(color: context.colors.outline),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                AppDropdownField.single(
+                  items: [
+                    AppDropdownItem(value: 'Sneakers', title: 'Sneakers'),
+                    AppDropdownItem(value: 'Apparel', title: 'Apparel'),
+                    AppDropdownItem(value: 'Accessories', title: 'Accessories'),
+                  ],
+                  label: 'Category',
+                  isFilled: false,
+                  initialValue: 'Sneakers',
+                  type: DropdownFieldType.compact,
+                ),
+                const SizedBox(height: 12),
+                AppDropdownField.single(
+                  items: [
+                    AppDropdownItem(value: 'Nike', title: 'Nike'),
+                    AppDropdownItem(value: 'Adidas', title: 'Adidas'),
+                    AppDropdownItem(value: 'Puma', title: 'Puma'),
+                  ],
+                  label: 'Brand',
+                  isFilled: false,
+                  initialValue: 'Nike',
+                  type: DropdownFieldType.compact,
+                ),
+                const SizedBox(height: 12),
+                AppTextButton(
+                  onPressed: () {},
+                  text: 'Add New Category',
+                  size: ButtonSize.medium,
+                  color: SemanticColor.primary,
+                  prefixIcon: BetterIcons.add01Outline,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 16),
+            child: Text('Inventory', style: context.textTheme.titleSmall),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              border: Border.all(color: context.colors.outline),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 12,
+              children: [
+                AppTextField(
+                  label: 'Size',
+                  isFilled: false,
+                  initialValue: '12',
+                ),
+                AppNumberField.integer(
+                  title: 'Quantity',
+                  isFilled: false,
+                  initialValue: 100,
+                ),
+                AppTextField(
+                  label: 'SKU',
+                  isFilled: false,
+                  initialValue: 'AA-BB-CC-DD',
+                ),
+                AppTextButton(
+                  onPressed: () {},
+                  text: 'Add New Size',
+                  size: ButtonSize.medium,
+                  color: SemanticColor.primary,
+                  prefixIcon: BetterIcons.add01Outline,
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border.all(color: context.colors.outline),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Description', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          AppDropdownField.single(
+            items: [
+              AppDropdownItem(value: 'Sneakers', title: 'Sneakers'),
+              AppDropdownItem(value: 'Apparel', title: 'Apparel'),
+              AppDropdownItem(value: 'Accessories', title: 'Accessories'),
+            ],
+            label: 'Category',
+            isFilled: false,
+            initialValue: 'Sneakers',
+            type: DropdownFieldType.compact,
+          ),
+          const SizedBox(height: 12),
+          AppDropdownField.single(
+            items: [
+              AppDropdownItem(value: 'Nike', title: 'Nike'),
+              AppDropdownItem(value: 'Adidas', title: 'Adidas'),
+              AppDropdownItem(value: 'Puma', title: 'Puma'),
+            ],
+            label: 'Brand',
+            isFilled: false,
+            initialValue: 'Nike',
+            type: DropdownFieldType.compact,
+          ),
+          const SizedBox(height: 12),
+          AppTextButton(
+            onPressed: () {},
+            text: 'Add New Category',
+            size: ButtonSize.medium,
+            color: SemanticColor.primary,
+            prefixIcon: BetterIcons.add01Outline,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 17.5),
+            child: AppDivider(),
+          ),
+          Text('Inventory', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Row(
+            spacing: 16,
+            children: [
+              Expanded(
+                child: AppTextField(
+                  label: 'Size',
+                  isFilled: false,
+                  initialValue: '12',
+                ),
+              ),
+              Expanded(
+                child: AppNumberField.integer(
+                  title: 'Quantity',
+                  isFilled: false,
+                  initialValue: 100,
+                ),
+              ),
+              Expanded(
+                child: AppTextField(
+                  label: 'SKU',
+                  isFilled: false,
+                  initialValue: 'AA-BB-CC-DD',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          AppTextButton(
+            onPressed: () {},
+            text: 'Add New Size',
+            size: ButtonSize.medium,
+            color: SemanticColor.primary,
+            prefixIcon: BetterIcons.add01Outline,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommercePricingCard extends StatelessWidget {
+  const EcommercePricingCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    if (isMobile) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Pricing', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              border: Border.all(color: context.colors.outline),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: AppTextField(
+                        density: TextFieldDensity.noDense,
+                        label: 'Price',
+                        isFilled: false,
+                        initialValue: '199.99',
+                        prefixIcon: Icon(
+                          BetterIcons.dollarCircleOutline,
+                          color: context.colors.onSurfaceVariant,
+                          size: 22,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: AppTextButton(
+                        onPressed: () {},
+                        text: 'Add discount',
+                        size: ButtonSize.medium,
+                        color: SemanticColor.primary,
+                        prefixIcon: BetterIcons.add01Outline,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 16),
+            child: Text(
+              'Shipping and Delivery',
+              style: context.textTheme.titleSmall,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              border: Border.all(color: context.colors.outline),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+            ),
+            child: Column(
+              spacing: 12,
+              children: [
+                AppTextField(
+                  label: 'Weight',
+                  isFilled: false,
+                  initialValue: '1.25',
+                  suffixIcon: SizedBox(
+                    width: 40,
+                    child: AppDropdownField.single(
+                      items: [AppDropdownItem(value: 'kg', title: 'Kg')],
+                      initialValue: 'kg',
+                      isFilled: false,
+                      type: DropdownFieldType.inLine,
+                    ),
+                  ),
+                ),
+                AppTextField(
+                  label: 'Length',
+                  isFilled: false,
+                  initialValue: '12.00',
+                  suffixIcon: SizedBox(
+                    width: 40,
+                    child: AppDropdownField.single(
+                      items: [AppDropdownItem(value: 'in', title: 'in')],
+                      initialValue: 'in',
+                      isFilled: false,
+                      type: DropdownFieldType.inLine,
+                    ),
+                  ),
+                ),
+                AppTextField(
+                  label: 'Width',
+                  isFilled: false,
+                  initialValue: '12.00',
+                  suffixIcon: SizedBox(
+                    width: 40,
+                    child: AppDropdownField.single(
+                      items: [AppDropdownItem(value: 'in', title: 'in')],
+                      initialValue: 'in',
+                      isFilled: false,
+                      type: DropdownFieldType.inLine,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 16),
+            child: Text('Selling Type', style: context.textTheme.titleSmall),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: context.colors.surface,
+              border: Border.all(color: context.colors.outline),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+            ),
+            child: Column(
+              spacing: 16,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    AppCheckbox(value: false, size: CheckboxSize.small),
+                    const SizedBox(width: 8),
+                    Text(
+                      'In-store selling only',
+                      style: context.textTheme.labelLarge,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    AppCheckbox(value: true, size: CheckboxSize.small),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Online selling only',
+                      style: context.textTheme.labelLarge,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    AppCheckbox(value: false, size: CheckboxSize.small),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Available both in-store and online',
+                      style: context.textTheme.labelLarge,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border.all(color: context.colors.outline),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Pricing', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                flex: 2,
+                child: AppTextField(
+                  density: TextFieldDensity.noDense,
+                  label: 'Price',
+                  isFilled: false,
+                  initialValue: '199.99',
+                  prefixIcon: Icon(
+                    BetterIcons.dollarCircleOutline,
+                    color: context.colors.onSurfaceVariant,
+                    size: 22,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: AppTextButton(
+                  onPressed: () {},
+                  text: 'Add discount',
+                  size: ButtonSize.medium,
+                  color: SemanticColor.primary,
+                  prefixIcon: BetterIcons.add01Outline,
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 17.5),
+            child: AppDivider(),
+          ),
+          Text('Shipping and Delivery', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Row(
+            spacing: 8,
+            children: [
+              Expanded(
+                child: AppTextField(
+                  label: 'Weight',
+                  isFilled: false,
+                  initialValue: '1.25',
+                  suffixIcon: SizedBox(
+                    width: 40,
+                    child: AppDropdownField.single(
+                      items: [AppDropdownItem(value: 'kg', title: 'Kg')],
+                      initialValue: 'kg',
+                      isFilled: false,
+                      type: DropdownFieldType.inLine,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: AppTextField(
+                  label: 'Length',
+                  isFilled: false,
+                  initialValue: '12.00',
+                  suffixIcon: SizedBox(
+                    width: 40,
+                    child: AppDropdownField.single(
+                      items: [AppDropdownItem(value: 'in', title: 'in')],
+                      initialValue: 'in',
+                      isFilled: false,
+                      type: DropdownFieldType.inLine,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: AppTextField(
+                  label: 'Width',
+                  isFilled: false,
+                  initialValue: '12.00',
+                  suffixIcon: SizedBox(
+                    width: 40,
+                    child: AppDropdownField.single(
+                      items: [AppDropdownItem(value: 'in', title: 'in')],
+                      initialValue: 'in',
+                      isFilled: false,
+                      type: DropdownFieldType.inLine,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 17.5),
+            child: AppDivider(),
+          ),
+          Text('Selling Type', style: context.textTheme.titleSmall),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              AppCheckbox(value: false, size: CheckboxSize.small),
+              const SizedBox(width: 8),
+              Text(
+                'In-store selling only',
+                style: context.textTheme.labelLarge,
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              AppCheckbox(value: true, size: CheckboxSize.small),
+              const SizedBox(width: 8),
+              Text('Online selling only', style: context.textTheme.labelLarge),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              AppCheckbox(value: false, size: CheckboxSize.small),
+              const SizedBox(width: 8),
+              Text(
+                'Available both in-store and online',
+                style: context.textTheme.labelLarge,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

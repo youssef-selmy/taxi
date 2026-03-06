@@ -1,0 +1,7 @@
+icomoon_generator:
+  input_json_file: "font/selection.json"
+  output_class_file: "lib/better_icon.dart"
+
+  class_name: "BetterIcons"
+  package: "better_icons"
+  format: true

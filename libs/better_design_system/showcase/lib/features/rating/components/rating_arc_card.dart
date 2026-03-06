@@ -1,0 +1,51 @@
+import 'package:better_design_system/atoms/buttons/filled_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/molecules/rating_arc/rating_arc.dart';
+import 'package:flutter/material.dart';
+
+import 'rating_header.dart';
+
+class RatingArcCard extends StatelessWidget {
+  const RatingArcCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 340,
+      child: Column(
+        children: [
+          RatingHeader(title: 'How was your trip with Mr. Alex?'),
+          SizedBox(height: 20),
+          AppRatingArc(rating: 100, title: 'Loved it!'),
+          SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: AppTextField(
+              label: 'Additional feedback (optional)',
+              isFilled: false,
+              hint: 'Your thoughts',
+              maxLines: 4,
+            ),
+          ),
+          AppDivider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            child: Row(
+              spacing: 12,
+              children: [
+                Expanded(
+                  child: AppOutlinedButton(onPressed: () {}, text: 'Skip'),
+                ),
+                Expanded(
+                  child: AppFilledButton(onPressed: () {}, text: 'Submit'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

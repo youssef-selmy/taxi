@@ -1,0 +1,1 @@
+enum UploadCardStyle { filled, outlined }

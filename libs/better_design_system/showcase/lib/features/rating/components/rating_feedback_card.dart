@@ -1,0 +1,53 @@
+import 'package:better_assets/assets.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/better_design_system.dart';
+import 'package:better_design_system/molecules/rating_bar/rating_bar.dart';
+import 'package:flutter/material.dart';
+
+import 'rating_header.dart';
+
+class RatingFeedbackCard extends StatelessWidget {
+  const RatingFeedbackCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 420,
+      child: Column(
+        children: [
+          RatingHeader(title: 'Rating'),
+          SizedBox(height: 20),
+          Center(
+            child: Assets.images.emptyStates.feedback.image(
+              width: 135,
+              height: 135,
+            ),
+          ),
+          SizedBox(height: 24),
+          Text('We’d love your feedback!', style: context.textTheme.titleSmall),
+          SizedBox(height: 8),
+          Text(
+            'Give us a tiny rating to help us improve',
+            style: context.textTheme.bodySmall?.variant(context),
+          ),
+          SizedBox(height: 24),
+          AppRatingBar(rate: 5, onPressed: (_) {}, size: RatingCellSize.small),
+          SizedBox(height: 32),
+          AppDivider(),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: AppOutlinedButton(onPressed: () {}, text: 'Submit'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

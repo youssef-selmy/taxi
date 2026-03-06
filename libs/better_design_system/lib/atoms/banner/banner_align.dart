@@ -1,0 +1,1 @@
+enum BannerAlign { center, right }

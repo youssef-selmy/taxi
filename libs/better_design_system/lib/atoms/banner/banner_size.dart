@@ -1,0 +1,1 @@
+enum BannerSize { medium, large }

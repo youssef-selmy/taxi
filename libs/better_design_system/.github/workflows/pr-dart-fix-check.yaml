@@ -1,0 +1,51 @@
+name: Enforce Dart Fixes
+
+on:
+    pull_request:
+
+jobs:
+    dart_fix_check:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout main repository
+              uses: actions/checkout@v4
+              with:
+                  path: "libs/better_design_system"
+                  submodules: true
+                  token: ${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}
+
+            - name: Checkout localizatinos repository
+              uses: actions/checkout@v4
+              with:
+                  repository: "irnpnh/flutter-localizations"
+                  path: "libs/flutter_localizations"
+                  submodules: true
+                  token: ${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}
+
+            - name: Set up Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                  flutter-version: 3.35.5
+                  cache: true
+
+            - name: Install pub Dependencies
+              working-directory: ./libs/better_design_system
+              run: flutter pub get
+
+            - name: Install pub Dependencies
+              working-directory: ./libs/flutter_localizations
+              run: flutter pub get
+
+            - name: Apply dart fixes
+              working-directory: ./libs/better_design_system
+              run: dart fix --apply
+
+            - name: Fail if changes were made
+              run: |
+                  if [[ -n "$(git status --porcelain)" ]]; then
+                    echo "::error::'dart fix --apply' made changes. Please run it locally and commit the results."
+                    # Optional: show a short diff to help the author
+                    git --no-pager diff --unified=0 | sed -n '1,200p'
+                    exit 1
+                  fi

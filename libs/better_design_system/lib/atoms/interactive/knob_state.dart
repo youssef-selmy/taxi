@@ -1,0 +1,1 @@
+enum KnobState { active, inactive }

@@ -1,0 +1,4 @@
+{
+    "name": "betterdesign_showcase",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json"
+}

@@ -1,0 +1,4 @@
+{
+    "name": "better_design_system_widgetbook",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json"
+}

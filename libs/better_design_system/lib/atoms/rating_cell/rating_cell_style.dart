@@ -1,0 +1,1 @@
+enum RatingCellStyle { outline, ghost }

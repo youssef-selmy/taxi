@@ -1,0 +1,1 @@
+enum BreadcrumbStyle { ghost, soft }

@@ -1,0 +1,44 @@
+name: better_design_system_widgetbook
+description: "A new Flutter project."
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  widgetbook: ^3.18.0
+  better_design_system:
+    path: ..
+  widgetbook_annotation: ^3.7.0
+  api_response: ^0.2.3
+  image_faker: 0.1.0
+  better_icons:
+    path: ../better_icons
+  time: ^2.1.5
+  better_assets:
+    path: ../assets
+  generic_map: ^0.10.1
+
+  flutter_layout_grid: any
+  file_picker: any
+  latlong2: any
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  alchemist: ^0.11.0
+  widgetbook_generator: ^3.18.0
+  build_runner: ^2.10.0
+  flutter_gen_runner: ^5.10.0
+  flutter_gen: ^5.10.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/md/

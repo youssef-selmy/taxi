@@ -1,0 +1,1889 @@
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/atoms/navbar/navbar_icon.dart';
+import 'package:better_design_system/atoms/tab_menu_horizontal/tab_menu_horizontal.dart';
+import 'package:better_design_system/organisms/profile_button/profile_button.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_showcase/core/blocs/settings.cubit.dart';
+import 'package:better_design_showcase/features/hr_platform/entities/hr_platform_dashboard_page.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_logo.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_section.dart';
+import 'package:better_design_system/atoms/sidebar_navigation/sidebar_navigation_user_profile.dart';
+import 'package:better_design_system/atoms/toggle_switch_button_group/toggle_switch_button_group.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:image_faker/image_faker.dart';
+import 'package:better_design_system/atoms/avatar/avatar.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/molecules/kanban_board/kanban_board.dart';
+import 'package:better_design_system/molecules/kanban_board/model/card_item.dart';
+
+class HrPlatformKanbanPageDesktop extends StatefulWidget {
+  final Widget? header;
+  const HrPlatformKanbanPageDesktop({super.key, this.header});
+
+  @override
+  State<HrPlatformKanbanPageDesktop> createState() =>
+      _HrPlatformKanbanPageDesktopState();
+}
+
+class _HrPlatformKanbanPageDesktopState
+    extends State<HrPlatformKanbanPageDesktop> {
+  String selectedTab = 'Candidate Pipeline';
+
+  void _onTabChanged(String value) {
+    setState(() {
+      selectedTab = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (widget.header != null) widget.header!,
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HrPlatformSidebar(
+                selectedItem: HrPlatformSidebarPage.recruitment,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Recruitment',
+                            style: context.textTheme.bodyLarge,
+                          ),
+                          const Spacer(),
+                          AppNavbarIcon(
+                            icon: BetterIcons.search01Filled,
+                            iconColor: context.colors.onSurfaceVariant,
+                            iconSize: 22,
+                            size: ButtonSize.medium,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          const SizedBox(width: 10),
+                          AppNavbarIcon(
+                            icon: BetterIcons.notification02Outline,
+                            iconColor: context.colors.onSurfaceVariant,
+                            iconSize: 24,
+                            badgeNumber: 2,
+                            size: ButtonSize.medium,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          const SizedBox(width: 10),
+                          AppProfileButton(
+                            avatarUrl: ImageFaker().person.four,
+                            title: 'Paityn Baptista',
+                            items: [
+                              AppPopupMenuItem(
+                                title: 'Profile',
+                                onPressed: () {},
+                                icon: BetterIcons.userFilled,
+                              ),
+                              AppPopupMenuItem(
+                                title: 'Profile',
+                                onPressed: () {},
+                                icon: BetterIcons.wallet01Filled,
+                              ),
+                              AppPopupMenuItem(
+                                hasDivider: true,
+                                title: 'Logout',
+                                onPressed: () {},
+                                icon: BetterIcons.logout01Filled,
+                                color: SemanticColor.error,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 38),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppOutlinedButton(
+                            onPressed: () {},
+                            size: ButtonSize.medium,
+                            borderRadius: BorderRadius.circular(50),
+                            prefixIcon: BetterIcons.arrowLeft02Outline,
+                            color: SemanticColor.neutral,
+                          ),
+                          const SizedBox(width: 14),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                'Product Designer',
+                                style: context.textTheme.headlineSmall,
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                '25 Applications',
+                                style: context.textTheme.bodySmall!.copyWith(
+                                  color: context.colors.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      AppTabMenuHorizontal(
+                        tabs: [
+                          TabMenuHorizontalOption(
+                            title: 'Overview',
+                            value: 'Overview',
+                            icon: BetterIcons.file02Outline,
+                          ),
+                          TabMenuHorizontalOption(
+                            title: 'Candidate Pipeline',
+                            value: 'Candidate Pipeline',
+                            icon: BetterIcons.dashboardSquare02Outline,
+                          ),
+                          TabMenuHorizontalOption(
+                            title: 'Candidate Profiles',
+                            value: 'Candidate Profiles',
+                            icon: BetterIcons.userCircle02Outline,
+                          ),
+                          TabMenuHorizontalOption(
+                            title: 'Hiring Analytics',
+                            value: 'Hiring Analytics',
+                            icon: BetterIcons.analytics01Outline,
+                          ),
+                          TabMenuHorizontalOption(
+                            title: 'Notes & Communication',
+                            value: 'Notes & Communication',
+                            icon: BetterIcons.pencilEdit02Outline,
+                          ),
+                        ],
+                        selectedValue: selectedTab,
+                        onChanged: _onTabChanged,
+                        style: TabMenuHorizontalStyle.primary,
+                        color: SemanticColor.primary,
+                        isFullWidth: true,
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          AppDropdownField.single(
+                            items: [
+                              AppDropdownItem(
+                                value: 'Kanban view',
+                                title: 'Kanban view',
+                              ),
+                            ],
+                            onChanged: (value) {},
+                            initialValue: 'Kanban view',
+                            width: 128,
+                            isFilled: false,
+                            fillColor: context.colors.surface,
+                            borderRadius: BorderRadius.circular(18),
+                            type: DropdownFieldType.compact,
+                          ),
+                          const SizedBox(width: 8),
+                          AppDropdownField.single(
+                            prefixIcon: BetterIcons.arrowUpDownOutline,
+                            items: [
+                              AppDropdownItem(value: 'Sort', title: 'Sort'),
+                            ],
+                            onChanged: (value) {},
+                            initialValue: 'Sort',
+                            width: 100,
+                            isFilled: false,
+                            fillColor: context.colors.surface,
+                            borderRadius: BorderRadius.circular(18),
+                            type: DropdownFieldType.compact,
+                          ),
+                          const Spacer(),
+                          SizedBox(
+                            width: 358,
+                            height: 40,
+                            child: AppTextField(
+                              prefixIcon: Icon(
+                                BetterIcons.search01Filled,
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                              hint: 'Search',
+                              isFilled: false,
+                              fillColor: context.colors.surface,
+                              borderRadius: BorderRadius.circular(50),
+                              density: TextFieldDensity.noDense,
+                            ),
+                          ),
+                          AppOutlinedButton(
+                            onPressed: () {},
+                            text: 'Filter',
+                            borderRadius: BorderRadius.circular(50),
+                            prefixIcon: BetterIcons.filterHorizontalOutline,
+                            foregroundColor: context.colors.onSurfaceVariant,
+                            color: SemanticColor.neutral,
+                            size: ButtonSize.medium,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      const HrPlatformKanbanBoardCard(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class HrPlatformSidebar extends StatefulWidget {
+  final ThemeMode? initialTheme;
+  const HrPlatformSidebar({
+    super.key,
+    this.selectedItem = HrPlatformSidebarPage.dashboard,
+    this.initialTheme,
+  });
+
+  final HrPlatformSidebarPage selectedItem;
+
+  @override
+  State<HrPlatformSidebar> createState() => _HrPlatformSidebarState();
+}
+
+class _HrPlatformSidebarState extends State<HrPlatformSidebar> {
+  late ThemeMode selectedThemeMode;
+
+  @override
+  void initState() {
+    selectedThemeMode =
+        widget.initialTheme ?? context.read<SettingsCubit>().state.themeMode;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topLeft,
+      child: AppSidebarNavigation<HrPlatformSidebarPage>(
+        collapsable: true,
+        showDivider: true,
+        header: AppSidebarNavigationLogo(
+          logoUrl: ImageFaker().appLogo.taxi,
+          title: 'HR Platform',
+        ),
+        style: SidebarNavigationItemStyle.primary,
+        data: [
+          NavigationItem(
+            title: 'Dashboard',
+            value: HrPlatformSidebarPage.dashboard,
+            icon: (BetterIcons.home01Outline, BetterIcons.home01Filled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Projects',
+            value: HrPlatformSidebarPage.projects,
+            icon: (BetterIcons.noteOutline, BetterIcons.noteFilled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+            subItems: [
+              NavigationSubItem(
+                title: 'Overview',
+                value: HrPlatformSidebarPage.projects,
+              ),
+            ],
+          ),
+          NavigationItem(
+            title: 'Tasks',
+            value: HrPlatformSidebarPage.tasks,
+            icon: (
+              BetterIcons.checkmarkSquare02Outline,
+              BetterIcons.checkmarkSquare02Filled,
+            ),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+            badgeNumber: 2,
+          ),
+          NavigationItem(
+            title: 'Calendar',
+            value: HrPlatformSidebarPage.calendar,
+            icon: (BetterIcons.calendar01Outline, BetterIcons.calendar01Filled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Inbox',
+            value: HrPlatformSidebarPage.inbox,
+            icon: (BetterIcons.message02Outline, BetterIcons.message02Filled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Performance',
+            value: HrPlatformSidebarPage.performance,
+            icon: (
+              BetterIcons.analytics01Outline,
+              BetterIcons.analytics01Filled,
+            ),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Report & Analytics',
+            value: HrPlatformSidebarPage.reportAndAnalytics,
+            icon: (BetterIcons.chart03Outline, BetterIcons.chart03Filled),
+            section: SidebarNavigationSection(
+              title: 'Menu',
+              value: HrPlatformSidebarPage.menu,
+            ),
+          ),
+          NavigationItem(
+            title: 'Employees',
+            value: HrPlatformSidebarPage.employees,
+            icon: (
+              BetterIcons.userGroup02Outline,
+              BetterIcons.userGroup03Filled,
+            ),
+            section: SidebarNavigationSection(
+              title: 'Management',
+              value: HrPlatformSidebarPage.employees,
+            ),
+          ),
+          NavigationItem(
+            title: 'Recruitment',
+            value: HrPlatformSidebarPage.recruitment,
+            icon: (BetterIcons.userAdd01Outline, BetterIcons.userAdd01Filled),
+            section: SidebarNavigationSection(
+              title: 'Management',
+              value: HrPlatformSidebarPage.employees,
+            ),
+          ),
+          NavigationItem(
+            title: 'Payroll',
+            value: HrPlatformSidebarPage.payroll,
+            icon: (BetterIcons.wallet01Outline, BetterIcons.wallet01Filled),
+            section: SidebarNavigationSection(
+              title: 'Management',
+              value: HrPlatformSidebarPage.employees,
+            ),
+          ),
+          NavigationItem(
+            title: 'Settings',
+            value: HrPlatformSidebarPage.settings,
+            icon: (BetterIcons.settings01Outline, BetterIcons.settings01Filled),
+            section: SidebarNavigationSection(
+              title: 'Support',
+              value: HrPlatformSidebarPage.support,
+            ),
+          ),
+          NavigationItem(
+            title: 'Help Center',
+            value: HrPlatformSidebarPage.helpCenter,
+            icon: (BetterIcons.helpCircleOutline, BetterIcons.helpCircleFilled),
+            section: SidebarNavigationSection(
+              title: 'Support',
+              value: HrPlatformSidebarPage.support,
+            ),
+          ),
+        ],
+        selectedItem: widget.selectedItem,
+        onItemSelected: (value) {},
+        footer: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  border: Border.all(color: context.colors.outline),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  spacing: 16,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          spacing: 4,
+                          children: <Widget>[
+                            Icon(
+                              BetterIcons.rocket01Outline,
+                              size: 24,
+                              color: context.colors.primary,
+                            ),
+                            Text(
+                              'Upgrade Plan',
+                              style: context.textTheme.labelLarge,
+                            ),
+                          ],
+                        ),
+
+                        AppIconButton(
+                          onPressed: () {},
+                          icon: BetterIcons.cancelCircleOutline,
+                          size: ButtonSize.medium,
+                        ),
+                      ],
+                    ),
+
+                    Text(
+                      'Upgrade your plan to premium now to access more features',
+                      style: context.textTheme.bodyMedium?.variant(context),
+                    ),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppOutlinedButton(
+                            onPressed: () {},
+                            text: 'Upgrade Now',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: AppToggleSwitchButtonGroup(
+                isExpanded: true,
+                isRounded: true,
+                options: [
+                  ToggleSwitchButtonGroupOption(
+                    value: ThemeMode.light,
+                    label: 'Light',
+                    icon: BetterIcons.sun02Outline,
+                    selectedIcon: BetterIcons.sun01Filled,
+                  ),
+                  ToggleSwitchButtonGroupOption(
+                    value: ThemeMode.dark,
+                    label: 'Dark',
+                    icon: BetterIcons.moon02Outline,
+                    selectedIcon: BetterIcons.moon02Filled,
+                  ),
+                ],
+                selectedValue: selectedThemeMode,
+                onChanged: (value) {
+                  setState(() {
+                    selectedThemeMode = value;
+                  });
+                },
+              ),
+            ),
+            const AppDivider(),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                child: AppSidebarNavigationUserProfile(
+                  avatarUrl: ImageFaker().person.seven,
+                  style: SidebarNavigationUserProfileStyle.soft,
+                  title: 'Gustavo Kenter',
+                  subtitle: 'Gustavo@better.com',
+                  onPressed: () {},
+                  icon: BetterIcons.moreVerticalCircle01Outline,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HrPlatformKanbanBoardCard extends StatelessWidget {
+  const HrPlatformKanbanBoardCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppKanbanBoard(
+      columns: [
+        KColumn(
+          header: KColumnHeader(
+            color: SemanticColor.success,
+            title: 'New Applications',
+            prefix: Container(
+              height: 12,
+              width: 12,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: SemanticColor.success.main(context),
+              ),
+            ),
+            trailing: [
+              AppBadge(
+                text: '3',
+                color: SemanticColor.success,
+                isRounded: true,
+                style: BadgeStyle.fill,
+              ),
+              const SizedBox(width: 12),
+              AppIconButton(
+                icon: BetterIcons.add01Outline,
+                size: ButtonSize.small,
+              ),
+            ],
+            style: KColumnHeaderStyle.detached,
+          ),
+          children: [
+            CardItem(
+              id: '1',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.one,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Omar Arcand',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Omar@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Resume Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('92%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppTextButton(
+                          onPressed: () {},
+                          text: 'View Resume',
+                          size: ButtonSize.small,
+                          prefix: Icon(
+                            BetterIcons.file01Outline,
+                            size: 16,
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                          color: SemanticColor.neutral,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CardItem(
+              id: '2',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.one,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Angel Dokidis',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Angel@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Resume Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('85%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppTextButton(
+                          onPressed: () {},
+                          text: 'View Resume',
+                          size: ButtonSize.small,
+                          prefix: Icon(
+                            BetterIcons.file01Outline,
+                            size: 16,
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                          color: SemanticColor.neutral,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CardItem(
+              id: '3',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'No Portfolio',
+                          color: SemanticColor.error,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.one,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Jaydon Philips',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Jaydon@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Resume Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('64%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppTextButton(
+                          onPressed: () {},
+                          text: 'View Resume',
+                          size: ButtonSize.small,
+                          prefix: Icon(
+                            BetterIcons.file01Outline,
+                            size: 16,
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                          color: SemanticColor.neutral,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: AppTextButton(
+                        onPressed: () {},
+                        text: 'Decline Application',
+                        color: SemanticColor.error,
+                        size: ButtonSize.small,
+                        prefixIcon: BetterIcons.cancel01Outline,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          value: null,
+        ),
+        KColumn(
+          header: KColumnHeader(
+            color: SemanticColor.warning,
+            title: 'HR Interview',
+            prefix: Container(
+              height: 12,
+              width: 12,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: SemanticColor.warning.main(context),
+              ),
+            ),
+            trailing: [
+              AppBadge(
+                text: '4',
+                color: SemanticColor.warning,
+                isRounded: true,
+                style: BadgeStyle.fill,
+              ),
+              const SizedBox(width: 12),
+              AppIconButton(
+                icon: BetterIcons.add01Outline,
+                size: ButtonSize.small,
+              ),
+            ],
+            style: KColumnHeaderStyle.detached,
+          ),
+          children: [
+            CardItem(
+              id: '1',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.six,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Allison Donin',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Allison@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Resume Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('81%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppTextButton(
+                          onPressed: () {},
+                          text: 'View Resume',
+                          size: ButtonSize.small,
+                          prefix: Icon(
+                            BetterIcons.file01Outline,
+                            size: 16,
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                          color: SemanticColor.neutral,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Reviews by',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tiana Philips',
+                          style: context.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CardItem(
+              id: '2',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.seven,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Marilyn Torff',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Marilyn@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Resume Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('97%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppTextButton(
+                          onPressed: () {},
+                          text: 'View Resume',
+                          size: ButtonSize.small,
+                          prefix: Icon(
+                            BetterIcons.file01Outline,
+                            size: 16,
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                          color: SemanticColor.neutral,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Reviews by',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tiana Philips',
+                          style: context.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CardItem(
+              id: '3',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.five,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Kierra Torff',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Kierra@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Resume Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('100%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppTextButton(
+                          onPressed: () {},
+                          text: 'View Resume',
+                          size: ButtonSize.small,
+                          prefix: Icon(
+                            BetterIcons.file01Outline,
+                            size: 16,
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                          color: SemanticColor.neutral,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Reviews by',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tiana Philips',
+                          style: context.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CardItem(
+              id: '4',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.one,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Adison Arcand',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Adison@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Resume Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('75%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppTextButton(
+                          onPressed: () {},
+                          text: 'View Resume',
+                          size: ButtonSize.small,
+                          prefix: Icon(
+                            BetterIcons.file01Outline,
+                            size: 16,
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                          color: SemanticColor.neutral,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Reviews by',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tiana Philips',
+                          style: context.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          value: null,
+        ),
+        KColumn(
+          header: KColumnHeader(
+            color: SemanticColor.insight,
+            title: 'Technical Interview',
+            prefix: Container(
+              height: 12,
+              width: 12,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: SemanticColor.insight.main(context),
+              ),
+            ),
+            trailing: [
+              AppBadge(
+                text: '3',
+                color: SemanticColor.insight,
+                isRounded: true,
+                style: BadgeStyle.fill,
+              ),
+              const SizedBox(width: 12),
+              AppIconButton(
+                icon: BetterIcons.add01Outline,
+                size: ButtonSize.small,
+              ),
+            ],
+            style: KColumnHeaderStyle.detached,
+          ),
+          children: [
+            CardItem(
+              id: '1',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.eight,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Dulce Saris',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Dulce@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('93%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppBadge(
+                          text: 'Qualified',
+                          color: SemanticColor.success,
+                          isRounded: true,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Interviewed by',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tiana Philips',
+                          style: context.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CardItem(
+              id: '2',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.one,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Haylie Donin',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Haylie@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('98%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppBadge(
+                          text: 'Qualified',
+                          color: SemanticColor.success,
+                          isRounded: true,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Interviewed by',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tiana Philips',
+                          style: context.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CardItem(
+              id: '3',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.two,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Talan Dorwart',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Talan@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('63%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppBadge(
+                          text: 'Not Qualified',
+                          color: SemanticColor.warning,
+                          isRounded: true,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Interviewed by',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tiana Philips',
+                          style: context.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            CardItem(
+              id: '4',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Portfolio Submitted',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.four,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Maren Torff',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Maren@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('61%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppBadge(
+                          text: 'Not Qualified',
+                          color: SemanticColor.warning,
+                          isRounded: true,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Interviewed by',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          'Tiana Philips',
+                          style: context.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          value: null,
+        ),
+        KColumn(
+          header: KColumnHeader(
+            color: SemanticColor.primary,
+            title: 'Hired',
+            prefix: Container(
+              height: 12,
+              width: 12,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: SemanticColor.primary.main(context),
+              ),
+            ),
+            trailing: [
+              AppBadge(
+                text: '1',
+                color: SemanticColor.primary,
+                isRounded: true,
+                style: BadgeStyle.fill,
+              ),
+              const SizedBox(width: 12),
+              AppIconButton(
+                icon: BetterIcons.add01Outline,
+                size: ButtonSize.small,
+              ),
+            ],
+            style: KColumnHeaderStyle.detached,
+          ),
+          children: [
+            CardItem(
+              id: '2',
+              widget: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: context.colors.surface,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: context.colors.outline),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppBadge(
+                          text: 'Hired',
+                          color: SemanticColor.primary,
+                          isRounded: true,
+                        ),
+                        const Spacer(),
+                        AppIconButton(
+                          icon: BetterIcons.moreHorizontalCircle01Outline,
+                          size: ButtonSize.small,
+                          iconColor: context.colors.onSurfaceVariant,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        AppAvatar(
+                          imageUrl: ImageFaker().person.three,
+                          size: AvatarSize.size32px,
+                        ),
+                        SizedBox(width: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Chance Franci',
+                              style: context.textTheme.bodyMedium,
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                              'Chance@better.com',
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color: context.colors.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 11.5),
+                      child: AppDivider(),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Score',
+                              style: context.textTheme.labelSmall!.copyWith(
+                                color: context.colors.onSurfaceVariantLow,
+                              ),
+                            ),
+                            Text('93%', style: context.textTheme.titleSmall),
+                          ],
+                        ),
+                        const Spacer(),
+                        AppBadge(
+                          text: 'Qualified',
+                          color: SemanticColor.success,
+                          isRounded: true,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          value: null,
+        ),
+      ],
+    );
+  }
+}

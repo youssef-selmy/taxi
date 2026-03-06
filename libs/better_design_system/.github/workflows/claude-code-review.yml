@@ -1,0 +1,159 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+      actions: read # Required to read CI results
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Full history for accurate diffs
+
+      - name: Run Claude Code Review
+        id: claude-review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            You are reviewing code for the BetterUI, a Flutter design system using Dart 3.10+.
+
+            **CRITICAL: This is a STRICT review. You MUST fail the workflow if critical violations are found.**
+
+            Read CLAUDE.md for complete coding standards, then review this PR focusing on:
+
+            ## PRIMARY FOCUS AREAS (STRICT ENFORCEMENT):
+
+            ### 1. Color System Usage (CRITICAL)
+            ❌ REJECT if code uses `Theme.of(context).colorScheme.X`
+            ✅ REQUIRE `context.colors.X` (ColorSystem extension)
+            ✅ REQUIRE `SemanticColor` enum for color parameters
+            - Check ALL color access patterns
+            - Verify proper semantic color variants (bold, disabled, variant, variantLow, container, onColor)
+
+            ### 2. Responsive Design Patterns (CRITICAL)
+            ✅ REQUIRE use of `context.isDesktop`, `context.isMobile`, `context.isTablet`
+            ✅ REQUIRE use of `context.responsive()` for adaptive values
+            ✅ REQUIRE `isDesktop` parameter when generating themes
+            ❌ REJECT hardcoded breakpoint checks like `MediaQuery.of(context).size.width > 1024`
+
+            ### 3. Dart 3.10+ Modern Patterns (ENFORCE)
+            ✅ REQUIRE switch expressions for enum-based logic (not if/else chains)
+            ✅ ENCOURAGE pattern matching in switch expressions
+            ✅ REQUIRE const constructors where possible
+            ❌ REJECT outdated patterns when modern alternatives exist
+
+            ### 4. Code Duplication & Readability (CRITICAL)
+            - Identify repeated code blocks that should be extracted into:
+              * Private helper methods (for single-file duplication)
+              * Shared utilities (for cross-file duplication)
+              * Reusable components (for widget duplication)
+            - Flag complex nested logic that should be simplified
+            - Suggest descriptive variable/method names for unclear code
+            - Recommend splitting large methods (>50 lines) into smaller units
+
+            ## SECONDARY CHECKS:
+            - Atomic design structure (atoms/molecules/organisms/templates)
+            - Component naming (must start with "App")
+            - Documentation (dartdoc comments for public APIs)
+            - Proper disposal of controllers/focus nodes
+            - Null safety patterns
+            - Unused imports (should run `dart fix --apply`)
+
+            ## REVIEW PROCESS:
+            1. Read CLAUDE.md thoroughly
+            2. Examine the PR diff using `gh pr diff`
+            3. Analyze the scope of work COMPLETED in this PR
+            4. Check each modified Dart file against standards
+            5. For CRITICAL violations: Mark as "Changes Required" and list blockers
+            6. For suggestions: Provide specific code examples
+            7. Use `gh pr comment` to post review with this structure:
+
+            ```markdown
+            ## 🤖 Claude Code Review
+
+            ### ⏱️ Development Time Estimate
+            **Estimated development time for the work completed in this PR:** [X hours/days]
+
+            **Breakdown of work done:**
+            - New components/features: [X hours]
+            - Refactoring/improvements: [X hours]
+            - Bug fixes: [X hours]
+            - Documentation: [X hours]
+            - Testing: [X hours]
+
+            **Complexity Level:** [Simple | Moderate | Complex | Very Complex]
+
+            **Notes:** [Brief explanation of what makes this estimate - e.g., "3 new complex organisms with full theming support and responsive layouts"]
+
+            ### ⛔ Critical Issues (Must Fix Before Merge)
+            [List any CRITICAL violations that block this PR]
+
+            ### ⚠️ Code Quality Issues
+            [List duplication, readability, and pattern issues]
+
+            ### 💡 Suggestions
+            [List optional improvements]
+
+            ### ✅ Positive Observations
+            [Highlight good patterns used]
+
+            ---
+            **Review Status:** [PASS ✅ | CHANGES REQUIRED ❌]
+            ```
+
+            8. Calculate time estimates based on WORK COMPLETED (not fixes needed):
+               - Analyze the type and scope of changes made
+               - Consider the complexity of implementation
+               - Use these guidelines for estimating work done:
+
+                 **New Components:**
+                 * Simple atom (button, badge): 1-2 hours
+                 * Complex atom (date picker, file upload): 2-4 hours
+                 * Molecule (card, list item): 2-3 hours
+                 * Complex molecule (chart, data table cell): 3-5 hours
+                 * Organism (navigation, data table): 4-8 hours
+                 * Template (full screen): 6-12 hours
+
+                 **Modifications:**
+                 * Simple property addition: 15-30 min
+                 * Style/theme updates: 30-60 min per component
+                 * Behavior changes: 1-2 hours per component
+                 * Major refactoring: 2-4 hours per component
+
+                 **Other Work:**
+                 * Documentation (dartdoc): 15-30 min per class
+                 * Widgetbook stories: 30-60 min per component
+                 * Bug fixes: 30 min - 2 hours depending on complexity
+                 * Testing: 30-60 min per component
+
+            9. On subsequent commits (synchronize event), update the estimate:
+               - Note: "**Update:** [X additional hours] of work added since last review"
+               - Summarize what new work was done
+               - Show cumulative total estimate
+               - Example: "Previous estimate: 4 hours. New commits added 2 hours of refactoring. **Total: 6 hours**"
+
+            10. EXIT WITH FAILURE (exit code 1) if Critical Issues exist
+            11. Provide actionable, specific feedback with code examples
+
+            Remember: The time estimate reflects the DEVELOPMENT EFFORT PUT INTO THE PR, not the time needed to fix issues.
+
+            Be thorough, strict, but educational. Reference CLAUDE.md sections when explaining standards.
+
+          additional_permissions: |
+            actions: read
+
+          claude_args: '--allowed-tools "Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*),Bash(exit:*)"'

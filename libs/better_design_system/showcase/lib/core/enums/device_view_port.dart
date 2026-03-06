@@ -1,0 +1,1 @@
+enum DeviceViewport { mobile, desktop }

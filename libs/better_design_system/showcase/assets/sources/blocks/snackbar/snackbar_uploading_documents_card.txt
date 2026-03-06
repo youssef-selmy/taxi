@@ -1,0 +1,191 @@
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/linear_progress_bar/linear_progress_bar.dart';
+import 'package:better_design_system/better_design_system.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+
+class SnackbarUploadingDocumentsCard extends StatelessWidget {
+  const SnackbarUploadingDocumentsCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 464,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: context.colors.outline),
+        color: context.colors.surface,
+        boxShadow: [
+          BoxShadow(
+            color: context.colors.shadow,
+            blurRadius: 80,
+            spreadRadius: -8,
+            offset: Offset(0, 24),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: context.colors.surfaceVariant,
+            ),
+            child: Icon(
+              BetterIcons.cloudUploadOutline,
+              size: 20,
+              color: context.colors.onSurfaceVariant,
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Uploading Documents',
+                  style: context.textTheme.labelLarge,
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Please wait until the upload is complete.',
+                  style: context.textTheme.bodySmall?.variant(context),
+                ),
+                SizedBox(height: 8),
+                AppLinearProgressBar(
+                  linearProgressBarNumberPosition:
+                      LinearProgressBarNumberPosition.right,
+                  progress: 0.3,
+                  linearProgressBarStatus: LinearProgressBarStatus.uploading,
+                  onCancelPressed: () {},
+                  showProgressNumber: true,
+                  label: 'Label',
+                ),
+                SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    AppTextButton(onPressed: () {}, text: 'Cancel Upload'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SnackbarPreview extends StatelessWidget {
+  final Widget child;
+
+  const SnackbarPreview({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 1440,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 88, vertical: 84),
+        child: Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  width: 289,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: context.colors.surfaceVariant,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: context.colors.surfaceVariant,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 40),
+                Row(
+                  spacing: 65,
+                  children: [
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                  ],
+                ),
+                SizedBox(height: 48),
+                Row(
+                  spacing: 65,
+                  children: [
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                  ],
+                ),
+                SizedBox(height: 48),
+                Row(
+                  spacing: 65,
+                  children: [
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                    _buildContainerItem(context),
+                  ],
+                ),
+              ],
+            ),
+
+            Positioned(right: 0, bottom: 0, child: child),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Expanded _buildContainerItem(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 16,
+        children: [
+          Container(
+            height: 165,
+            decoration: BoxDecoration(
+              color: context.colors.surfaceVariant,
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          Container(
+            width: 128,
+            height: 16,
+            decoration: BoxDecoration(
+              color: context.colors.surfaceVariant,
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+          Container(
+            height: 22,
+            decoration: BoxDecoration(
+              color: context.colors.surfaceVariant,
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

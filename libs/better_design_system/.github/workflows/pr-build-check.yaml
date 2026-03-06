@@ -1,0 +1,88 @@
+name: Build Check (Showcase & Widgetbook)
+
+on:
+  pull_request:
+
+env:
+  PUB_CACHE: ~/.pub-cache
+
+jobs:
+  build_check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          path: "libs/better_design_system"
+          submodules: true
+          token: ${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Checkout localizations repository
+        uses: actions/checkout@v4
+        with:
+          repository: "irnpnh/flutter-localizations"
+          path: "libs/flutter_localizations"
+          submodules: true
+          token: ${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.35.5
+          channel: stable
+          cache: true
+
+      - name: Install root dependencies
+        working-directory: ./libs/better_design_system
+        run: flutter pub get
+
+      - name: Install localizations dependencies
+        working-directory: ./libs/flutter_localizations
+        run: flutter pub get
+
+      - name: Install widgetbook dependencies
+        working-directory: ./libs/better_design_system/widgetbook
+        run: flutter pub get
+
+      - name: Install showcase dependencies
+        working-directory: ./libs/better_design_system/showcase
+        run: flutter pub get
+
+      - name: Generate localizations
+        working-directory: ./libs/flutter_localizations
+        run: flutter gen-l10n
+
+      - name: Run widgetbook code generation
+        working-directory: ./libs/better_design_system/widgetbook
+        run: dart run build_runner build -d --delete-conflicting-outputs
+
+      - name: Run showcase code generation
+        working-directory: ./libs/better_design_system/showcase
+        run: dart run build_runner build -d --delete-conflicting-outputs
+
+      - name: Build widgetbook (web)
+        working-directory: ./libs/better_design_system/widgetbook
+        run: flutter build web --release --wasm
+
+      - name: Build showcase (web)
+        working-directory: ./libs/better_design_system/showcase
+        run: flutter build web --release --wasm
+
+      - name: Report success
+        if: success()
+        run: echo "✅ Both widgetbook and showcase built successfully!"
+
+      - name: Report failure
+        if: failure()
+        run: |
+          echo "::error::Build failed. Please ensure both widgetbook and showcase can be built locally before pushing."
+          exit 1

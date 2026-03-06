@@ -1,0 +1,406 @@
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_showcase/core/components/table_footer.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/tab_menu_horizontal/tab_menu_horizontal.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_system/atoms/buttons/top_bar_icon_button.dart';
+import 'package:better_design_system/atoms/navbar/navbar.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/theme/shadows.dart';
+
+class EcommerceOrdersMobile extends StatelessWidget {
+  const EcommerceOrdersMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            EcommerceMobileTopBar.dashboardPanel(
+              prefixIcon: BetterIcons.menu01Outline,
+              title: 'Orders',
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+                child: AppTabMenuHorizontal(
+                  style: TabMenuHorizontalStyle.soft,
+                  tabs: [
+                    TabMenuHorizontalOption(title: 'All', value: 'All'),
+                    TabMenuHorizontalOption(
+                      title: 'New Orders',
+                      value: 'New Orders',
+                      badgeNumber: 2,
+                    ),
+                    TabMenuHorizontalOption(
+                      title: 'Shipping',
+                      value: 'Shipping',
+                    ),
+                    TabMenuHorizontalOption(
+                      title: 'Completed',
+                      value: 'Completed',
+                    ),
+                    TabMenuHorizontalOption(
+                      title: 'Cancelled',
+                      value: 'Cancelled',
+                    ),
+                  ],
+                  selectedValue: 'All',
+                  onChanged: (_) {},
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: 15.5,
+                horizontal: 16,
+              ),
+              child: AppDivider(),
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  spacing: 8,
+                  children: [
+                    AppOutlinedButton(
+                      onPressed: () {},
+                      text: 'Sort',
+                      color: SemanticColor.neutral,
+                      size: ButtonSize.medium,
+                      prefix: Icon(
+                        BetterIcons.arrowUpDownOutline,
+                        size: 20,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      suffix: Icon(
+                        BetterIcons.arrowDown01Outline,
+                        size: 20,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    AppOutlinedButton(
+                      onPressed: () {},
+                      text: 'Filter',
+                      color: SemanticColor.neutral,
+                      size: ButtonSize.medium,
+                      prefix: Icon(
+                        BetterIcons.filterHorizontalOutline,
+                        size: 20,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      suffix: Icon(
+                        BetterIcons.arrowDown01Outline,
+                        size: 20,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    AppTextButton(
+                      onPressed: () {},
+                      text: 'Add Filter',
+                      prefix: Icon(
+                        BetterIcons.addSquareOutline,
+                        size: 20,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      size: ButtonSize.medium,
+                    ),
+                    AppIconButton(
+                      icon: BetterIcons.file02Outline,
+                      style: IconButtonStyle.outline,
+                      size: ButtonSize.medium,
+                    ),
+                    AppIconButton(
+                      icon: BetterIcons.cloudDownloadOutline,
+                      style: IconButtonStyle.outline,
+                      size: ButtonSize.medium,
+                    ),
+                    AppIconButton(
+                      icon: BetterIcons.moreVerticalCircle01Outline,
+                      style: IconButtonStyle.outline,
+                      size: ButtonSize.medium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 16,
+                bottom: 24,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 8,
+                children: [
+                  EcommerceOrdersCard(
+                    userImage: Assets.images.avatars.illustration01.image(),
+                    userName: 'Corey George',
+                    orderStatusBadgeText: 'Completed',
+                    orderStatusBadgeColor: SemanticColor.success,
+                    paymentStatusBadgeText: 'Completed',
+                    paymentStatusBadgeColor: SemanticColor.success,
+                  ),
+                  EcommerceOrdersCard(
+                    userImage: Assets.images.avatars.illustration02.image(),
+                    userName: 'Ahmad Rosser',
+                    orderStatusBadgeText: 'Shipping',
+                    orderStatusBadgeColor: SemanticColor.warning,
+                    paymentStatusBadgeText: 'Cash on Delivery',
+                    paymentStatusBadgeColor: SemanticColor.neutral,
+                  ),
+                  EcommerceOrdersCard(
+                    userImage: Assets.images.avatars.illustration03.image(),
+                    userName: 'Ahmad Siphron',
+                    orderStatusBadgeText: 'Shipping',
+                    orderStatusBadgeColor: SemanticColor.warning,
+                    paymentStatusBadgeText: 'Cash on Delivery',
+                    paymentStatusBadgeColor: SemanticColor.neutral,
+                  ),
+                  EcommerceOrdersCard(
+                    userImage: Assets.images.avatars.illustration04.image(),
+                    userName: 'Ashlynn Septimus',
+                    orderStatusBadgeText: 'Completed',
+                    orderStatusBadgeColor: SemanticColor.success,
+                    paymentStatusBadgeText: 'Completed',
+                    paymentStatusBadgeColor: SemanticColor.success,
+                  ),
+                  EcommerceOrdersCard(
+                    userImage: Assets.images.avatars.illustration05.image(),
+                    userName: 'Ann Stanton',
+                    orderStatusBadgeText: 'Completed',
+                    orderStatusBadgeColor: SemanticColor.success,
+                    paymentStatusBadgeText: 'Completed',
+                    paymentStatusBadgeColor: SemanticColor.success,
+                  ),
+                  EcommerceOrdersCard(
+                    userImage: Assets.images.avatars.illustration06.image(),
+                    userName: 'Jocelyn Franci',
+                    orderStatusBadgeText: 'Cancelled',
+                    orderStatusBadgeColor: SemanticColor.error,
+                    paymentStatusBadgeText: 'Not Completed',
+                    paymentStatusBadgeColor: SemanticColor.neutral,
+                  ),
+                  EcommerceOrdersCard(
+                    userImage: Assets.images.avatars.illustration07.image(),
+                    userName: 'Ann Levin',
+                    orderStatusBadgeText: 'Completed',
+                    orderStatusBadgeColor: SemanticColor.success,
+                    paymentStatusBadgeText: 'Cash on Delivery',
+                    paymentStatusBadgeColor: SemanticColor.neutral,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 31),
+              child: AppTableFooter(isMobile: true),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A mobile-optimized top bar for e-commerce applications.
+///
+/// The [EcommerceMobileTopBar] provides a consistent navigation bar for mobile
+/// e-commerce screens with a prefix icon, title, and customizable suffix icons.
+///
+/// Example:
+/// ```dart
+/// EcommerceMobileTopBar.dashboardPanel(
+///   title: 'Dashboard',
+///   prefixIcon: BetterIcons.menu01Outline,
+/// )
+/// ```
+class EcommerceMobileTopBar extends StatelessWidget {
+  final IconData prefixIcon;
+  final String title;
+  final List<IconData> suffixIcons;
+  final TextStyle? Function(BuildContext) titleStyle;
+
+  const EcommerceMobileTopBar._({
+    required this.prefixIcon,
+    required this.title,
+    required this.suffixIcons,
+    required this.titleStyle,
+  });
+
+  /// Dashboard panel top bar with search, notifications, and store icons.
+  factory EcommerceMobileTopBar.dashboardPanel({
+    required String title,
+    required IconData prefixIcon,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: const [
+        BetterIcons.search01Filled,
+        BetterIcons.notification02Outline,
+        BetterIcons.store01Outline,
+      ],
+      titleStyle: (context) => context.textTheme.titleSmall,
+    );
+  }
+
+  /// Client side top bar with custom suffix icons.
+  factory EcommerceMobileTopBar.clientSide({
+    required String title,
+    required IconData prefixIcon,
+    required List<IconData> suffixIcons,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: suffixIcons,
+      titleStyle: (context) => context.textTheme.labelLarge,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbar(
+      showDivider: false,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      prefix: Row(
+        spacing: 8,
+        children: [
+          AppTopBarIconButton(
+            icon: prefixIcon,
+            iconColor: context.colors.onSurfaceVariant,
+          ),
+          Text(title, style: titleStyle(context)),
+        ],
+      ),
+      suffix: Row(
+        spacing: 8,
+        children: [
+          const SizedBox(width: 8),
+          ...suffixIcons.map(
+            (icon) => AppTopBarIconButton(
+              icon: icon,
+              iconColor: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceOrdersCard extends StatelessWidget {
+  const EcommerceOrdersCard({
+    super.key,
+    required this.userImage,
+    required this.userName,
+    required this.orderStatusBadgeText,
+    required this.orderStatusBadgeColor,
+    required this.paymentStatusBadgeText,
+    required this.paymentStatusBadgeColor,
+  });
+
+  final Widget userImage;
+  final String userName;
+  final String orderStatusBadgeText;
+  final SemanticColor orderStatusBadgeColor;
+  final String paymentStatusBadgeText;
+  final SemanticColor paymentStatusBadgeColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border.all(color: context.colors.outline),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [BetterShadow.shadow4.toBoxShadow(context)],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 12,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '#PRD001',
+                style: context.textTheme.labelMedium!.copyWith(
+                  color: context.colors.onSurfaceVariantLow,
+                ),
+              ),
+              Text(
+                '23 May, 2025',
+                style: context.textTheme.labelMedium!.copyWith(
+                  color: context.colors.onSurfaceVariantLow,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: SizedBox(width: 40, height: 40, child: userImage),
+              ),
+              const SizedBox(width: 8),
+              Text(userName, style: context.textTheme.labelLarge),
+              const Spacer(),
+              Text('\$244.00', style: context.textTheme.labelLarge),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Order status:',
+                style: context.textTheme.labelLarge!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+              AppBadge(
+                text: orderStatusBadgeText,
+                size: BadgeSize.large,
+                color: orderStatusBadgeColor,
+                isRounded: true,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Payment status:',
+                style: context.textTheme.labelLarge!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+              AppBadge(
+                text: paymentStatusBadgeText,
+                size: BadgeSize.large,
+                color: paymentStatusBadgeColor,
+                isRounded: true,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

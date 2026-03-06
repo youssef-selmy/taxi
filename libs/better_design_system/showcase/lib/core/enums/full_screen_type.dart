@@ -1,0 +1,1 @@
+enum FullScreenType { dashboard, block }

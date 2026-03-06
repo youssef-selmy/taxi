@@ -1,0 +1,1163 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:better_design_showcase/core/router/app_router.dart';
+import 'package:better_design_showcase/features/fintech/presentation/blocs/navigator.cubit.dart';
+import 'package:better_design_system/atoms/avatar/avatar.dart';
+import 'package:better_design_system/atoms/input_fields/dropdown/dropdown_field.dart';
+import 'package:better_design_system/molecules/bottom_navigation/bottom_navigation.dart';
+import 'package:better_design_system/molecules/bottom_navigation/bottom_navigation_fab.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:math';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/dot_badge/dot_badge.dart';
+import 'package:better_design_system/atoms/toggle_switch_button_group/toggle_switch_button_group.dart';
+import 'package:better_design_system/organisms/profile_button/profile_button.dart';
+import 'package:image_faker/image_faker.dart';
+import 'package:better_design_showcase/core/components/page_indicator.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_system/atoms/buttons/filled_button.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_icons/better_icons.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:better_design_system/better_design_system.dart';
+
+class FintechScreenMobile extends StatelessWidget {
+  const FintechScreenMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: context.read<NavigatorCubit>(),
+      child: Scaffold(
+        backgroundColor: context.colors.surfaceVariantLow,
+        body: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400, maxHeight: 1000),
+            child: BlocBuilder<NavigatorCubit, AppNavigatorState>(
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 40),
+                  child: Column(
+                    children: [
+                      Expanded(child: AutoRouter()),
+
+                      if (state.selectedRoute == FintechHomeRoute() ||
+                          state.selectedRoute == FintechCardRoute() ||
+                          state.selectedRoute == FintechAnalyticsRoute() ||
+                          state.selectedRoute == FintechProfileRoute())
+                        ClipRRect(
+                          borderRadius: BorderRadiusGeometry.only(
+                            bottomLeft: Radius.circular(16),
+                            bottomRight: Radius.circular(16),
+                          ),
+                          child: AppBottomNavigation<PageRouteInfo>(
+                            primaryActionPosition:
+                                PrimaryActionPosition.floating,
+                            primaryAction: BottomNavFab(
+                              color: SemanticColor.primary,
+                              icon: Icon(
+                                BetterIcons.add01Outline,
+                                size: 24,
+                                color: context.colors.surface,
+                              ),
+                              onPressed: () {
+                                context.read<NavigatorCubit>()
+                                    .onNavigationItemTapped(
+                                      FintechTransferRoute(),
+                                    );
+                                context.router.replaceAll([
+                                  FintechTransferRoute(),
+                                ]);
+                              },
+                            ),
+                            onTap: (value) {
+                              context.read<NavigatorCubit>().onNavigationItemTapped(
+                                value,
+                              );
+                              context.router.replaceAll([value]);
+                            },
+                            selectedValue: state.selectedRoute,
+                            items: [
+                              NavigationItem(
+                                label: 'Home',
+                                icon: Icon(BetterIcons.home01Outline),
+                                activeIcon: Icon(BetterIcons.home01Filled),
+                                value: FintechHomeRoute(),
+                              ),
+                              NavigationItem(
+                                label: 'Card',
+                                icon: Icon(BetterIcons.creditCardOutline),
+                                activeIcon: Icon(BetterIcons.creditCardFilled),
+                                value: FintechCardRoute(),
+                              ),
+
+                              NavigationItem(
+                                label: 'Analytics',
+                                icon: Icon(BetterIcons.analytics01Outline),
+                                activeIcon: Icon(BetterIcons.analytics01Filled),
+                                value: FintechAnalyticsRoute(),
+                              ),
+                              NavigationItem(
+                                label: 'Profile',
+                                icon: Icon(BetterIcons.userCircle02Outline),
+                                activeIcon: Icon(
+                                  BetterIcons.userCircle02Filled,
+                                ),
+                                value: FintechProfileRoute(),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+@RoutePage()
+class FintechHomeScreen extends StatefulWidget {
+  const FintechHomeScreen({super.key});
+
+  @override
+  State<FintechHomeScreen> createState() => _FintechHomeScreenState();
+}
+
+class _FintechHomeScreenState extends State<FintechHomeScreen> {
+  final List<String> transactionsTab = ['Payment', 'Receive'];
+
+  late String selectedTab;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTab = transactionsTab.first;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        AppProfileButton(
+                          avatarUrl: ImageFaker().person.one,
+                          statusBadge: StatusBadgeType.online,
+                          title: 'Hi, Sara 👋',
+                        ),
+
+                        Row(
+                          spacing: 8,
+                          children: <Widget>[
+                            AppIconButton(
+                              onPressed: () {},
+                              icon: BetterIcons.search01Filled,
+                            ),
+                            AppIconButton(
+                              onPressed: () {},
+                              icon: BetterIcons.notification02Outline,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Total Balance',
+                    style: context.textTheme.labelLarge?.variant(context),
+                  ),
+                  SizedBox(height: 8),
+                  Text('\$17,000,000', style: context.textTheme.headlineLarge),
+
+                  SizedBox(height: 40),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Card', style: context.textTheme.titleSmall),
+                      AppOutlinedButton(
+                        onPressed: () {},
+                        prefixIcon: BetterIcons.add01Outline,
+                        text: 'Add new Card',
+                        size: ButtonSize.medium,
+                        color: SemanticColor.neutral,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+
+                  FintechSavedPaymentMethodsCarousel(),
+                ],
+              ),
+            ),
+            SizedBox(height: 24),
+            SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: 8,
+                children: <Widget>[
+                  AppOutlinedButton(
+                    onPressed: () {},
+                    text: 'Top-up',
+                    prefixIcon: BetterIcons.add01Outline,
+                    color: SemanticColor.neutral,
+                    borderRadius: BorderRadius.circular(100),
+                    size: ButtonSize.medium,
+                  ),
+                  AppOutlinedButton(
+                    onPressed: () {},
+                    text: 'Transfer',
+                    prefixIcon: BetterIcons.arrowDataTransferHorizontalOutline,
+                    color: SemanticColor.neutral,
+                    borderRadius: BorderRadius.circular(100),
+                    size: ButtonSize.medium,
+                  ),
+                  AppOutlinedButton(
+                    onPressed: () {},
+                    text: 'Withdraw',
+                    prefixIcon: BetterIcons.arrowDown03Outline,
+                    color: SemanticColor.neutral,
+                    borderRadius: BorderRadius.circular(100),
+                    size: ButtonSize.medium,
+                  ),
+                  AppOutlinedButton(
+                    onPressed: () {},
+                    text: 'Payment',
+                    prefixIcon: BetterIcons.dollarCircleOutline,
+                    color: SemanticColor.neutral,
+                    borderRadius: BorderRadius.circular(100),
+                    size: ButtonSize.medium,
+                  ),
+                  AppOutlinedButton(
+                    onPressed: () {},
+                    text: 'More',
+                    prefixIcon: BetterIcons.dashboardSquare01Outline,
+                    color: SemanticColor.neutral,
+                    borderRadius: BorderRadius.circular(100),
+                    size: ButtonSize.medium,
+                  ),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 24),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: context.colors.surface,
+                            border: Border.all(color: context.colors.outline),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            spacing: 24,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Analytics',
+                                style: context.textTheme.titleSmall,
+                              ),
+                              Row(
+                                spacing: 24,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      spacing: 12,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Row(
+                                              spacing: 8,
+                                              children: <Widget>[
+                                                BetterDotBadge(
+                                                  dotBadgeSize:
+                                                      DotBadgeSize.large,
+                                                  color: SemanticColor.primary,
+                                                ),
+                                                Text(
+                                                  'Income',
+                                                  style: context
+                                                      .textTheme
+                                                      .labelLarge
+                                                      ?.variant(context),
+                                                ),
+                                              ],
+                                            ),
+                                            Text(
+                                              '\$5,890.35',
+                                              style:
+                                                  context.textTheme.labelLarge,
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Row(
+                                              spacing: 8,
+                                              children: <Widget>[
+                                                BetterDotBadge(
+                                                  dotBadgeSize:
+                                                      DotBadgeSize.large,
+                                                  color: SemanticColor.warning,
+                                                ),
+                                                Text(
+                                                  'Outcome',
+                                                  style: context
+                                                      .textTheme
+                                                      .labelLarge
+                                                      ?.variant(context),
+                                                ),
+                                              ],
+                                            ),
+                                            Text(
+                                              '\$2,741.13',
+                                              style:
+                                                  context.textTheme.labelLarge,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  _StackedCircularProgress(
+                                    values: [0.5, 0.3],
+                                    colors: [
+                                      context.colors.primary,
+                                      context.colors.warning,
+                                    ],
+                                    size: 100,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 24),
+                  Text(
+                    'Recent Transactions',
+                    style: context.textTheme.titleSmall,
+                  ),
+                  SizedBox(height: 16),
+                  AppToggleSwitchButtonGroup<String>(
+                    isExpanded: true,
+                    options:
+                        transactionsTab
+                            .map(
+                              (e) => ToggleSwitchButtonGroupOption(
+                                value: e,
+                                label: e,
+                              ),
+                            )
+                            .toList(),
+                    selectedValue: selectedTab,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedTab = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 16),
+
+                  Column(
+                    children: [
+                      _getTransactionItem(
+                        context,
+                        icon: BetterIcons.hamburger01Filled,
+                        iconColor: context.colors.warning,
+                        title: 'Food',
+                        subtitle: '05 / 2025',
+                        price: '\$100',
+                      ),
+                      AppDivider(height: 36),
+                      _getTransactionItem(
+                        context,
+                        icon: BetterIcons.add01Filled,
+                        iconColor: context.colors.warning,
+                        title: 'Gas bill',
+                        subtitle: '05 / 2025',
+                        price: '\$35',
+                      ),
+                      AppDivider(height: 36),
+                      _getTransactionItem(
+                        context,
+                        icon: BetterIcons.car05Filled,
+                        iconColor: context.colors.primary,
+                        title: 'Car Gasoline',
+                        subtitle: '05 / 2025',
+                        price: '\$30',
+                      ),
+                      AppDivider(height: 36),
+                      _getTransactionItem(
+                        context,
+                        icon: BetterIcons.building02Filled,
+                        iconColor: context.colors.onSurfaceVariant,
+                        title: 'School Tuition',
+                        subtitle: '05 / 2025',
+                        price: '\$350',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _getTransactionItem(
+    BuildContext context, {
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required String subtitle,
+    required String price,
+  }) => Row(
+    children: <Widget>[
+      Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: context.colors.surface,
+          border: Border.all(color: context.colors.outline),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Icon(icon, size: 20, color: iconColor),
+      ),
+      SizedBox(width: 8),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: context.textTheme.labelLarge),
+          Text(subtitle, style: context.textTheme.bodySmall?.variant(context)),
+        ],
+      ),
+      Spacer(),
+      Text(price, style: context.textTheme.labelLarge),
+    ],
+  );
+}
+
+class _StackedCircularProgress extends StatelessWidget {
+  final List<double> values;
+  final List<Color> colors;
+  final double size;
+
+  const _StackedCircularProgress({
+    required this.values,
+    required this.colors,
+    this.size = 100,
+  }) : assert(
+         values.length == colors.length,
+         'values & colors length mismatch',
+       );
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          CustomPaint(
+            size: Size(size, size),
+            painter: _ArcPainter(
+              value: 1,
+              color: context.colors.surfaceVariant,
+              strokeWidth: 12,
+            ),
+          ),
+
+          for (int i = 0; i < values.length; i++)
+            CustomPaint(
+              size: Size(size, size),
+              painter: _ArcPainter(
+                value: values[i],
+                color: colors[i],
+                strokeWidth: 12,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ArcPainter extends CustomPainter {
+  final double value;
+  final Color color;
+  final double strokeWidth;
+
+  _ArcPainter({
+    required this.value,
+    required this.color,
+    required this.strokeWidth,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint =
+        Paint()
+          ..color = color
+          ..strokeWidth = strokeWidth
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round;
+
+    final rect = Rect.fromCircle(
+      center: Offset(size.width / 2, size.height / 2),
+      radius: size.width / 2 - strokeWidth / 2,
+    );
+
+    final startAngle = -pi / 2;
+    final sweepAngle = 2 * pi * value;
+
+    canvas.drawArc(rect, startAngle, sweepAngle, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _ArcPainter oldDelegate) {
+    return oldDelegate.value != value || oldDelegate.color != color;
+  }
+}
+
+class FintechSavedPaymentMethodsCarousel extends StatefulWidget {
+  const FintechSavedPaymentMethodsCarousel({super.key});
+
+  @override
+  State<FintechSavedPaymentMethodsCarousel> createState() =>
+      _FintechSavedPaymentMethodsCarouselState();
+}
+
+class _FintechSavedPaymentMethodsCarouselState
+    extends State<FintechSavedPaymentMethodsCarousel> {
+  final _cards = [
+    FintechSavedPaymentMethodCard(
+      cardSubtitle: 'Niklaus Mikaelson',
+      displayValue: '**** **** **** 7788',
+      expireDate: '01/02',
+      style: SavedPaymentMethodStyle.gradientRed,
+      type: SavedPaymentMethodType.cardNumber,
+    ),
+    FintechSavedPaymentMethodCard(
+      cardSubtitle: 'Elijah Mikaelson',
+      displayValue: '**** **** **** 1122',
+      expireDate: '05/27',
+      style: SavedPaymentMethodStyle.gradientBlue,
+      type: SavedPaymentMethodType.cardNumber,
+    ),
+    FintechSavedPaymentMethodCard(
+      cardSubtitle: 'Niklaus Bank',
+      displayValue: '**** **** **** 3344',
+      expireDate: '09/25',
+      style: SavedPaymentMethodStyle.gradientPurple,
+      type: SavedPaymentMethodType.cardNumber,
+    ),
+  ];
+  final PageController _pageController = PageController(viewportFraction: 1);
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      final page = _pageController.page?.round() ?? 0;
+      if (page != _currentPage) {
+        setState(() => _currentPage = page);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 210,
+          child: PageView.builder(
+            padEnds: true,
+            pageSnapping: true,
+            controller: _pageController,
+            itemCount: _cards.length,
+            itemBuilder: (context, index) {
+              return AnimatedPadding(
+                duration: const Duration(milliseconds: 250),
+                padding: EdgeInsets.zero,
+                child: Row(children: [Expanded(child: _cards[index])]),
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 16),
+        AppPageIndicator(pageCount: _cards.length, currentPage: _currentPage),
+      ],
+    );
+  }
+}
+
+enum SavedPaymentMethodType {
+  normal,
+  business,
+  marketing,
+  personal,
+  cardNumber,
+}
+
+enum SavedPaymentMethodStyle {
+  solidBlue,
+  gradientRed,
+  gradientPurple,
+  gradientBlue,
+}
+
+class FintechSavedPaymentMethodCard extends StatelessWidget {
+  final String? expireDate;
+  final String cardSubtitle;
+  final String displayValue;
+  final SavedPaymentMethodType type;
+  final SavedPaymentMethodStyle style;
+  const FintechSavedPaymentMethodCard({
+    super.key,
+    required this.cardSubtitle,
+    required this.displayValue,
+    this.expireDate,
+    this.type = SavedPaymentMethodType.normal,
+    this.style = SavedPaymentMethodStyle.solidBlue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 210,
+      constraints: BoxConstraints(maxWidth: 316),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: _getBackground(context),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        spacing: 8,
+                        children: [
+                          Assets.images.paymentMethods.mastercardPng.image(
+                            height: 32,
+                            width: 32,
+                            fit: BoxFit.cover,
+                          ),
+                          Text(
+                            'mastercard',
+                            style: context.textTheme.labelLarge,
+                          ),
+                        ],
+                      ),
+
+                      AppIconButton(
+                        icon: BetterIcons.moreHorizontalCircle01Filled,
+                        size: ButtonSize.medium,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 37),
+                  Text(
+                    _typeText,
+                    style: context.textTheme.labelMedium?.variant(context),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(displayValue, style: context.textTheme.titleLarge),
+                ],
+              ),
+            ),
+          ),
+
+          Container(
+            decoration: BoxDecoration(color: context.colors.onSurface),
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Text(
+                  cardSubtitle,
+                  style: context.textTheme.labelMedium?.apply(
+                    color: context.colors.surface,
+                  ),
+                ),
+                if (expireDate != null) ...[
+                  const Spacer(),
+                  Text(
+                    'Exp $expireDate',
+                    style: context.textTheme.labelMedium?.apply(
+                      color: context.colors.surface,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String get _typeText => switch (type) {
+    SavedPaymentMethodType.normal => 'Total Amount',
+    SavedPaymentMethodType.business => 'Business',
+    SavedPaymentMethodType.marketing => 'Marketing',
+    SavedPaymentMethodType.personal => 'Personal',
+    SavedPaymentMethodType.cardNumber => 'Card Number',
+  };
+
+  ImageProvider _getBackground(BuildContext context) => switch (style) {
+    SavedPaymentMethodStyle.solidBlue =>
+      Assets.images.cardBackgrounds.solidBlue.provider(),
+    SavedPaymentMethodStyle.gradientRed =>
+      context.isDark
+          ? Assets.images.cardBackgrounds.linearGradientStyle1Dark.provider()
+          : Assets.images.cardBackgrounds.linearGradientStyle1.provider(),
+    SavedPaymentMethodStyle.gradientPurple =>
+      Assets.images.cardBackgrounds.linearGradientStyle2.provider(),
+    SavedPaymentMethodStyle.gradientBlue =>
+      Assets.images.cardBackgrounds.linearGradientStyle3.provider(),
+  };
+}
+
+@RoutePage()
+class FintechCardScreen extends StatelessWidget {
+  const FintechCardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [Text('Card', style: context.textTheme.titleSmall)],
+              ),
+            ),
+            SizedBox(height: 16),
+            FintechSavedPaymentMethodsCarousel(),
+            SizedBox(height: 24),
+            Text('Card Information', style: context.textTheme.titleSmall),
+            SizedBox(height: 16),
+
+            Column(
+              spacing: 16,
+              children: [
+                AppTextField(
+                  initialValue: 'Sara Temple',
+                  label: 'Card Name',
+                  isFilled: false,
+                  readOnly: true,
+                ),
+                AppTextField(
+                  initialValue: '2598 6329 9657 0206',
+                  label: 'Card Number',
+                  isFilled: false,
+                  readOnly: true,
+                ),
+                Row(
+                  spacing: 16,
+                  children: <Widget>[
+                    Expanded(
+                      child: AppTextField(
+                        initialValue: '09/23',
+                        label: '09/23',
+                        isFilled: false,
+                        readOnly: true,
+                      ),
+                    ),
+                    Expanded(
+                      child: AppTextField(
+                        initialValue: 'CVV',
+                        label: '691',
+                        isFilled: false,
+                        readOnly: true,
+                      ),
+                    ),
+                  ],
+                ),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppFilledButton(
+                        onPressed: () {},
+                        text: 'Add New Card',
+                        prefixIcon: BetterIcons.add01Outline,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: AppOutlinedButton(
+                        onPressed: () {},
+                        text: 'Edit Card',
+                        prefixIcon: BetterIcons.pencilEdit01Outline,
+                        color: SemanticColor.neutral,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+@RoutePage()
+class FintechAnalyticsScreen extends StatefulWidget {
+  const FintechAnalyticsScreen({super.key});
+
+  @override
+  State<FintechAnalyticsScreen> createState() => _FintechAnalyticsScreenState();
+}
+
+class _FintechAnalyticsScreenState extends State<FintechAnalyticsScreen> {
+  final weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  final values = [800.0, 1200.0, 600.0, 1000.0, 900.0, 700.0, 1100.0];
+
+  final List<String> chartTabs = ['Income', 'Outcome'];
+
+  late String selectedTab;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTab = chartTabs.first;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Analytics', style: context.textTheme.titleSmall),
+                ],
+              ),
+            ),
+            SizedBox(height: 16),
+            AppToggleSwitchButtonGroup<String>(
+              isExpanded: true,
+              options:
+                  chartTabs
+                      .map(
+                        (e) =>
+                            ToggleSwitchButtonGroupOption(value: e, label: e),
+                      )
+                      .toList(),
+              selectedValue: selectedTab,
+              onChanged: (value) {
+                setState(() {
+                  selectedTab = value;
+                });
+              },
+            ),
+            SizedBox(height: 24),
+
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Overview', style: context.textTheme.titleSmall),
+                    Text(
+                      'Oct 10,2024 - Oct 17 2024',
+                      style: context.textTheme.labelMedium,
+                    ),
+                  ],
+                ),
+
+                SizedBox(
+                  width: 93,
+                  child: AppDropdownField.single(
+                    items: [
+                      AppDropdownItem(value: 'Daily', title: 'Daily'),
+                      AppDropdownItem(value: 'Weekly', title: 'Weekly'),
+                      AppDropdownItem(value: 'Monthly', title: 'Monthly'),
+                      AppDropdownItem(value: 'Yearly', title: 'Yearly'),
+                    ],
+                    type: DropdownFieldType.compact,
+                    isFilled: false,
+                    initialValue: 'Weekly',
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 24),
+            SizedBox(
+              height: 240,
+              child: BarChart(
+                BarChartData(
+                  maxY: 2000,
+                  minY: 0,
+                  gridData: FlGridData(
+                    show: true,
+                    drawVerticalLine: false,
+                    horizontalInterval: 500,
+                    getDrawingHorizontalLine:
+                        (value) => FlLine(
+                          color: context.colors.outlineVariant,
+                          dashArray: [4, 4],
+                          strokeWidth: 1,
+                        ),
+                  ),
+                  borderData: FlBorderData(show: false),
+                  titlesData: FlTitlesData(
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 48,
+                        interval: 500,
+                        getTitlesWidget: (value, meta) {
+                          final label = '\$${value.toInt()}';
+                          return Text(
+                            label,
+                            style: context.textTheme.bodySmall?.variant(
+                              context,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          final index = value.toInt();
+                          return Text(
+                            index >= 0 && index < weekdays.length
+                                ? weekdays[index]
+                                : '',
+                            style: context.textTheme.bodySmall?.variant(
+                              context,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                  ),
+                  barGroups: List.generate(weekdays.length, (i) {
+                    return BarChartGroupData(
+                      x: i,
+                      barRods: [
+                        BarChartRodData(
+                          toY: values[i],
+                          width: 16,
+                          borderRadius: BorderRadius.circular(100),
+                          color: context.colors.primary,
+                        ),
+                      ],
+                    );
+                  }),
+                ),
+              ),
+            ),
+            SizedBox(height: 24),
+            Text('Details', style: context.textTheme.titleSmall),
+            SizedBox(height: 16),
+
+            Column(
+              children: [
+                _getDetailItem(
+                  context,
+                  avatar: ImageFaker().person.one,
+                  title: 'Kara White',
+                  subtitle: '18:59',
+                  price: '\$100',
+                  leadingSubtitle: 'Transfer',
+                ),
+                AppDivider(height: 36),
+                _getDetailItem(
+                  context,
+                  avatar: ImageFaker().person.two,
+                  title: 'Richard Hill',
+                  subtitle: '22:21',
+                  price: '\$200',
+                  leadingSubtitle: 'Withdraw',
+                ),
+                AppDivider(height: 36),
+                _getDetailItem(
+                  context,
+                  avatar: ImageFaker().person.three,
+                  title: 'Frederick Dimatteo',
+                  subtitle: '08:51',
+                  price: '\$78',
+                  leadingSubtitle: 'Transfer',
+                ),
+                AppDivider(height: 36),
+                _getDetailItem(
+                  context,
+                  avatar: ImageFaker().person.four,
+                  title: 'Aletha Parish',
+                  subtitle: '09:23',
+                  price: '\$250',
+                  leadingSubtitle: 'Transfer',
+                ),
+                AppDivider(height: 36),
+              ],
+            ),
+            SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _getDetailItem(
+    BuildContext context, {
+    required String avatar,
+    required String title,
+    required String subtitle,
+    required String price,
+    required String leadingSubtitle,
+  }) => Row(
+    children: [
+      AppAvatar(imageUrl: avatar, size: AvatarSize.size40px),
+      SizedBox(width: 8),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 4,
+        children: [
+          Text(title, style: context.textTheme.labelLarge),
+          Text(subtitle, style: context.textTheme.bodySmall?.variant(context)),
+        ],
+      ),
+      Spacer(),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        spacing: 4,
+        children: [
+          Text(price, style: context.textTheme.labelLarge),
+          Text(
+            leadingSubtitle,
+            style: context.textTheme.bodySmall?.variant(context),
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+@RoutePage()
+class FintechProfileScreen extends StatelessWidget {
+  const FintechProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+      child: Center(
+        child: Assets.images.emptyStates.empty2.image(width: 200, height: 200),
+      ),
+    );
+  }
+}

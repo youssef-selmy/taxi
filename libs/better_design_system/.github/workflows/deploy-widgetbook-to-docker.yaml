@@ -1,0 +1,107 @@
+name: Deploy Widgetbook to Docker
+
+on:
+  push:
+    branches: [main]
+
+env:
+  PUB_CACHE: ~/.pub-cache
+
+jobs:
+  web-deploy:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          path: "libs/better_design_system"
+          submodules: true
+          token: ${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Checkout localizatinos repository
+        uses: actions/checkout@v4
+        with:
+          repository: "irnpnh/flutter-localizations"
+          path: "libs/flutter_localizations"
+          submodules: true
+          token: ${{ secrets.GIT_PERSONAL_ACCESS_TOKEN }}
+
+      - name: Cache Pubs
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.PUB_CACHE }}
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: "LumeAgency"
+          password: ${{ secrets.GHCR_TOKEN_LUME_AGENCY }}
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.35.5"
+          channel: "stable"
+          cache: true
+
+      - name: Install pub Dependencies
+        working-directory: ./libs/better_design_system
+        run: flutter pub get
+
+      - name: Install pub Dependencies
+        working-directory: ./libs/flutter_localizations
+        run: flutter pub get
+
+      - name: Install widgetbook pub Dependencies
+        working-directory: ./libs/better_design_system/widgetbook
+        run: flutter pub get
+
+      - name: Install widgetbook pub Dependencies
+        working-directory: ./libs/better_design_system/showcase
+        run: flutter pub get
+
+      - name: Run localizatinos generator
+        working-directory: ./libs/flutter_localizations
+        run: flutter gen-l10n
+
+      - name: Run widgetbook build_runner
+        working-directory: ./libs/better_design_system/widgetbook
+        run: dart run build_runner build -d --delete-conflicting-outputs
+
+      - name: Run widgetbook build_runner
+        working-directory: ./libs/better_design_system/showcase
+        run: dart run build_runner build -d --delete-conflicting-outputs
+
+      - name: Build Design System widgetbook web App
+        working-directory: ./libs/better_design_system/widgetbook
+        run: flutter build web --release --wasm
+
+      - name: Build Design System widgetbook web App
+        working-directory: ./libs/better_design_system/showcase
+        run: flutter build web --release --wasm
+
+      - name: Push widgetbook web app to the Docker Hub
+        uses: docker/build-push-action@v5
+        with:
+          context: ./libs/better_design_system/widgetbook
+          push: true
+          file: ./libs/better_design_system/widgetbook/Dockerfile
+          tags: |
+            ghcr.io/lumeagency/better-design-system-widgetbook:latest
+
+      - name: Push showcase web app to the Docker Hub
+        uses: docker/build-push-action@v5
+        with:
+          context: ./libs/better_design_system/showcase
+          push: true
+          file: ./libs/better_design_system/showcase/Dockerfile
+          tags: |
+            ghcr.io/lumeagency/better-design-system-showcase:latest

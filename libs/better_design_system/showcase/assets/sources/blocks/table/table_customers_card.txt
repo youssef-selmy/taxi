@@ -1,0 +1,472 @@
+import 'package:better_design_system/atoms/buttons/filled_button.dart';
+import 'package:better_design_system/atoms/buttons/icon_button.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/input_fields/text_field/text_field.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:api_response/api_response.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_showcase/core/components/table_footer.dart';
+import 'package:better_design_system/atoms/badge/badge.dart';
+import 'package:better_design_system/atoms/checkbox/checkbox.dart';
+import 'package:better_design_system/molecules/charts/bar_sparkline/bar_sparkline.dart';
+import 'package:better_design_system/molecules/charts/chart_series_data.dart';
+import 'package:better_design_system/organisms/data_table/data_table.dart';
+import 'package:better_icons/better_icons.dart';
+
+class TableCustomersCard extends StatelessWidget {
+  const TableCustomersCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 1225,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: context.colors.surface,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: context.colors.outline,
+                        width: 1,
+                      ),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    child: Icon(
+                      BetterIcons.userGroup03Filled,
+                      size: 24,
+                      color: context.colors.primary,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 8,
+                    children: [
+                      Text('Customers', style: context.textTheme.titleSmall),
+                      Text(
+                        'List of all the clients registered',
+                        style: context.textTheme.bodyMedium!.copyWith(
+                          color: context.colors.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  AppTextField(
+                    constraints: BoxConstraints(maxWidth: 267),
+                    hint: 'Search',
+                    prefixIcon: Icon(
+                      BetterIcons.search01Filled,
+                      size: 20,
+                      color: context.colors.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  AppFilledButton(
+                    onPressed: () {},
+                    prefixIcon: BetterIcons.add01Outline,
+                    text: 'Add User',
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 9.5),
+              child: const AppDivider(),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    AppOutlinedButton(
+                      onPressed: () {},
+                      text: 'Sort',
+                      color: SemanticColor.neutral,
+                      size: ButtonSize.medium,
+                      prefix: Icon(
+                        BetterIcons.arrowUpDownOutline,
+                        size: 18,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      suffix: Icon(
+                        BetterIcons.arrowDown01Outline,
+                        size: 18,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 17.5),
+                      child: Container(
+                        width: 1,
+                        decoration: BoxDecoration(
+                          color: context.colors.outline,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                    ),
+                    AppOutlinedButton(
+                      onPressed: () {},
+                      text: 'Filter',
+                      color: SemanticColor.neutral,
+                      size: ButtonSize.medium,
+                      prefix: Icon(
+                        BetterIcons.filterHorizontalOutline,
+                        size: 18,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      suffix: Icon(
+                        BetterIcons.arrowDown01Outline,
+                        size: 18,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    const SizedBox(width: 8),
+                    AppTextButton(
+                      onPressed: () {},
+                      text: 'Add Filter',
+                      prefix: Icon(
+                        BetterIcons.addSquareOutline,
+                        size: 18,
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      size: ButtonSize.medium,
+                    ),
+                    const Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 17.5),
+                      child: Container(
+                        width: 1,
+                        decoration: BoxDecoration(
+                          color: context.colors.outline,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                      ),
+                    ),
+                    AppIconButton(
+                      icon: BetterIcons.file02Outline,
+                      style: IconButtonStyle.outline,
+                      size: ButtonSize.medium,
+                    ),
+                    const SizedBox(width: 8),
+                    AppIconButton(
+                      icon: BetterIcons.cloudDownloadOutline,
+                      style: IconButtonStyle.outline,
+                      size: ButtonSize.medium,
+                    ),
+                    const SizedBox(width: 8),
+                    AppIconButton(
+                      icon: BetterIcons.moreVerticalCircle01Outline,
+                      style: IconButtonStyle.outline,
+                      size: ButtonSize.medium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const TableCustomersData(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Transactions {
+  final String username;
+  final Widget avatar;
+  final String activity;
+  final SemanticColor activityColor;
+  final IconData? activityIcon;
+  final String userStatus;
+  Transactions({
+    required this.username,
+    required this.avatar,
+    required this.activity,
+    required this.activityColor,
+    this.activityIcon,
+    this.userStatus = 'Active',
+  });
+}
+
+class TableCustomersData extends StatelessWidget {
+  const TableCustomersData({super.key, this.isMobile = false});
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final orders = [
+      Transactions(
+        username: 'Angel Gouse',
+        avatar: Assets.images.avatars.illustration01.image(
+          width: 40,
+          height: 40,
+        ),
+        activity: 'Online',
+        activityColor: SemanticColor.primary,
+      ),
+      Transactions(
+        username: 'Martin Calzoni',
+        avatar: Assets.images.avatars.illustration02.image(
+          width: 40,
+          height: 40,
+        ),
+        activity: 'Online',
+        activityColor: SemanticColor.primary,
+      ),
+      Transactions(
+        username: 'Marcus Bergson',
+        avatar: Assets.images.avatars.illustration03.image(
+          width: 40,
+          height: 40,
+        ),
+        activity: 'Online',
+        activityColor: SemanticColor.primary,
+      ),
+      Transactions(
+        username: 'Abram Bator',
+        avatar: Assets.images.avatars.illustration04.image(
+          width: 40,
+          height: 40,
+        ),
+        activity: 'Last activity 2h ago',
+        activityColor: SemanticColor.neutral,
+        activityIcon: BetterIcons.clock01Filled,
+        userStatus: 'Blocked',
+      ),
+      Transactions(
+        username: 'Alfonso Lipshutz',
+        avatar: Assets.images.avatars.illustration05.image(
+          width: 40,
+          height: 40,
+        ),
+        activity: 'Last activity 2h ago',
+        activityColor: SemanticColor.neutral,
+        activityIcon: BetterIcons.clock01Filled,
+        userStatus: 'Blocked',
+      ),
+    ];
+
+    final data = ApiResponse<List<Transactions>>.loaded(orders);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: 385,
+          width: double.infinity,
+          child: AppDataTable<List<Transactions>, dynamic>(
+            minWidth: 1500,
+            data: data,
+            getPageInfo:
+                (_) =>
+                    OffsetPageInfo(hasNextPage: false, hasPreviousPage: false),
+            getRowCount: (list) => list.length,
+            onPageChanged: (_) {},
+            paging: OffsetPaging(limit: 10, offset: 0),
+            columns: [
+              DataColumn2(fixedWidth: 48, label: AppCheckbox(value: false)),
+              DataColumn2(
+                fixedWidth: 74,
+                label: Text('', style: context.textTheme.bodyMedium),
+              ),
+              DataColumn2(
+                fixedWidth: 271.5,
+                label: Row(
+                  children: [
+                    Text('User', style: context.textTheme.bodyMedium),
+                    SizedBox(width: 4),
+                    Icon(
+                      BetterIcons.unfoldMoreFilled,
+                      color: context.colors.onSurfaceVariantLow,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+              DataColumn2(
+                fixedWidth: 200,
+                label: Row(
+                  children: [
+                    Text('Activity', style: context.textTheme.bodyMedium),
+                    SizedBox(width: 4),
+                    Icon(
+                      BetterIcons.unfoldMoreFilled,
+                      color: context.colors.onSurfaceVariantLow,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+              DataColumn2(
+                fixedWidth: 180,
+                label: Text(
+                  'Mobile Number',
+                  style: context.textTheme.bodyMedium,
+                ),
+              ),
+              DataColumn2(
+                fixedWidth: 160,
+                label: Text(
+                  'Wallet Amount',
+                  style: context.textTheme.bodyMedium,
+                ),
+              ),
+              DataColumn2(
+                fixedWidth: 252,
+                label: Row(
+                  children: [
+                    Text('Total Order', style: context.textTheme.bodyMedium),
+                    const SizedBox(width: 4),
+                    Icon(
+                      BetterIcons.unfoldMoreFilled,
+                      color: context.colors.onSurfaceVariantLow,
+                      size: 20,
+                    ),
+                  ],
+                ),
+              ),
+              DataColumn2(fixedWidth: 56, label: Text('')),
+            ],
+            rowBuilder: (list, index) {
+              final item = list[index];
+              return DataRow(
+                onSelectChanged: (_) {},
+                cells: [
+                  DataCell(AppCheckbox(value: false)),
+                  DataCell(
+                    Text(
+                      '#${index + 1}',
+                      style: context.textTheme.labelLarge!.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: item.avatar,
+                        ),
+                        const SizedBox(width: 8),
+                        Column(
+                          spacing: 4,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              item.username,
+                              style: context.textTheme.labelLarge,
+                            ),
+                            Text(
+                              item.userStatus,
+                              style: context.textTheme.bodySmall!.copyWith(
+                                color:
+                                    item.userStatus == 'Active'
+                                        ? context.colors.onSurfaceVariantLow
+                                        : context.colors.error,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataCell(
+                    AppBadge(
+                      text: item.activity,
+                      color: item.activityColor,
+                      prefixIcon: item.activityIcon,
+                      size: BadgeSize.large,
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      '+1 (888) 888-888',
+                      style: context.textTheme.labelLarge,
+                    ),
+                  ),
+                  DataCell(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 4,
+                      children: [
+                        Text('\$100.00', style: context.textTheme.labelLarge),
+                        Text(
+                          'USD',
+                          style: context.textTheme.bodySmall!.copyWith(
+                            color: context.colors.onSurfaceVariantLow,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataCell(
+                    Row(
+                      spacing: 12,
+                      children: [
+                        Text('236 Orders', style: context.textTheme.labelLarge),
+                        SizedBox(
+                          width: 100,
+                          height: 40,
+                          child: AppBarSparkline(
+                            data: [
+                              ChartSeriesData(
+                                name: 'Orders',
+                                color: context.colors.success,
+                                points: [
+                                  ChartPoint(name: '1', value: 30),
+                                  ChartPoint(name: '2', value: 50),
+                                  ChartPoint(name: '3', value: 70),
+                                  ChartPoint(name: '4', value: 100),
+                                  ChartPoint(name: '5', value: 60),
+                                  ChartPoint(name: '6', value: 45),
+                                  ChartPoint(name: '7', value: 80),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DataCell(
+                    AppIconButton(
+                      icon: BetterIcons.moreVerticalCircle01Outline,
+                      size: ButtonSize.medium,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+        const AppTableFooter(),
+      ],
+    );
+  }
+}

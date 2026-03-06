@@ -1,0 +1,1 @@
+enum FeedbackTagStyle { soft, ghost }

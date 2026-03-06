@@ -1,0 +1,104 @@
+name: better_design_showcase
+description: "Showcase for BetterUI."
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  better_design_system:
+    path: ..
+  freezed_annotation: ^3.1.0
+  api_response: ^0.2.3
+  image_faker: 0.1.0
+  flutter_staggered_grid_view: ^0.7.0
+  flutter_syntax_view: ^4.1.7
+  flutter_animate: ^4.5.2
+  better_icons:
+    path: ../better_icons
+  time: ^2.1.5
+  better_assets:
+    path: ../assets
+  generic_map: ^0.10.1
+  flutter_markdown_plus: ^1.0.5
+  url_launcher: ^6.3.1
+
+  # State management
+  flutter_bloc: ^9.1.1
+  hydrated_bloc: ^10.1.1
+
+  # Routing
+  auto_route: ^10.2.0
+
+  # Local storage
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_dotenv: ^6.0.0
+
+dev_dependencies:
+  freezed: ^3.2.3
+  auto_route_generator: ^10.2.5
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.10.0
+  flutter_gen_runner: ^5.12.0
+  flutter_gen: ^5.12.0
+  injectable_generator: ^2.9.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf
+  assets:
+    - assets/images/
+    - assets/images/blocks_component/
+    - assets/images/products/
+    - assets/images/showcase/
+    - assets/sources/
+    - assets/docs/
+    - assets/sources/templates/ecommerce/
+    - assets/sources/templates/fintech/
+    - assets/sources/templates/sales_and_marketing/
+    - assets/sources/templates/hr_platform/
+    - assets/sources/blocks/accordion/
+    - assets/sources/blocks/activity_log/
+    - assets/sources/blocks/avatar/
+    - assets/sources/blocks/badge/
+    - assets/sources/blocks/breadcrumb/
+    - assets/sources/blocks/button/
+    - assets/sources/blocks/chart/
+    - assets/sources/blocks/checkbox/
+    - assets/sources/blocks/date_and_time_picker/
+    - assets/sources/blocks/dropdown/
+    - assets/sources/blocks/notification/
+    - assets/sources/blocks/progress_bar/
+    - assets/sources/blocks/radio/
+    - assets/sources/blocks/rating/
+    - assets/sources/blocks/slider/
+    - assets/sources/blocks/snackbar/
+    - assets/sources/blocks/app_switch/
+    - assets/sources/blocks/switch_toggle/
+    - assets/sources/blocks/tag/
+    - assets/sources/blocks/toast_massage/
+    - assets/sources/blocks/tooltip/
+    - assets/sources/blocks/divider/
+    - assets/sources/blocks/file_upload/
+    - assets/sources/blocks/icon_container/
+    - assets/sources/blocks/input_component/
+    - assets/sources/blocks/list_item_cards/
+    - assets/sources/blocks/modal/
+    - assets/sources/blocks/pagination/
+    - assets/sources/blocks/pin_input/
+    - assets/sources/blocks/sidebar/
+    - assets/sources/blocks/step_indicator/
+    - assets/sources/blocks/table/
+    - assets/sources/blocks/text_area/
+    - assets/sources/blocks/text_input/

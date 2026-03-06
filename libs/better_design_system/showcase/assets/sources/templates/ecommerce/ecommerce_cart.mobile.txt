@@ -1,0 +1,732 @@
+import 'package:better_design_system/atoms/buttons/filled_button.dart';
+import 'package:better_icons/better_icon.dart';
+import 'package:flutter/material.dart';
+import 'package:better_design_system/atoms/buttons/top_bar_icon_button.dart';
+import 'package:better_design_system/atoms/navbar/navbar.dart';
+import 'package:better_design_system/utils/extensions/extensions.dart';
+import 'package:better_assets/gen/assets.gen.dart';
+import 'package:better_design_system/atoms/buttons/outlined_button.dart';
+import 'package:better_design_system/atoms/buttons/text_button.dart';
+import 'package:better_design_system/atoms/divider/divider.dart';
+import 'package:better_design_system/atoms/input_fields/counter_input/counter_input.dart';
+import 'package:better_design_system/theme/shadows.dart';
+import 'package:better_design_system/molecules/bottom_navigation/bottom_navigation.dart';
+
+class EcommerceCartMobile extends StatelessWidget {
+  const EcommerceCartMobile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 400),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            EcommerceMobileTopBar.clientSide(
+              prefixIcon: BetterIcons.location01Outline,
+              title: 'Cordova',
+              suffixIcons: [
+                BetterIcons.search01Filled,
+                BetterIcons.menu01Outline,
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                top: 16,
+                bottom: 38,
+              ),
+              child: Column(
+                spacing: 24,
+                children: [
+                  const EcommerceItemsCard(isMobile: true),
+                  const EcommerceSummaryCard(isMobile: true),
+                ],
+              ),
+            ),
+            EcommerceBottomNav(selectedItem: EcommerceNavRoute.shippingCart),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A mobile-optimized top bar for e-commerce applications.
+///
+/// The [EcommerceMobileTopBar] provides a consistent navigation bar for mobile
+/// e-commerce screens with a prefix icon, title, and customizable suffix icons.
+///
+/// Example:
+/// ```dart
+/// EcommerceMobileTopBar.dashboardPanel(
+///   title: 'Dashboard',
+///   prefixIcon: BetterIcons.menu01Outline,
+/// )
+/// ```
+class EcommerceMobileTopBar extends StatelessWidget {
+  final IconData prefixIcon;
+  final String title;
+  final List<IconData> suffixIcons;
+  final TextStyle? Function(BuildContext) titleStyle;
+
+  const EcommerceMobileTopBar._({
+    required this.prefixIcon,
+    required this.title,
+    required this.suffixIcons,
+    required this.titleStyle,
+  });
+
+  /// Dashboard panel top bar with search, notifications, and store icons.
+  factory EcommerceMobileTopBar.dashboardPanel({
+    required String title,
+    required IconData prefixIcon,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: const [
+        BetterIcons.search01Filled,
+        BetterIcons.notification02Outline,
+        BetterIcons.store01Outline,
+      ],
+      titleStyle: (context) => context.textTheme.titleSmall,
+    );
+  }
+
+  /// Client side top bar with custom suffix icons.
+  factory EcommerceMobileTopBar.clientSide({
+    required String title,
+    required IconData prefixIcon,
+    required List<IconData> suffixIcons,
+  }) {
+    return EcommerceMobileTopBar._(
+      prefixIcon: prefixIcon,
+      title: title,
+      suffixIcons: suffixIcons,
+      titleStyle: (context) => context.textTheme.labelLarge,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppNavbar(
+      showDivider: false,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      prefix: Row(
+        spacing: 8,
+        children: [
+          AppTopBarIconButton(
+            icon: prefixIcon,
+            iconColor: context.colors.onSurfaceVariant,
+          ),
+          Text(title, style: titleStyle(context)),
+        ],
+      ),
+      suffix: Row(
+        spacing: 8,
+        children: [
+          const SizedBox(width: 8),
+          ...suffixIcons.map(
+            (icon) => AppTopBarIconButton(
+              icon: icon,
+              iconColor: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EcommerceItemsCard extends StatelessWidget {
+  const EcommerceItemsCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    final padding = isMobile ? 16.0 : 24.0;
+    final shadow =
+        isMobile
+            ? BetterShadow.shadow4.toBoxShadow(context)
+            : BetterShadow.shadow16.toBoxShadow(context);
+
+    return Container(
+      padding: EdgeInsets.all(padding),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border.all(color: context.colors.outline),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [shadow],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: isMobile ? 16 : 0,
+        children: [
+          _buildHeader(context),
+          if (!isMobile) const SizedBox(height: 32),
+          isMobile ? _buildMobileItems(context) : _buildDesktopItems(context),
+          if (!isMobile) const SizedBox(height: 32),
+          SizedBox(
+            width: isMobile ? double.infinity : null,
+            child: AppOutlinedButton(
+              onPressed: () {},
+              text: 'Continue Shopping',
+              color: SemanticColor.neutral,
+              prefixIcon: BetterIcons.arrowLeft01Outline,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Row(
+      spacing: 8,
+      children: [
+        Text('Items', style: context.textTheme.titleMedium),
+        Text(
+          '(2)',
+          style: context.textTheme.labelLarge!.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMobileItems(BuildContext context) {
+    return Column(
+      spacing: 16,
+      children: [
+        // First item
+        Column(
+          children: [
+            Row(
+              spacing: 10,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Assets.images.products.shoe01EcommerceCart.image(
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Men\'s Shoes',
+                        style: context.textTheme.bodySmall!.copyWith(
+                          color: context.colors.onSurfaceVariantLow,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Air Jordan 1 Mid',
+                        style: context.textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text(
+                            'Size:',
+                            style: context.textTheme.labelMedium!.copyWith(
+                              color: context.colors.onSurfaceVariantLow,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Text('43', style: context.textTheme.labelMedium),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Color:',
+                            style: context.textTheme.labelMedium!.copyWith(
+                              color: context.colors.onSurfaceVariantLow,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Text('White', style: context.textTheme.labelMedium),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 114,
+                  child: AppCounterInput(
+                    initialValue: 1,
+                    isFilled: false,
+                    min: 1,
+                    max: 9,
+                  ),
+                ),
+                const Spacer(),
+                Text('\$110.99', style: context.textTheme.titleSmall),
+                const SizedBox(width: 8),
+                AppTextButton(
+                  onPressed: () {},
+                  prefixIcon: BetterIcons.delete03Outline,
+                  color: SemanticColor.error,
+                  size: ButtonSize.medium,
+                ),
+              ],
+            ),
+          ],
+        ),
+        AppDivider(),
+        // Second item
+        Column(
+          children: [
+            Row(
+              spacing: 10,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Assets.images.products.shoe02EcommerceCart.image(
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Men\'s Shoes',
+                        style: context.textTheme.bodySmall!.copyWith(
+                          color: context.colors.onSurfaceVariantLow,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Air Jordan 1 Low SE',
+                        style: context.textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text(
+                            'Size:',
+                            style: context.textTheme.labelMedium!.copyWith(
+                              color: context.colors.onSurfaceVariantLow,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Text('43', style: context.textTheme.labelMedium),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Color:',
+                            style: context.textTheme.labelMedium!.copyWith(
+                              color: context.colors.onSurfaceVariantLow,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Text('Gray', style: context.textTheme.labelMedium),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 114,
+                  child: AppCounterInput(
+                    initialValue: 1,
+                    isFilled: false,
+                    min: 1,
+                    max: 9,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  '\$120.99',
+                  style: context.textTheme.labelSmall!.copyWith(
+                    decoration: TextDecoration.lineThrough,
+                    color: context.colors.onSurfaceVariantLow,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text('\$110.99', style: context.textTheme.titleSmall),
+                const SizedBox(width: 8),
+                AppTextButton(
+                  onPressed: () {},
+                  prefixIcon: BetterIcons.delete03Outline,
+                  color: SemanticColor.error,
+                  size: ButtonSize.medium,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopItems(BuildContext context) {
+    return Column(
+      children: [
+        // First item
+        Row(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: Assets.images.products.shoe01EcommerceCart.provider(),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 11),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Men\'s Shoes',
+                    style: context.textTheme.bodySmall!.copyWith(
+                      color: context.colors.onSurfaceVariantLow,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text('Air Jordan 1 Mid', style: context.textTheme.labelLarge),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        'Size:',
+                        style: context.textTheme.labelMedium!.copyWith(
+                          color: context.colors.onSurfaceVariantLow,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Text('43', style: context.textTheme.labelMedium),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Color:',
+                        style: context.textTheme.labelMedium!.copyWith(
+                          color: context.colors.onSurfaceVariantLow,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Text('White', style: context.textTheme.labelMedium),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            SizedBox(
+              width: 112,
+              child: AppCounterInput(
+                initialValue: 1,
+                isFilled: false,
+                min: 1,
+                max: 9,
+              ),
+            ),
+            const SizedBox(width: 142),
+            Text('\$110.99', style: context.textTheme.titleSmall),
+            const SizedBox(width: 8),
+            AppTextButton(
+              onPressed: () {},
+              prefixIcon: BetterIcons.delete03Outline,
+              color: SemanticColor.error,
+              size: ButtonSize.medium,
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 17.5),
+          child: AppDivider(),
+        ),
+        // Second item
+        Row(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: Assets.images.products.shoe02EcommerceCart.provider(),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 11),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Men\'s Shoes',
+                    style: context.textTheme.bodySmall!.copyWith(
+                      color: context.colors.onSurfaceVariantLow,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Air Jordan 1 Low SE',
+                    style: context.textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        'Size:',
+                        style: context.textTheme.labelMedium!.copyWith(
+                          color: context.colors.onSurfaceVariantLow,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Text('43', style: context.textTheme.labelMedium),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Color:',
+                        style: context.textTheme.labelMedium!.copyWith(
+                          color: context.colors.onSurfaceVariantLow,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Text('Gray', style: context.textTheme.labelMedium),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            SizedBox(
+              width: 112,
+              child: AppCounterInput(
+                initialValue: 1,
+                isFilled: false,
+                min: 1,
+                max: 9,
+              ),
+            ),
+            const SizedBox(width: 99),
+            Text(
+              '\$120.99',
+              style: context.textTheme.labelSmall!.copyWith(
+                decoration: TextDecoration.lineThrough,
+                color: context.colors.onSurfaceVariantLow,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Text('\$110.99', style: context.textTheme.titleSmall),
+            const SizedBox(width: 8),
+            AppTextButton(
+              onPressed: () {},
+              prefixIcon: BetterIcons.delete03Outline,
+              color: SemanticColor.error,
+              size: ButtonSize.medium,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class EcommerceSummaryCard extends StatelessWidget {
+  const EcommerceSummaryCard({super.key, this.isMobile = false});
+
+  final bool isMobile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: isMobile ? const EdgeInsets.all(16) : const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: context.colors.surface,
+        border: Border.all(color: context.colors.outline),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow:
+            isMobile
+                ? [BetterShadow.shadow4.toBoxShadow(context)]
+                : [BetterShadow.shadow16.toBoxShadow(context)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Summary', style: context.textTheme.titleMedium),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Subtotal',
+                style: context.textTheme.bodyLarge!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+              Text('\$231.98', style: context.textTheme.bodyLarge),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Shipping Cost',
+                style: context.textTheme.bodyLarge!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+              Text('\$10.00', style: context.textTheme.bodyLarge),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Discount',
+                style: context.textTheme.bodyLarge!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+              Text('-\$11.00', style: context.textTheme.bodyLarge),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Tax',
+                style: context.textTheme.bodyLarge!.copyWith(
+                  color: context.colors.onSurfaceVariant,
+                ),
+              ),
+              Text('\$0', style: context.textTheme.bodyLarge),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 11.5),
+            child: AppDivider(),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: AppTextButton(
+              onPressed: () {},
+              text: 'Apply Discount Code',
+              prefixIcon: BetterIcons.discountFilled,
+              suffixIcon: BetterIcons.arrowRight01Outline,
+              color: SemanticColor.primary,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 11.5),
+            child: AppDivider(),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Total', style: context.textTheme.titleMedium),
+              Text('\$230.98', style: context.textTheme.titleMedium),
+            ],
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: AppFilledButton(
+              onPressed: () {},
+              text: 'Checkout',
+              size: ButtonSize.extraLarge,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+enum EcommerceNavRoute { home, wishlist, shippingCart, profile }
+
+class EcommerceBottomNav extends StatefulWidget {
+  const EcommerceBottomNav({
+    super.key,
+    this.selectedItem = EcommerceNavRoute.home,
+  });
+
+  final EcommerceNavRoute selectedItem;
+
+  @override
+  State<EcommerceBottomNav> createState() => _EcommerceBottomNavState();
+}
+
+class _EcommerceBottomNavState extends State<EcommerceBottomNav> {
+  late EcommerceNavRoute _selectedRoute;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedRoute = widget.selectedItem;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBottomNavigation<EcommerceNavRoute>(
+      items: [
+        NavigationItem(
+          icon: const Icon(BetterIcons.home01Outline),
+          activeIcon: const Icon(BetterIcons.home01Filled),
+          label: 'Home',
+          value: EcommerceNavRoute.home,
+        ),
+        NavigationItem(
+          icon: const Icon(BetterIcons.favouriteOutline),
+          activeIcon: const Icon(BetterIcons.favouriteFilled),
+          value: EcommerceNavRoute.wishlist,
+          label: 'Wishlist',
+        ),
+        NavigationItem(
+          icon: const Icon(BetterIcons.shoppingBag02Outline),
+          activeIcon: const Icon(BetterIcons.shoppingBag02Filled),
+          value: EcommerceNavRoute.shippingCart,
+          label: 'Shopping Cart',
+          badgeCount: 2,
+        ),
+        NavigationItem(
+          icon: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Assets.images.avatars.illustration01.image(
+              width: 24,
+              height: 24,
+            ),
+          ),
+          value: EcommerceNavRoute.profile,
+          label: 'Profile',
+        ),
+      ],
+      selectedValue: _selectedRoute,
+      onTap: (value) => setState(() => _selectedRoute = value),
+    );
+  }
+}
