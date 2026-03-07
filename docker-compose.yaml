@@ -49,6 +49,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/admin-api/Dockerfile
+    command: ["npx","ts-node","--transpile-only","-r","tsconfig-paths/register","apps/admin-api/src/main.ts"]
     restart: always
     depends_on:
       - "mysql"
