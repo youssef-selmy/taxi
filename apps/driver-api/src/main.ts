@@ -12,7 +12,7 @@ import { getConfig } from 'license-verify';
 
 async function bootstrap() {
   await loadSecrets();
-  const app = await NestFactory.create(DriverAPIModule.register());
+  const app = await NestFactory.create(await DriverAPIModule.register());
 
   // Increase body size limit to 20MB
   app.use(express.json({ limit: '20mb' }));
@@ -34,4 +34,7 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  Logger.error(error, 'Driver API bootstrap');
+  process.exit(1);
+});

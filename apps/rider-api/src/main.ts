@@ -11,7 +11,7 @@ import { getConfig } from 'license-verify';
 
 async function bootstrap() {
   await loadSecrets();
-  const app = await NestFactory.create(RiderAPIModule.register());
+  const app = await NestFactory.create(await RiderAPIModule.register());
 
   // Increase body size limit to 20MB
   app.use(express.json({ limit: '20mb' }));
@@ -29,9 +29,12 @@ async function bootstrap() {
     });
   }
 
-  await app.listen(port,'0.0.0.0', () => {
+  await app.listen(port, '0.0.0.0', () => {
     Logger.log('Listening at http://localhost:' + port, 'Rider API');
   });
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  Logger.error(error, 'Rider API bootstrap');
+  process.exit(1);
+});

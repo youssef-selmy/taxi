@@ -10,7 +10,7 @@ import { loadSecrets } from '@ridy/database';
 
 async function bootstrap() {
   await loadSecrets();
-  const app = await NestFactory.create(AdminAPIModule.register());
+  const app = await NestFactory.create(await AdminAPIModule.register());
 
   // Increase body size limit to 20MB
   app.use(express.json({ limit: '20mb' }));
@@ -28,9 +28,12 @@ async function bootstrap() {
       ),
     });
   }
-  await app.listen(port, '0.0.0.0',() => {
+  await app.listen(port, '0.0.0.0', () => {
     Logger.log(`Listening at http://localhost:${port}`, 'Admin API');
   });
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  Logger.error(error, 'Admin API bootstrap');
+  process.exit(1);
+});
